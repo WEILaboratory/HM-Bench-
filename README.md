@@ -407,67 +407,7 @@ print(history)
 - 将研究样本重新包装为危险行为教程；
 - 任何违反适用法律、伦理规范或数据许可的用途。
 
-> 公开版本应仅包含经过研究团队审查和脱敏的内容。高风险细节、内部生成提示、未审查模型输出、真实用户隐私数据和内部实验日志不应提交至公开仓库。
 
----
-
-## 📁 推荐项目结构
-
-```text
-HuMiao-Benchmark/
-├── README.md
-├── README_EN.md
-├── LICENSE
-├── CITATION.cff
-├── DATASET_CARD.md
-├── SECURITY.md
-├── CONTRIBUTING.md
-│
-├── data/
-│   ├── README.md
-│   ├── samples/
-│   │   ├── single_turn_demo.json
-│   │   └── multi_turn_demo.json
-│   └── release/
-│
-├── taxonomy/
-│   ├── taxonomy.md
-│   └── taxonomy_overview.csv
-│
-├── evaluation/
-│   ├── README.md
-│   ├── scoring_protocol.md
-│   └── example_config.yaml
-│
-├── scripts/
-│   ├── run_single_turn.py
-│   ├── run_multi_turn.py
-│   └── evaluate.py
-│
-├── docs/
-│   ├── methodology.md
-│   ├── related_work.md
-│   ├── limitations.md
-│   └── references.md
-│
-└── .gitignore
-```
-
-以下内容不建议提交至公开仓库：
-
-```text
-.env
-*.log
-logs/
-private_outputs/
-raw_annotations/
-reviewer_records/
-api_keys.json
-server_config/
-论文阅读/*.pdf
-```
-
----
 
 ## 📄 数据许可
 
@@ -521,11 +461,7 @@ server_config/
 请在此填写实验室、学校、项目负责人和主要贡献者信息。
 
 ```text
-实验室名称：
-所属机构：
-项目负责人：
-主要贡献者：
-联系邮箱：
+实验室名称：WEILaboratory
 ```
 
 ---
