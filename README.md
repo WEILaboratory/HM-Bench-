@@ -425,21 +425,6 @@ print(history)
 
 ## 📝 引用
 
-论文尚未正式发表时，可暂时使用以下格式，并在论文公开后更新：
-
-```bibtex
-@misc{humiao_benchmark_2026,
-  title        = {护苗：面向中文青少年大模型交互的内容安全评测基准},
-  author       = {请填写项目作者},
-  year         = {2026},
-  howpublished = {\url{https://github.com/你的组织名/你的仓库名}},
-  note         = {HuMiao: A Chinese Youth-Centric Benchmark for LLM Safety Evaluation}
-}
-```
-
-建议同时在仓库根目录添加 `CITATION.cff`，使 GitHub 自动显示 **Cite this repository** 按钮。
-
----
 
 ## 🤝 贡献
 
@@ -457,8 +442,6 @@ print(history)
 ---
 
 ## 👥 项目团队
-
-请在此填写实验室、学校、项目负责人和主要贡献者信息。
 
 ```text
 实验室名称：WEILaboratory
