@@ -409,19 +409,7 @@ print(history)
 
 
 
-## 📄 数据许可
 
-数据许可和代码许可应分别说明。
-
-建议方案：
-
-- **代码**：Apache License 2.0 或 MIT License；
-- **数据**：CC BY-NC 4.0，或经过实验室审核的 Research-Only License；
-- **附加要求**：单独提供 Responsible Use Terms，明确未成年人保护相关使用边界。
-
-> 最终许可方案应由项目负责人、实验室和所属机构确认。本 README 不构成法律意见。
-
----
 
 ## 📝 引用
 
