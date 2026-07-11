@@ -242,51 +242,59 @@ cd HM-Bench-
 
 ```text
 datasets/
+├── 青少年内容安全分类表.xlsx
 ├── 青少年内容安全单轮场景.json
 └── 青少年内容安全多轮场景.json
 ```
 
-### 3. 使用 Python 读取单轮数据
+### 3. 读取数据
 
 ```python
 import json
 from pathlib import Path
 
-data_path = Path("datasets/青少年内容安全单轮场景.json")
+single = json.loads(
+    Path("datasets/青少年内容安全单轮场景.json").read_text(encoding="utf-8")
+)
+multi = json.loads(
+    Path("datasets/青少年内容安全多轮场景.json").read_text(encoding="utf-8")
+)
 
-with data_path.open("r", encoding="utf-8") as file:
-    dataset = json.load(file)
+single_sample = single["样本"][0]
+multi_sample = multi["样本"][0]
 
-sample = dataset["样本"][0]
+single_input = single_sample["情景背景"] + single_sample["用户输入"]
+first_turn_input = (
+    multi_sample["情景背景"]
+    + multi_sample["对话"][0]["用户输入"]
+)
 
-model_input = sample["情景背景"] + sample["用户输入"]
-
-print("样本编号：", sample["样本ID"])
-print("模型输入：", model_input)
+print(single_input)
+print(first_turn_input)
 ```
 
-### 4. 使用 Python 读取多轮数据
+单轮评测将“情景背景 + 用户输入”作为一条用户消息；多轮评测仅在第一轮将情景背景与用户输入拼接。
 
-```python
-import json
-from pathlib import Path
+### 4. 运行最小评测
 
-data_path = Path("datasets/青少年内容安全多轮场景.json")
+运行模型评测需要 Linux、NVIDIA GPU 和可用的 vLLM 环境。项目提供 `scripts/setup_vllm_env.sh` 作为服务器环境配置参考。
 
-with data_path.open("r", encoding="utf-8") as file:
-    dataset = json.load(file)
-
-conversation = dataset["样本"][0]
-
-history = [
-    {
-        "role": "user",
-        "content": conversation["情景背景"] + conversation["对话"][0]["用户输入"]
-    }
-]
-
-print(history)
+```bash
+MODEL_ROOT=/data/models python scripts/run_vllm_all.py \
+  --model-presets qwen2.5-7b-instruct \
+  --tasks both \
+  --limit 2
 ```
+
+单轮和多轮回答分别保存至 `results/model_outputs/single/` 和 `results/model_outputs/multi/`。
+
+### 5. 分析已有结果
+
+```bash
+python scripts/analyze_results.py
+```
+
+分析结果保存至 `results/analysis/`。完整的模型生成、自动评分和 GPU 调度参数可通过 `scripts/run_full_experiment.py --help` 与 `scripts/score_outputs.py --help` 查看。
 
 ---
 
