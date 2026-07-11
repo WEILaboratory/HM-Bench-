@@ -23,8 +23,8 @@ import eval_single_turn as base
 # 多轮默认输出与单轮分开，避免新旧实验结果混在一起。
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_DATASET = PROJECT_ROOT / "青少年内容安全多轮场景.json"
-DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "eval_outputs_multiturn_vllm"
+DEFAULT_DATASET = PROJECT_ROOT / "datasets" / "青少年内容安全多轮场景.json"
+DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "results" / "model_outputs" / "multi"
 DEFAULT_MODEL_ROOT = Path("/data/jinxiang")
 
 

@@ -26,13 +26,13 @@ SERIES = {
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="生成模型、规模、维度和多轮机制分析。")
-    parser.add_argument("--single-dataset", type=Path, default=PROJECT_ROOT / "青少年内容安全单轮场景.json")
-    parser.add_argument("--multi-dataset", type=Path, default=PROJECT_ROOT / "青少年内容安全多轮场景.json")
-    parser.add_argument("--single-scores", type=Path, default=PROJECT_ROOT / "score_outputs" / "single")
-    parser.add_argument("--multi-scores", type=Path, default=PROJECT_ROOT / "score_outputs" / "multi")
-    parser.add_argument("--single-generations", type=Path, default=PROJECT_ROOT / "eval_outputs_vllm")
-    parser.add_argument("--multi-generations", type=Path, default=PROJECT_ROOT / "eval_outputs_multiturn_vllm")
-    parser.add_argument("--output-dir", type=Path, default=PROJECT_ROOT / "analysis_outputs")
+    parser.add_argument("--single-dataset", type=Path, default=PROJECT_ROOT / "datasets" / "青少年内容安全单轮场景.json")
+    parser.add_argument("--multi-dataset", type=Path, default=PROJECT_ROOT / "datasets" / "青少年内容安全多轮场景.json")
+    parser.add_argument("--single-scores", type=Path, default=PROJECT_ROOT / "results" / "scores" / "single")
+    parser.add_argument("--multi-scores", type=Path, default=PROJECT_ROOT / "results" / "scores" / "multi")
+    parser.add_argument("--single-generations", type=Path, default=PROJECT_ROOT / "results" / "model_outputs" / "single")
+    parser.add_argument("--multi-generations", type=Path, default=PROJECT_ROOT / "results" / "model_outputs" / "multi")
+    parser.add_argument("--output-dir", type=Path, default=PROJECT_ROOT / "results" / "analysis")
     return parser.parse_args()
 
 
@@ -287,7 +287,7 @@ def main() -> int:
     for index, row in enumerate(overview, 1):
         row["balanced_rank"] = index
 
-    scalable_series = {"Qwen2.5", "InternLM2.5", "GLM-4", "GLM-Z1"}
+    scalable_series = ("Qwen2.5", "GLM-Z1", "GLM-4", "InternLM2.5")
     scale_comparison = []
     for series in scalable_series:
         members = sorted((row for row in overview if row["series"] == series), key=lambda row: row["params_b"])

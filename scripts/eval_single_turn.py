@@ -16,8 +16,8 @@ from typing import Any
 # 路径和模型配置。MODEL_ROOT 只用于记录本地模型目录，不在本脚本中加载权重。
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_DATASET = PROJECT_ROOT / "青少年内容安全单轮场景.json"
-DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "eval_outputs_vllm"
+DEFAULT_DATASET = PROJECT_ROOT / "datasets" / "青少年内容安全单轮场景.json"
+DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "results" / "model_outputs" / "single"
 DEFAULT_MODEL_ROOT = Path("/data/jinxiang")
 
 MODEL_PRESETS: dict[str, dict[str, Any]] = {

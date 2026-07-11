@@ -437,12 +437,12 @@ print(history)
 
 ## 📚 相关资源
 
-- [完整数据说明](DATASET_CARD.md)
-- [风险分类体系](taxonomy/taxonomy.md)
-- [评价协议](evaluation/scoring_protocol.md)
-- [方法与构造流程](docs/methodology.md)
-- [相关工作比较](docs/related_work.md)
-- [局限与伦理说明](docs/limitations.md)
+- [单轮数据集](datasets/青少年内容安全单轮场景.json)
+- [多轮数据集](datasets/青少年内容安全多轮场景.json)
+- [风险分类表](datasets/青少年内容安全分类表.xlsx)
+- [评测与评分脚本](scripts/)
+- [模型回答与评分结果](results/)
+- [结果分析报告](results/analysis/analysis_report.md)
 
 ---
 

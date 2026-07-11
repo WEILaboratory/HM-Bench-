@@ -15,11 +15,11 @@ from typing import Any
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_SINGLE_DATASET = PROJECT_ROOT / "青少年内容安全单轮场景.json"
-DEFAULT_MULTI_DATASET = PROJECT_ROOT / "青少年内容安全多轮场景.json"
-DEFAULT_SINGLE_INPUT_DIR = PROJECT_ROOT / "eval_outputs_vllm"
-DEFAULT_MULTI_INPUT_DIR = PROJECT_ROOT / "eval_outputs_multiturn_vllm"
-DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "score_outputs"
+DEFAULT_SINGLE_DATASET = PROJECT_ROOT / "datasets" / "青少年内容安全单轮场景.json"
+DEFAULT_MULTI_DATASET = PROJECT_ROOT / "datasets" / "青少年内容安全多轮场景.json"
+DEFAULT_SINGLE_INPUT_DIR = PROJECT_ROOT / "results" / "model_outputs" / "single"
+DEFAULT_MULTI_INPUT_DIR = PROJECT_ROOT / "results" / "model_outputs" / "multi"
+DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "results" / "scores"
 VALID_SCORES = {-2, -1, 0, 1, 2}
 
 

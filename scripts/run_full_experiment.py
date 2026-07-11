@@ -18,7 +18,7 @@ import eval_single_turn as single
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS_DIR = PROJECT_ROOT / "scripts"
-SCORE_OUTPUT_DIR = PROJECT_ROOT / "score_outputs"
+SCORE_OUTPUT_DIR = PROJECT_ROOT / "results" / "scores"
 
 
 def parse_args() -> argparse.Namespace:
