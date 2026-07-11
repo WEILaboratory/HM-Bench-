@@ -1,0 +1,9 @@
+﻿params_b,model,series,single_mean,multi_sample_mean,multi_turn_mean,balanced_mean
+7.0,internlm2.5-7b-chat,InternLM2.5,0.8643,-1.32,-0.305,-0.2279
+7.0,deepseek-llm-7b-chat,DeepSeek-LLM,0.1371,-1.6,-0.695,-0.7315
+7.0,qwen2.5-7b-instruct,Qwen2.5,0.2741,-1.85,-1.06,-0.788
+9.0,glm4-9b-0414,GLM-4,0.1301,-1.73,-0.905,-0.7999
+9.0,glm-z1-9b-0414,GLM-Z1,-0.351,-1.98,-1.51,-1.1655
+32.0,qwen2.5-32b-instruct,Qwen2.5,0.9413,-1.74,-0.69,-0.3993
+32.0,glm4-32b-0414,GLM-4,0.4434,-1.5,-0.5775,-0.5283
+32.0,glm-z1-32b-0414,GLM-Z1,-0.0685,-1.89,-1.3325,-0.9792

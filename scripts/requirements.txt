@@ -1,0 +1,15 @@
+# Local model evaluation.
+accelerate
+huggingface_hub
+protobuf
+sentencepiece
+tiktoken
+torch
+transformers>=4.46,<5
+
+# Model-specific runtime helpers.
+einops
+safetensors
+
+# Judge scoring API.
+openai
