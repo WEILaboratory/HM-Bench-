@@ -1,10 +1,10 @@
 <div align="center">
 
-# 🌱 护苗 · HuMiao Benchmark
+# 🌱 护苗 · HM Benchmark
 
-### 面向中文青少年大模型交互的内容安全评测基准
+### 中文语境下青少年与大模型交互内容的安全性与帮助性评测基准
 
-**A Chinese Youth-Centric Benchmark for Evaluating Contextual Safety and Helpfulness in Large Language Models**
+**A Benchmark for Evaluating Content Safety and Helpfulness in Chinese-Language Interactions Between Adolescents and Large Language Models**
 
 <p>
   <a href="#-项目简介">项目简介</a> •
@@ -24,7 +24,7 @@
   <img src="https://img.shields.io/badge/Status-Research%20Release-orange" alt="Status">
 </p>
 
-> **护苗**关注中文青少年在真实、自然、隐含和多轮交互场景中的大模型内容安全问题，评估模型能否在保持帮助性的同时，识别风险、守住边界并提供适龄的安全替代方案。
+> **HM-Bench**通过拟真的青少年生活情境和自然语言输入，测试模型对隐含风险及其跨轮演化过程的识别与处理能力。
 
 </div>
 
@@ -59,7 +59,7 @@
 <tr>
 <td width="25%" align="center">
 
-### 🧒 青少年中心
+### 🧒 青少年视角与场景
 
 围绕未成年人的学习、家庭、心理、平台使用、消费和线下安全等真实生活领域构建。
 
@@ -82,7 +82,7 @@
 
 ### ⚖️ 安全与帮助性
 
-不仅判断模型是否拒绝，也评估其是否理解处境并提供有效、安全的替代建议。
+不将拒绝本身视为充分安全，而是进一步评价模型能否在不推动风险的前提下理解用户处境，并提供适龄、具体且可执行的安全替代。
 
 </td>
 </tr>
@@ -110,8 +110,8 @@
 
 | 数据文件 | 样本量 | 评测对象 | 主要用途 |
 | --- | ---: | --- | --- |
-| `青少年内容安全单轮场景.json` | 715 | 单轮模型回答 | 隐含风险识别、安全边界和替代建议能力 |
-| `青少年内容安全多轮场景.json` | 100 | 四轮对话回答 | 上下文跟踪、风险累积识别和抗诱导能力 |
+| `datasets/青少年内容安全单轮场景.json` | 715 | 单轮模型回答 | 隐含风险识别、安全边界和替代建议能力 |
+| `datasets/青少年内容安全多轮场景.json` | 100 | 四轮对话回答 | 上下文跟踪、风险累积识别和抗诱导能力 |
 
 > 单轮数据集采用**内容风险分类体系**，多轮数据集采用**对话风险机制体系**。两部分分别回答“风险涉及什么”和“风险如何在对话中演化”。
 
@@ -168,7 +168,7 @@
 
 ## 🧾 数据格式
 
-### 单轮样本
+### 单轮样本（`样本`数组中的一项）
 
 ```json
 {
@@ -190,7 +190,7 @@
 
 分类标签仅用于统计与评测，不应作为被测模型输入。
 
-### 多轮样本
+### 多轮样本（`样本`数组中的一项）
 
 ```json
 {
@@ -231,19 +231,17 @@
 
 ## 🚀 快速开始
 
-> 以下命令为项目结构示例。正式发布前，请根据仓库中的真实文件名和脚本参数进行调整。
-
 ### 1. 克隆仓库
 
 ```bash
-git clone https://github.com/你的组织名/你的仓库名.git
-cd 你的仓库名
+git clone https://github.com/WEILaboratory/HM-Bench-.git
+cd HM-Bench-
 ```
 
 ### 2. 查看数据
 
 ```text
-data/
+datasets/
 ├── 青少年内容安全单轮场景.json
 └── 青少年内容安全多轮场景.json
 ```
@@ -254,12 +252,12 @@ data/
 import json
 from pathlib import Path
 
-data_path = Path("data/青少年内容安全单轮场景.json")
+data_path = Path("datasets/青少年内容安全单轮场景.json")
 
 with data_path.open("r", encoding="utf-8") as file:
-    samples = json.load(file)
+    dataset = json.load(file)
 
-sample = samples[0]
+sample = dataset["样本"][0]
 
 model_input = sample["情景背景"] + sample["用户输入"]
 
@@ -273,12 +271,12 @@ print("模型输入：", model_input)
 import json
 from pathlib import Path
 
-data_path = Path("data/青少年内容安全多轮场景.json")
+data_path = Path("datasets/青少年内容安全多轮场景.json")
 
 with data_path.open("r", encoding="utf-8") as file:
-    conversations = json.load(file)
+    dataset = json.load(file)
 
-conversation = conversations[0]
+conversation = dataset["样本"][0]
 
 history = [
     {
