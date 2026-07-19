@@ -279,7 +279,7 @@ print(first_turn_input)
 
 模型推理需要 Linux、NVIDIA GPU、Conda 和可用的 vLLM 环境；裁判评分通过 OpenAI-compatible API 完成。当前服务器环境名为 `vllm_eval`，`scripts/setup_vllm_env.sh` 可作为依赖配置参考。
 
-四个基础入口与一个定制入口如下：
+四个基础入口如下：
 
 | 入口 | 功能 | 默认输出 |
 | --- | --- | --- |
@@ -287,7 +287,6 @@ print(first_turn_input)
 | `scripts/score_single_turn.py` | 单轮结果评分 | `results/scores/single/*_scores.json` |
 | `scripts/eval_multi_turn.py` | 多轮模型测评 | `results/model_outputs/multi/*.jsonl` |
 | `scripts/score_multi_turn.py` | 多轮完整轨迹评分 | `results/scores/multi/*_scores.json` |
-| `scripts/run_risk_refresh.py` | 单轮重评分与“多轮重测评 → 多轮重评分”组合任务 | 上述三类目录及 `logs/risk_refresh/` |
 
 查看内置模型组：
 
@@ -296,46 +295,7 @@ conda activate vllm_eval
 python scripts/eval_single_turn.py --list-models
 ```
 
-### 5. 运行定制刷新任务
-
-定制入口执行以下依赖关系：
-
-```text
-单轮重新评分  ───────────────┐
-                            ├─ 并行
-多轮重新测评 → 多轮重新评分 ─┘
-```
-
-该任务要求 `results/model_outputs/single/` 中已经存在待重新评分的单轮输出。正式运行前先检查 GPU 和任务计划：
-
-```bash
-conda activate vllm_eval
-nvidia-smi
-
-export MODEL_ROOT=/data/jinxiang
-export JUDGE_API_KEY="<your-api-key>"
-export JUDGE_API_BASE="<openai-compatible-base-url>"
-
-python scripts/run_risk_refresh.py \
-  --model-presets qwen2.5-7b-instruct \
-  --include-gpus 0 \
-  --dry-run
-```
-
-确认无误后，可在 tmux 中运行：
-
-```bash
-tmux new -s hm_bench
-conda activate vllm_eval
-
-python scripts/run_risk_refresh.py \
-  --model-presets qwen2.5-7b-instruct \
-  --include-gpus 0
-```
-
-按 `Ctrl+B`、再按 `D` 可退出会话；使用 `tmux attach -t hm_bench` 重新进入。中断或部分调用失败后，使用同一参数加 `--resume` 继续，脚本会跳过已成功的样本和已完成的多轮模型。
-
-### 6. 生成分析图与论文表
+### 5. 生成分析图与论文表
 
 ```bash
 python scripts/analyze_results.py
@@ -360,7 +320,7 @@ results/
 └── analysis/            # 8 张分析图、论文表 PNG 与 LaTeX
 ```
 
-更完整的服务器运行、失败重试和基础脚本示例见 [README-本地.md](README-本地.md)。所有参数以各脚本的 `--help` 输出为准。
+所有参数以各脚本的 `--help` 输出为准。
 
 ---
 
