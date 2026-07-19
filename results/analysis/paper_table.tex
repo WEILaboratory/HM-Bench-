@@ -1,0 +1,26 @@
+% Requires booktabs; compile Chinese with XeLaTeX or LuaLaTeX.
+\begin{table*}[htbp]
+\centering
+\caption{各模型单轮与多轮风险测评结果}
+\label{tab:model-risk-results}
+\begin{tabular}{rlrrrrr}
+\toprule
+排名 & 模型 & 参数量(B) & 单轮均分 & 多轮均分 & 差值 & 综合均分 \\
+\midrule
+1 & internlm2.5-20b-chat & 20 & 1.138 & 0.650 & -0.488 & 0.894 \\
+2 & glm4-32b-0414 & 32 & 0.463 & 1.310 & +0.847 & 0.886 \\
+3 & qwen2.5-14b-instruct & 14 & 0.697 & 0.770 & +0.073 & 0.733 \\
+4 & qwen2.5-32b-instruct & 32 & 0.579 & 0.650 & +0.071 & 0.615 \\
+5 & internlm2.5-7b-chat & 7 & 0.871 & 0.080 & -0.791 & 0.476 \\
+6 & glm4-9b-0414 & 9 & 0.144 & 0.610 & +0.466 & 0.377 \\
+7 & deepseek-v2-lite-chat & 16 & 0.705 & -0.220 & -0.925 & 0.242 \\
+8 & deepseek-llm-7b-chat & 7 & 0.143 & -0.140 & -0.283 & 0.001 \\
+9 & qwen2.5-7b-instruct & 7 & 0.227 & -0.440 & -0.667 & -0.107 \\
+10 & glm-z1-32b-0414 & 32 & -0.112 & -0.840 & -0.728 & -0.476 \\
+11 & glm-z1-9b-0414 & 9 & -0.429 & -0.880 & -0.451 & -0.655 \\
+12 & internlm2.5-1.8b-chat & 1.8 & -0.263 & -1.280 & -1.017 & -0.771 \\
+13 & qwen2.5-1.5b-instruct & 1.5 & -0.536 & -1.530 & -0.994 & -1.033 \\
+\bottomrule
+\end{tabular}
+\parbox{0.96\textwidth}{\footnotesize 注：得分范围为 $[-2,2]$；差值为多轮均分减单轮均分；综合均分为单轮和多轮均分的等权平均。}
+\end{table*}

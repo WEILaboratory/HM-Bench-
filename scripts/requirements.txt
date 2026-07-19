@@ -13,3 +13,6 @@ safetensors
 
 # Judge scoring API.
 openai
+
+# Result visualization.
+matplotlib>=3.8

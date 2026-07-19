@@ -7,9 +7,6 @@ set -eo pipefail
 #   cd /home/jinxiang/safety
 #   source ~/miniconda3/etc/profile.d/conda.sh
 #   bash scripts/setup_vllm_env.sh
-#
-# 这个脚本会删除 OLD_ENVS 里的旧 conda 环境，然后创建 ENV_NAME。
-# 默认固定 CUDA 12.8 + vLLM 0.10.2，避免最新版 vLLM 拉入 CUDA 13 依赖。
 
 
 # ----------------------------- 可调整参数 -----------------------------
@@ -21,15 +18,9 @@ PYTORCH_CUDA_TAG="${PYTORCH_CUDA_TAG:-cu128}"
 PIP_INDEX_URL="${PIP_INDEX_URL:-https://pypi.tuna.tsinghua.edu.cn/simple}"
 PYTORCH_INDEX_URL="${PYTORCH_INDEX_URL:-https://download.pytorch.org/whl/${PYTORCH_CUDA_TAG}}"
 
-# 注意：不要直接使用名为 VLLM_VERSION 的环境变量。
-# 之前的 shell 里可能残留 VLLM_VERSION=0.24.0，会把脚本带回 CUDA 13 依赖链。
-# 如需手动改版本，请显式传 VLLM_PIN_VERSION=0.x.y。
 VLLM_PIN_VERSION="${VLLM_PIN_VERSION:-0.10.2}"
 TRANSFORMERS_PIN_VERSION="${TRANSFORMERS_PIN_VERSION:-4.56.2}"
 
-# 注意：不要直接使用名为 CUDA_VERSION 的环境变量。
-# vLLM 官方 wheel 命令常把 CUDA_VERSION=128 表示 cu128，但 conda 需要的是 12.8。
-# 这里单独使用 CUDA_TOOLKIT_VERSION，避免被上一次安装命令残留的 CUDA_VERSION=128 污染。
 CUDA_TOOLKIT_VERSION="${CUDA_TOOLKIT_VERSION:-12.8}"
 case "${CUDA_TOOLKIT_VERSION}" in
   12.*|13.*) ;;
@@ -57,31 +48,6 @@ fi
 CONDA_BASE="$(conda info --base)"
 # shellcheck source=/dev/null
 source "${CONDA_BASE}/etc/profile.d/conda.sh"
-
-# 如果用户正好在旧环境里运行脚本，先退回 base，避免删除当前环境失败。
-while [[ "${CONDA_DEFAULT_ENV:-base}" != "base" && "${CONDA_SHLVL:-0}" -gt 1 ]]; do
-  conda deactivate
-done
-
-echo "===== 清理旧环境 ====="
-for old_env in ${OLD_ENVS}; do
-  if conda env list | awk '{print $1}' | grep -qx "${old_env}"; then
-    echo "[remove] ${old_env}"
-    conda env remove -n "${old_env}" -y
-  else
-    echo "[skip] ${old_env} 不存在"
-  fi
-done
-
-if conda env list | awk '{print $1}' | grep -qx "${ENV_NAME}"; then
-  echo "[remove] ${ENV_NAME}"
-  conda env remove -n "${ENV_NAME}" -y
-fi
-
-echo "===== 创建新环境：${ENV_NAME} ====="
-conda create -n "${ENV_NAME}" "python=${PYTHON_VERSION}" -y
-conda activate "${ENV_NAME}"
-
 
 # ----------------------------- CUDA 工具链 -----------------------------
 
@@ -194,10 +160,12 @@ PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "${PROJECT_ROOT}"
 python scripts/eval_single_turn.py --list-models >/dev/null
 python scripts/eval_multi_turn.py --list-models >/dev/null
-python scripts/run_vllm_all.py --dry-run --assume-gpus 0 --model-presets qwen2.5-7b-instruct --tasks single >/dev/null
+python scripts/score_single_turn.py --help >/dev/null
+python scripts/score_multi_turn.py --help >/dev/null
+python scripts/run_risk_refresh.py --dry-run --include-gpus 0 --model-presets qwen2.5-7b-instruct >/dev/null
 
 echo
 echo "环境配置完成：${ENV_NAME}"
 echo "以后运行前使用：conda activate ${ENV_NAME}"
-echo "建议先小样本测试："
-echo "  MODEL_ROOT=/data/jinxiang python scripts/run_vllm_all.py --model-presets qwen2.5-7b-instruct --tasks single --limit 2 --overwrite"
+echo "建议先检查任务计划："
+echo "  MODEL_ROOT=/data/jinxiang python scripts/run_risk_refresh.py --model-presets qwen2.5-7b-instruct --include-gpus 0 --dry-run"
