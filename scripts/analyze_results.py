@@ -7,8 +7,9 @@ import argparse
 import json
 import math
 import os
+import random
 import statistics
-from collections import defaultdict
+from collections import Counter, defaultdict
 from pathlib import Path
 from textwrap import fill
 from typing import Any, Iterable
@@ -17,14 +18,18 @@ from typing import Any, Iterable
 # Matplotlib 在服务器上常无法写入默认缓存目录，因此将缓存放到项目外的临时目录。
 os.environ.setdefault("MPLCONFIGDIR", "/tmp/hm-bench-matplotlib")
 os.environ.setdefault("XDG_CACHE_HOME", "/tmp/hm-bench-cache")
+os.environ.setdefault("MPLBACKEND", "Agg")
 
 import matplotlib.pyplot as plt
 from matplotlib import font_manager
 from matplotlib.colors import LinearSegmentedColormap
-from matplotlib.patches import Patch
+from matplotlib.patches import Patch, Rectangle
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
+VALID_SCORES = tuple(range(-2, 3))
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="将完整评分结果生成为 PNG 图表和 LaTeX 论文表。")
     parser.add_argument(
@@ -39,6 +44,23 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--single-scores", type=Path, default=PROJECT_ROOT / "results" / "scores" / "single")
     parser.add_argument("--multi-scores", type=Path, default=PROJECT_ROOT / "results" / "scores" / "multi")
+    parser.add_argument(
+        "--single-human-labels",
+        type=Path,
+        default=PROJECT_ROOT / "results" / "scores" / "human_agreement" / "单轮人工一致性标注_100.json",
+    )
+    parser.add_argument(
+        "--multi-human-labels",
+        type=Path,
+        default=PROJECT_ROOT / "results" / "scores" / "human_agreement" / "多轮人工一致性标注_50.json",
+    )
+    parser.add_argument(
+        "--human-judge-reference",
+        type=Path,
+        default=PROJECT_ROOT / "results" / "scores" / "human_agreement" / "自动裁判评分对照_150.json",
+    )
+    parser.add_argument("--agreement-bootstrap-reps", type=int, default=20_000)
+    parser.add_argument("--agreement-bootstrap-seed", type=int, default=20_260_721)
     parser.add_argument("--output-dir", type=Path, default=PROJECT_ROOT / "results" / "analysis")
     parser.add_argument("--dpi", type=int, default=180)
     parser.add_argument(
@@ -153,6 +175,234 @@ def summary_stats(scores: list[int]) -> dict[str, Any]:
         "unsafe_count": sum(score < 0 for score in scores),
         "unsafe_rate": sum(score < 0 for score in scores) / count,
         "score_distribution": distribution,
+    }
+
+
+def load_human_judge_rows(
+    single_path: Path,
+    multi_path: Path,
+    reference_path: Path,
+) -> list[dict[str, Any]]:
+    """读取人工复核与自动裁判对照；仅纳入非空的真实人工评分。"""
+    reference = read_json(reference_path)
+    rows: list[dict[str, Any]] = []
+    for task, path in (("单轮", single_path), ("多轮", multi_path)):
+        document = read_json(path)
+        items = document.get("样本", [])
+        ref_items = reference.get(task, [])
+        ref_ids = [str(item.get("标注序号", "")) for item in ref_items]
+        if len(ref_ids) != len(set(ref_ids)):
+            raise ValueError(f"{task}自动裁判对照存在重复标注序号。")
+        ref_map = {str(item["标注序号"]): item for item in ref_items}
+        item_ids = [str(item.get("标注序号", "")) for item in items]
+        if len(item_ids) != len(set(item_ids)):
+            raise ValueError(f"{task}人工标注文件存在重复标注序号。")
+        if set(item_ids) != set(ref_ids):
+            raise ValueError(f"{task}人工标注与自动裁判对照的样本集不一致。")
+        for item in items:
+            human_score = item.get("人类评分")
+            if human_score is None:
+                continue
+            if isinstance(human_score, bool) or not isinstance(human_score, int) or human_score not in VALID_SCORES:
+                raise ValueError(
+                    f"{task} {item.get('标注序号')} 人类评分必须是 -2 至 2 的整数。"
+                )
+            annotation_id = str(item["标注序号"])
+            ref_item = ref_map[annotation_id]
+            judge_score = ref_item.get("自动裁判评分")
+            if isinstance(judge_score, bool) or not isinstance(judge_score, int) or judge_score not in VALID_SCORES:
+                raise ValueError(f"{task} {annotation_id} 自动裁判评分无效。")
+            locator = item.get("定位信息", {})
+            if str(locator.get("模型", "")) != str(ref_item.get("模型", "")):
+                raise ValueError(f"{task} {annotation_id} 模型定位与对照文件不一致。")
+            if str(locator.get("样本编号", "")) != str(ref_item.get("样本编号", "")):
+                raise ValueError(f"{task} {annotation_id} 样本定位与对照文件不一致。")
+            rows.append({
+                "task": task,
+                "annotation_id": annotation_id,
+                "model": str(locator.get("模型", "")),
+                "sample_id": str(locator.get("样本编号", "")),
+                "human_score": human_score,
+                "judge_score": judge_score,
+                "difference": judge_score - human_score,
+            })
+    if not rows:
+        raise ValueError("没有找到非空人工评分。")
+    return rows
+
+
+def weighted_cohen_kappa(human: list[int], judge: list[int], weighting: str) -> float | None:
+    """计算五档有序评分的 Cohen's kappa；weighting 为 unweighted/linear/quadratic。"""
+    if len(human) != len(judge) or not human:
+        raise ValueError("Cohen's kappa 需要非空的成对评分。")
+    count = len(human)
+    matrix = [[0 for _ in VALID_SCORES] for _ in VALID_SCORES]
+    for human_score, judge_score in zip(human, judge):
+        matrix[human_score + 2][judge_score + 2] += 1
+    human_marginal = [sum(row) / count for row in matrix]
+    judge_marginal = [sum(matrix[row][col] for row in range(5)) / count for col in range(5)]
+
+    def disagreement_weight(row: int, col: int) -> float:
+        distance = abs(row - col)
+        if weighting == "unweighted":
+            return float(row != col)
+        if weighting == "linear":
+            return distance / 4
+        if weighting == "quadratic":
+            return (distance / 4) ** 2
+        raise ValueError(f"不支持的 kappa 权重：{weighting}")
+
+    observed = sum(
+        disagreement_weight(row, col) * matrix[row][col] / count
+        for row in range(5)
+        for col in range(5)
+    )
+    expected = sum(
+        disagreement_weight(row, col) * human_marginal[row] * judge_marginal[col]
+        for row in range(5)
+        for col in range(5)
+    )
+    return None if math.isclose(expected, 0.0) else 1 - observed / expected
+
+
+def average_ranks(values: list[int]) -> list[float]:
+    order = sorted(range(len(values)), key=lambda index: values[index])
+    ranks = [0.0] * len(values)
+    start = 0
+    while start < len(order):
+        end = start + 1
+        while end < len(order) and values[order[end]] == values[order[start]]:
+            end += 1
+        average_rank = (start + 1 + end) / 2
+        for position in range(start, end):
+            ranks[order[position]] = average_rank
+        start = end
+    return ranks
+
+
+def pearson_correlation(left: list[float], right: list[float]) -> float | None:
+    if len(left) != len(right) or len(left) < 2:
+        return None
+    left_mean = mean(left)
+    right_mean = mean(right)
+    numerator = sum((x - left_mean) * (y - right_mean) for x, y in zip(left, right))
+    left_scale = math.sqrt(sum((x - left_mean) ** 2 for x in left))
+    right_scale = math.sqrt(sum((y - right_mean) ** 2 for y in right))
+    denominator = left_scale * right_scale
+    return None if math.isclose(denominator, 0.0) else numerator / denominator
+
+
+def exact_sign_test_two_sided(lower_count: int, higher_count: int) -> float | None:
+    disagreement_count = lower_count + higher_count
+    if disagreement_count == 0:
+        return None
+    tail = min(lower_count, higher_count)
+    probability = sum(math.comb(disagreement_count, value) for value in range(tail + 1)) / (2 ** disagreement_count)
+    return min(1.0, 2 * probability)
+
+
+def agreement_core(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    if not rows:
+        raise ValueError("一致性统计不能使用空样本。")
+    human = [int(row["human_score"]) for row in rows]
+    judge = [int(row["judge_score"]) for row in rows]
+    differences = [judge_score - human_score for human_score, judge_score in zip(human, judge)]
+    exact_count = sum(value == 0 for value in differences)
+    within_one_count = sum(abs(value) <= 1 for value in differences)
+    lower_count = sum(value < 0 for value in differences)
+    higher_count = sum(value > 0 for value in differences)
+    confusion = [
+        [sum(h == human_score and j == judge_score for h, j in zip(human, judge)) for judge_score in VALID_SCORES]
+        for human_score in VALID_SCORES
+    ]
+    return {
+        "n": len(rows),
+        "task_counts": dict(Counter(str(row["task"]) for row in rows)),
+        "human_mean": mean(human),
+        "judge_mean": mean(judge),
+        "mean_difference": mean(differences),
+        "exact_count": exact_count,
+        "exact_rate": exact_count / len(rows),
+        "within_one_count": within_one_count,
+        "within_one_rate": within_one_count / len(rows),
+        "mae": mean(abs(value) for value in differences),
+        "kappa_unweighted": weighted_cohen_kappa(human, judge, "unweighted"),
+        "kappa_linear": weighted_cohen_kappa(human, judge, "linear"),
+        "kappa_quadratic": weighted_cohen_kappa(human, judge, "quadratic"),
+        "spearman": pearson_correlation(average_ranks(human), average_ranks(judge)),
+        "disagreement_count": lower_count + higher_count,
+        "judge_lower_count": lower_count,
+        "judge_higher_count": higher_count,
+        "sign_test_two_sided_p": exact_sign_test_two_sided(lower_count, higher_count),
+        "difference_distribution": {value: differences.count(value) for value in range(-4, 5)},
+        "confusion_matrix": confusion,
+    }
+
+
+def percentile(values: list[float], probability: float) -> float:
+    ordered = sorted(values)
+    if not ordered:
+        raise ValueError("不能对空列表计算分位数。")
+    position = probability * (len(ordered) - 1)
+    lower = math.floor(position)
+    upper = math.ceil(position)
+    if lower == upper:
+        return ordered[lower]
+    fraction = position - lower
+    return ordered[lower] * (1 - fraction) + ordered[upper] * fraction
+
+
+def agreement_with_bootstrap(
+    rows: list[dict[str, Any]],
+    repetitions: int,
+    seed: int,
+) -> dict[str, Any]:
+    if repetitions < 1:
+        raise ValueError("bootstrap 重复次数必须为正整数。")
+    result = agreement_core(rows)
+    groups: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for row in rows:
+        groups[str(row["task"])].append(row)
+    rng = random.Random(seed)
+    bootstrap_values: dict[str, list[float]] = {
+        "exact_rate": [],
+        "within_one_rate": [],
+        "mae": [],
+        "mean_difference": [],
+        "kappa_quadratic": [],
+        "spearman": [],
+    }
+    for _ in range(repetitions):
+        resampled: list[dict[str, Any]] = []
+        for group in groups.values():
+            resampled.extend(rng.choice(group) for _ in range(len(group)))
+        replicate = agreement_core(resampled)
+        for key in bootstrap_values:
+            value = replicate[key]
+            if value is not None and math.isfinite(float(value)):
+                bootstrap_values[key].append(float(value))
+    result["bootstrap_repetitions"] = repetitions
+    result["bootstrap_seed"] = seed
+    result["ci95"] = {
+        key: (percentile(values, 0.025), percentile(values, 0.975))
+        for key, values in bootstrap_values.items()
+    }
+    return result
+
+
+def compute_agreement_summaries(
+    rows: list[dict[str, Any]],
+    repetitions: int,
+    seed: int,
+) -> dict[str, dict[str, Any]]:
+    single_rows = [row for row in rows if row["task"] == "单轮"]
+    multi_rows = [row for row in rows if row["task"] == "多轮"]
+    if not single_rows or not multi_rows:
+        raise ValueError("人工一致性实验必须同时包含单轮和多轮非空评分。")
+    return {
+        "single": agreement_with_bootstrap(single_rows, repetitions, seed + 1),
+        "multi": agreement_with_bootstrap(multi_rows, repetitions, seed + 2),
+        "pooled": agreement_with_bootstrap(rows, repetitions, seed + 3),
     }
 
 
@@ -416,6 +666,150 @@ def plot_model_multi_heatmap(
     save_figure(fig, output / "08_model_multi_mechanism_heatmap.png", dpi)
 
 
+def plot_human_judge_agreement(
+    summary: dict[str, Any],
+    output: Path,
+    dpi: int,
+) -> None:
+    """展示真实人工评分与自动裁判的混淆矩阵及差值分布。"""
+    confusion = summary["confusion_matrix"]
+    differences = summary["difference_distribution"]
+    fig, (matrix_ax, delta_ax) = plt.subplots(
+        1,
+        2,
+        figsize=(15.5, 7.6),
+        gridspec_kw={"width_ratios": [1.08, 1]},
+    )
+
+    agreement_cmap = LinearSegmentedColormap.from_list(
+        "agreement_blue",
+        ["#F5F8FA", "#A9C7DB", "#2C6FA3", "#214B63"],
+    )
+    image = matrix_ax.imshow(confusion, cmap=agreement_cmap, aspect="equal", vmin=0)
+    matrix_ax.set_xticks(range(5), [f"{value:+d}" if value else "0" for value in VALID_SCORES])
+    matrix_ax.set_yticks(range(5), [f"{value:+d}" if value else "0" for value in VALID_SCORES])
+    matrix_ax.set_xlabel("自动裁判评分")
+    matrix_ax.set_ylabel("人工评分")
+    matrix_ax.set_title("五档评分混淆矩阵", pad=22)
+    matrix_ax.text(
+        0.5,
+        1.015,
+        "对角线为完全一致；单元格数字为样本数",
+        transform=matrix_ax.transAxes,
+        ha="center",
+        va="bottom",
+        fontsize=10,
+        color="#5B6470",
+    )
+    maximum = max(max(row) for row in confusion)
+    for row_index, row in enumerate(confusion):
+        for col_index, value in enumerate(row):
+            text_color = "white" if maximum and value >= maximum * 0.42 else "#20242A"
+            matrix_ax.text(
+                col_index,
+                row_index,
+                str(value),
+                ha="center",
+                va="center",
+                fontsize=12,
+                fontweight="bold" if row_index == col_index else "normal",
+                color=text_color,
+            )
+        matrix_ax.add_patch(
+            Rectangle(
+                (row_index - 0.5, row_index - 0.5),
+                1,
+                1,
+                fill=False,
+                edgecolor="#D98C33",
+                linewidth=1.5,
+            )
+        )
+    matrix_ax.set_xticks([value - 0.5 for value in range(1, 5)], minor=True)
+    matrix_ax.set_yticks([value - 0.5 for value in range(1, 5)], minor=True)
+    matrix_ax.grid(which="minor", color="white", linewidth=1.2)
+    matrix_ax.tick_params(which="minor", bottom=False, left=False)
+    colorbar = fig.colorbar(image, ax=matrix_ax, fraction=0.046, pad=0.04)
+    colorbar.set_label("样本数")
+
+    delta_values = list(range(-4, 5))
+    counts = [int(differences.get(value, 0)) for value in delta_values]
+    colors = ["#D98C33" if value < 0 else "#A7ADB5" if value == 0 else "#2C6FA3" for value in delta_values]
+    bars = delta_ax.bar(delta_values, counts, width=0.72, color=colors, edgecolor="#4C5159", linewidth=0.7)
+    delta_ax.axvline(0, color="#60656F", linewidth=1.1)
+    delta_ax.set_xticks(delta_values, [f"{value:+d}" if value else "0" for value in delta_values])
+    delta_ax.set_xlabel("评分差（自动裁判 - 人工）")
+    delta_ax.set_ylabel("样本数")
+    delta_ax.set_title("成对评分差值分布", pad=22)
+    delta_ax.text(
+        0.5,
+        1.015,
+        "负值表示自动裁判评分更低",
+        transform=delta_ax.transAxes,
+        ha="center",
+        va="bottom",
+        fontsize=10,
+        color="#5B6470",
+    )
+    delta_ax.grid(axis="y")
+    delta_ax.set_axisbelow(True)
+    delta_ax.spines[["top", "right"]].set_visible(False)
+    delta_ax.set_ylim(0, max(counts) * 1.17 if max(counts) else 1)
+    for bar, count in zip(bars, counts):
+        if count:
+            delta_ax.text(
+                bar.get_x() + bar.get_width() / 2,
+                bar.get_height() + max(counts) * 0.025,
+                str(count),
+                ha="center",
+                va="bottom",
+                fontsize=10,
+                fontweight="bold",
+            )
+
+    sign_p = summary["sign_test_two_sided_p"]
+    fig.suptitle("人类标注者—自动裁判一致性", fontsize=18, fontweight="bold", y=0.985)
+    fig.text(
+        0.5,
+        0.925,
+        (
+            f'n={summary["n"]}（单轮{summary["task_counts"].get("单轮", 0)}，'
+            f'多轮{summary["task_counts"].get("多轮", 0)}）；仅统计非空的真实人工评分'
+        ),
+        ha="center",
+        va="center",
+        fontsize=11,
+        color="#5B6470",
+    )
+    fig.text(
+        0.5,
+        0.052,
+        (
+            f'完全一致 {summary["exact_rate"]:.1%}  |  '
+            f'二次加权 Cohen\'s κ={summary["kappa_quadratic"]:.3f}'
+        ),
+        ha="center",
+        va="center",
+        fontsize=11,
+        fontweight="bold",
+        color="#214B63",
+    )
+    fig.text(
+        0.5,
+        0.019,
+        (
+            f'{summary["disagreement_count"]}条不一致样本中：自动裁判更低 {summary["judge_lower_count"]}条，'
+            f'更高 {summary["judge_higher_count"]}条；双侧精确符号检验 p={sign_p:.2e}'
+        ),
+        ha="center",
+        va="center",
+        fontsize=10.2,
+        color="#4C5159",
+    )
+    fig.tight_layout(rect=(0.02, 0.10, 0.98, 0.90), w_pad=3.0)
+    save_figure(fig, output / "09_human_judge_agreement.png", dpi)
+
+
 def compact_model_rows(overview: list[dict[str, Any]]) -> list[dict[str, Any]]:
     add_rank(overview, "balanced_mean", "balanced_rank")
     return sorted(overview, key=lambda row: int(row["balanced_rank"]))
@@ -513,6 +907,16 @@ def main() -> int:
     single_reports = load_reports(args.single_scores)
     multi_reports = load_reports(args.multi_scores)
     validate_reports(single_reports, multi_reports, len(single_samples), len(multi_samples))
+    human_judge_rows = load_human_judge_rows(
+        args.single_human_labels,
+        args.multi_human_labels,
+        args.human_judge_reference,
+    )
+    agreement = compute_agreement_summaries(
+        human_judge_rows,
+        args.agreement_bootstrap_reps,
+        args.agreement_bootstrap_seed,
+    )
 
     single_rows: list[dict[str, Any]] = []
     multi_rows: list[dict[str, Any]] = []
@@ -578,9 +982,30 @@ def main() -> int:
         plot_model_l1_heatmap(model_l1_rows, model_order, l1_order, args.output_dir, args.dpi)
         plot_multi_mechanisms(mechanisms, args.output_dir, args.dpi)
         plot_model_multi_heatmap(model_mechanisms, model_order, mechanism_order, args.output_dir, args.dpi)
+        plot_human_judge_agreement(agreement["pooled"], args.output_dir, args.dpi)
 
     print(f"分析完成：{args.output_dir}")
     print(f"论文表产物：{len(table_paths)} 个文件")
+    for label, key in (("单轮", "single"), ("多轮", "multi"), ("汇总", "pooled")):
+        current = agreement[key]
+        kappa = current["kappa_quadratic"]
+        spearman = current["spearman"]
+        print(
+            f"{label}人工—自动裁判：n={current['n']}，"
+            f"完全一致={current['exact_rate']:.1%}，"
+            f"相差不超1分={current['within_one_rate']:.1%}，"
+            f"MAE={current['mae']:.3f}，"
+            f"二次加权κ={kappa:.3f}，"
+            f"Spearman ρ={spearman:.3f}，"
+            f"人工均分={current['human_mean']:.3f}，"
+            f"自动裁判均分={current['judge_mean']:.3f}"
+        )
+    pooled = agreement["pooled"]
+    print(
+        f"不一致方向：自动裁判更低 {pooled['judge_lower_count']} 条，"
+        f"更高 {pooled['judge_higher_count']} 条；"
+        f"双侧精确符号检验 p={pooled['sign_test_two_sided_p']:.2e}"
+    )
     return 0
 
 
