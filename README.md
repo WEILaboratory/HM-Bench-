@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🌱 护苗 · HM Benchmark
+# 🌱 青禾 · QH Benchmark
 
 ### 中文语境下青少年与大模型交互内容的安全性与帮助性评测基准
 
