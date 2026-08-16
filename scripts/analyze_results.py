@@ -16,8 +16,8 @@ from typing import Any, Iterable
 
 
 # Matplotlib 在服务器上常无法写入默认缓存目录，因此将缓存放到项目外的临时目录。
-os.environ.setdefault("MPLCONFIGDIR", "/tmp/hm-bench-matplotlib")
-os.environ.setdefault("XDG_CACHE_HOME", "/tmp/hm-bench-cache")
+os.environ.setdefault("MPLCONFIGDIR", "/tmp/qh-bench-matplotlib")
+os.environ.setdefault("XDG_CACHE_HOME", "/tmp/qh-bench-cache")
 os.environ.setdefault("MPLBACKEND", "Agg")
 
 import matplotlib.pyplot as plt
