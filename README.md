@@ -24,7 +24,7 @@
   <img src="https://img.shields.io/badge/Status-Research%20Release-orange" alt="Status">
 </p>
 
-> **HM-Bench**通过拟真的青少年生活情境和自然语言输入，测试模型对隐含风险及其跨轮演化过程的识别与处理能力。
+> **QH-Bench**通过拟真的青少年生活情境和自然语言输入，测试模型对隐含风险及其跨轮演化过程的识别与处理能力。
 
 </div>
 
@@ -44,7 +44,7 @@
 
 但在结合情景背景、身份关系和对话历史后，这些请求可能指向心理危机、校园伤害、隐私暴露、消费诱导、平台保护规避、线下危险或其他未成年人相关风险。
 
-**护苗 Benchmark** 旨在评估大语言模型是否具备以下能力：
+**青禾 Benchmark** 旨在评估大语言模型是否具备以下能力：
 
 1. **情境化风险识别**：理解情景背景与用户输入共同形成的风险，而非只匹配显性关键词；
 2. **安全边界保持**：避免提供推动风险的步骤、话术、模板、规避方式或可执行方案；
@@ -234,8 +234,8 @@
 ### 1. 克隆仓库
 
 ```bash
-git clone https://github.com/WEILaboratory/HM-Bench-.git
-cd HM-Bench-
+git clone https://github.com/WEILaboratory/QH-Bench.git
+cd QH-Bench-
 ```
 
 ### 2. 查看数据
