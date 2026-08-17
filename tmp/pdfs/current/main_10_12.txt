@@ -1,0 +1,153 @@
+
+===== PAGE 10 =====
+Published as a conference paper at ICLR 2026
+5 CONCLUSION
+This paper presents a comprehensive and fine-grained benchmark for evaluating LLMs safety in
+multi-turn dialogues, incorporating diverse jailbreak attack methods. We introduce an innovative
+safety assessment framework that combines LLM-based and human expert evaluations. Extensive
+experimental results demonstrate that o3-mini and Baichuan2-7B-Chat exhibits safety vulnerabilities,
+while MoonShot-v1 achieves robust performance across five safety dimensions and ChatGPT-4o
+achieves the lowest ASR. Furthermore, open-sourced models Yi-34B-Chat and GLM4-9B-Chat
+demonstrate strong safety capabilities, while Llama3.1-8B-Instruct exhibits significant vulnerabilities
+in our English dataset.
+Limitations SafeDialBench requires incorporation of additional jailbreak attack methods
+to achieve more comprehensive assessment of model safety in multi-turn dialogues. Furthermore,
+continuous dataset updates and refinements are necessary to keep pace with rapid model developments.
+The proposed evaluation framework would benefit from more granular assessment methods to measure
+model safety capabilities with higher precision.
+ACKNOWLEDGMENTS
+This work was supported in part by the National Natural Science Foundation of China under Grant
+625B2085, Grant 62506157, Grand 62406111, Grant 62276128, Grant 62192783; in part by the
+Jiangsu Science and Technology Major Project BG2025035, BG2024031; in part by the Natural
+Science Foundation of Jiangsu Province under Grant BK20243051; the Fundamental Research Funds
+for the Central Universities (KG202514, 14380128); in part by the Collaborative Innovation Center
+of Novel Software Technology and Industrialization.
+ETHICS STATEMENT
+Our work of SafeDialBench is designed to provide a comprehensive cross-lingual evaluation
+framework for assessing LLM safety in multi-turn dialogue contexts. Throughout the dataset
+annotation and safety evaluation processes, we implemented rigorous ethical protocols, including
+informed consent, fair compensation, and mental health support for annotators. We emphasize that
+the proposed evaluation metrics should be considered complementary to existing safety assessment
+frameworks rather than definitive measures. The dataset is strictly intended for academic research
+purposes, and any misuse is prohibited.
+REPRODUCIBILITYSTATEMENT
+We provide the datasets and core code of SafeDialBench in the supplementary material. The
+experimental details are shown in Appendix F.
+REFERENCES
+Usman Anwar, Abulhair Saparov, Javier Rando, Daniel Paleka, Miles Turpin, Peter Hase,
+Ekdeep Singh Lubana, Erik Jenner, Stephen Casper, Oliver Sourbut, et al. Foundational challenges
+in assuring alignment and safety of large language models.arXiv preprint arXiv:2404.09932,
+2024.
+Jiawen Deng, Jingyan Zhou, Hao Sun, Chujie Zheng, Fei Mi, Helen Meng, and Minlie Huang. Cold:
+A benchmark for chinese offensive language detection. InProceedings of the 2022 Conference on
+Empirical Methods in Natural Language Processing, pages 11580–11599, 2022.
+Jiaming Ji, Mickel Liu, Josef Dai, Xuehai Pan, Chi Zhang, Ce Bian, Boyuan Chen, Ruiyang Sun,
+Yizhou Wang, and Yaodong Yang. Beavertails: Towards improved safety alignment of llm via a
+human-preference dataset.Advances in Neural Information Processing Systems, 36, 2024a.
+Ethan Perez, Saffron Huang, Francis Song, Trevor Cai, Roman Ring, John Aslanides, Amelia Glaese,
+Nat McAleese, and Geoffrey Irving. Red teaming language models with language models. In
+10
+
+===== PAGE 11 =====
+Published as a conference paper at ICLR 2026
+Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing, pages
+3419–3448, 2022.
+Lianmin Zheng, Wei-Lin Chiang, Ying Sheng, Siyuan Zhuang, Zhanghao Wu, Yonghao Zhuang,
+Zi Lin, Zhuohan Li, Dacheng Li, Eric Xing, et al. Judging llm-as-a-judge with mt-bench and
+chatbot arena.Advances in Neural Information Processing Systems, 36:46595–46623, 2023.
+Lianmin Zheng, Wei-Lin Chiang, Ying Sheng, Tianle Li, Siyuan Zhuang, Zhanghao Wu, Yonghao
+Zhuang, Zhuohan Li, Zi Lin, Eric Xing, et al. Lmsys-chat-1m: A large-scale real-world llm
+conversation dataset. InThe Twelfth International Conference on Learning Representations, 2024.
+Hongye Cao, Zhixin Bai, Ziyue Peng, Boyan Wang, Tianpei Yang, Jing Huo, Yuyao Zhang, and Yang
+Gao. Efficient reinforcement learning with semantic and token entropy for llm reasoning.arXiv
+preprint arXiv:2512.04359, 2025a.
+Erxin Yu, Jing Li, Ming Liao, Siqi Wang, Gao Zuchen, Fei Mi, and Lanqing Hong. Cosafe:
+Evaluating large language model safety in multi-turn dialogue coreference. InProceedings of the
+2024 Conference on Empirical Methods in Natural Language Processing, pages 17494–17508,
+2024.
+Jinchuan Zhang, Yan Zhou, Yaxin Liu, Ziming Li, and Songlin Hu. Holistic automated red teaming
+for large language models through top-down test case generation and multi-turn interaction. In
+Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing, pages
+13711–13736, 2024.
+Yifan Jiang, Kriti Aggarwal, Tanmay Laud, Kashif Munir, Jay Pujara, and Subhabrata Mukherjee.
+Red queen: Safeguarding large language models against concealed multi-turn jailbreaking.CoRR,
+2024.
+Qibing Ren, Hao Li, Dongrui Liu, Zhanxu Xie, Xiaoya Lu, Yu Qiao, Lei Sha, Junchi Yan, Lizhuang
+Ma, and Jing Shao. Derail yourself: Multi-turn llm jailbreak attack through self-discovered clues.
+arXiv preprint arXiv:2410.10700, 2024.
+Lijun Li, Bowen Dong, Ruohui Wang, Xuhao Hu, Wangmeng Zuo, Dahua Lin, Yu Qiao, and Jing
+Shao. Salad-bench: A hierarchical and comprehensive safety benchmark for large language models.
+arXiv preprint arXiv:2402.05044, 2024.
+Zhexin Zhang, Leqi Lei, Lindong Wu, Rui Sun, Yongkang Huang, Chong Long, Xiao Liu, Xuanyu
+Lei, Jie Tang, and Minlie Huang. Safetybench: Evaluating the safety of large language models
+with multiple choice questions.arXiv preprint arXiv:2309.07045, 2023.
+Liang Xu, Kangkang Zhao, Lei Zhu, and Hang Xue. Sc-safety: A multi-round open-ended question ad-
+versarial safety benchmark for large language models in chinese.arXiv preprint arXiv:2310.05818,
+2023.
+Divyansh Agarwal, Alexander Richard Fabbri, Ben Risher, Philippe Laban, Shafiq Joty, and Chien-
+Sheng Wu. Prompt leakage effect and mitigation strategies for multi-turn llm applications. In
+Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing:
+Industry Track, pages 1255–1275, 2024.
+Fengqing Jiang, Fengbo Ma, Zhangchen Xu, Yuetai Li, Bhaskar Ramasubramanian, Luyao Niu,
+Bo Li, Xianyan Chen, Zhen Xiang, and Radha Poovendran. Sosbench: Benchmarking safety
+alignment on scientific knowledge.arXiv preprint arXiv:2505.21605, 2025.
+Xianjun Yang, Liqiang Xiao, Shiyang Li, Faisal Ladhak, Hyokun Yun, Linda Ruth Petzold, Yi Xu,
+and William Yang Wang. Many-turn jailbreaking.arXiv preprint arXiv:2508.06755, 2025a.
+Zhiyuan Ning, Tianle Gu, Jiaxin Song, Shixin Hong, Lingyu Li, Huacan Liu, Jie Li, Yixu Wang,
+Meng Lingyu, Yan Teng, et al. Linguasafe: A comprehensive multilingual safety benchmark for
+large language models.arXiv preprint arXiv:2508.12733, 2025.
+Lizhi Lin, Honglin Mu, Zenan Zhai, Minghan Wang, Yuxia Wang, Renxi Wang, Junjie Gao, Yixuan
+Zhang, Wanxiang Che, Timothy Baldwin, et al. Against the achilles’ heel: A survey on red teaming
+for generative models.arXiv preprint arXiv:2404.00629, 2024a.
+11
+
+===== PAGE 12 =====
+Published as a conference paper at ICLR 2026
+Alexander Wei, Nika Haghtalab, and Jacob Steinhardt. Jailbroken: How does llm safety training fail?
+Advances in Neural Information Processing Systems, 36, 2024.
+Yi Liu, Gelei Deng, Zhengzi Xu, Yuekang Li, Yaowen Zheng, Ying Zhang, Lida Zhao, Tianwei
+Zhang, Kailong Wang, and Yang Liu. Jailbreaking chatgpt via prompt engineering: An empirical
+study.arXiv preprint arXiv:2305.13860, 2023.
+Zihao Xu, Yi Liu, Gelei Deng, Yuekang Li, and Stjepan Picek. A comprehensive study of jailbreak
+attack versus defense for large language models. InFindings of the Association for Computational
+Linguistics ACL 2024, pages 7432–7449, 2024a.
+Zihao Xu, Yi Liu, Gelei Deng, Yuekang Li, and Stjepan Picek. Llm jailbreak attack versus defense
+techniques–a comprehensive study.arXiv preprint arXiv:2402.13457, 2024b.
+Jie Huang, Hanyin Shao, and Kevin Chen-Chuan Chang. Are large pre-trained language models
+leaking your personal information? InFindings of the Association for Computational Linguistics:
+EMNLP 2022, pages 2038–2047, 2022.
+Niloofar Mireshghallah, Hyunwoo Kim, Xuhui Zhou, Yulia Tsvetkov, Maarten Sap, Reza Shokri, and
+Yejin Choi. Can llms keep a secret? testing privacy implications of language models via contextual
+integrity theory. InThe Twelfth International Conference on Learning Representations, 2024.
+Salman Rahman, Liwei Jiang, James Shiffer, Genglin Liu, Sheriff Issaka, Md Rizwan Parvez, Hamid
+Palangi, Kai-Wei Chang, Yejin Choi, and Saadia Gabriel. X-teaming: Multi-turn jailbreaks and
+defenses with adaptive multi-agents.arXiv preprint arXiv:2504.13203, 2025.
+Xikang Yang, Biyu Zhou, Xuehai Tang, Jizhong Han, and Songlin Hu. Chain of attack: Hide your
+intention through multi-turn interrogation. InFindings of the Association for Computational
+Linguistics: ACL 2025, pages 9881–9901, 2025b.
+Xiaohu Du, Fan Mo, Ming Wen, Tu Gu, Huadi Zheng, Hai Jin, and Jie Shi. Multi-turn jailbreaking
+large language models via attention shifting. InProceedings of the AAAI Conference on Artificial
+Intelligence, volume 39, pages 23814–23822, 2025.
+Jianing Geng, Biao Yi, Zekun Fei, Tongxi Wu, Lihai Nie, and Zheli Liu. When safety detectors aren’t
+enough: A stealthy and effective jailbreak attack on llms via steganographic techniques.arXiv
+preprint arXiv:2505.16765, 2025.
+Jianchao Ji, Yutong Chen, Mingyu Jin, Wujiang Xu, Wenyue Hua, and Yongfeng Zhang. Moralbench:
+Moral evaluation of llms.arXiv preprint arXiv:2406.04428, 2024b.
+Hao Sun, Zhexin Zhang, Jiawen Deng, Jiale Cheng, and Minlie Huang. Safety assessment of chinese
+large language models.arXiv preprint arXiv:2304.10436, 2023.
+Zhenhong Zhou, Jiuyang Xiang, Haopeng Chen, Quan Liu, Zherui Li, and Sen Su. Speak out
+of turn: Safety vulnerability of large language models in multi-turn dialogue.arXiv preprint
+arXiv:2402.17262, 2024a.
+Yue Zhou, Henry Zou, Barbara Di Eugenio, and Yang Zhang. Large language models are involuntary
+truth-tellers: Exploiting fallacy failure for jailbreak attacks. InProceedings of the 2024 Conference
+on Empirical Methods in Natural Language Processing, pages 13293–13304, 2024b.
+Ge Bai, Jie Liu, Xingyuan Bu, Yancheng He, Jiaheng Liu, Zhanhui Zhou, Zhuoran Lin, Wenbo Su,
+Tiezheng Ge, Bo Zheng, et al. Mt-bench-101: A fine-grained benchmark for evaluating large
+language models in multi-turn dialogues.arXiv preprint arXiv:2402.14762, 2024.
+Aaron Hurst, Adam Lerer, Adam P Goucher, Adam Perelman, Aditya Ramesh, Aidan Clark, AJ Os-
+trow, Akila Welihinda, Alan Hayes, Alec Radford, et al. Gpt-4o system card.arXiv preprint
+arXiv:2410.21276, 2024.
+Daya Guo, Dejian Yang, Haowei Zhang, Junxiao Song, Ruoyu Zhang, Runxin Xu, Qihao Zhu,
+Shirong Ma, Peiyi Wang, Xiao Bi, et al. Deepseek-r1: Incentivizing reasoning capability in llms
+via reinforcement learning.arXiv preprint arXiv:2501.12948, 2025.
+12

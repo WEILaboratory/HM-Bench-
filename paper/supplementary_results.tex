@@ -1,0 +1,285 @@
+\subsection{Complete Model Results}
+
+\begin{table}[t]
+\caption{All 13 model results. Confidence intervals resample items; Neg. is
+the percentage of scores below zero.}
+\label{tab:supp-models}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{1.8pt}
+\renewcommand{\arraystretch}{1.22}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.48in}
+                  >{\raggedright\arraybackslash}p{1.42in}
+                  >{\centering\arraybackslash}p{0.38in}
+                  *{2}{>{\centering\arraybackslash}p{0.38in}
+                       >{\centering\arraybackslash}p{0.80in}
+                       >{\centering\arraybackslash}p{0.38in}}}
+\toprule
+Family & Model / Hugging Face identifier & Params. &
+\multicolumn{3}{c}{Single-turn} & \multicolumn{3}{c}{Multi-turn}\\
+\cmidrule(lr){4-6}\cmidrule(lr){7-9}
+ & & & Mean & 95\% CI & Neg. & Mean & 95\% CI & Neg.\\
+\midrule
+InternLM & internlm/internlm2\_5-20b-chat & 20B & $1.138$ & $[1.052,\,1.222]$ & 14.8 & $0.650$ & $[0.380,\,0.910]$ & 30.0\\
+GLM & zai-org/GLM-4-32B-0414 & 32B & $0.463$ & $[0.341,\,0.583]$ & 35.5 & $1.310$ & $[1.060,\,1.540]$ & 13.0\\
+Qwen & Qwen/Qwen2.5-14B-Instruct & 14B & $0.697$ & $[0.593,\,0.799]$ & 26.3 & $0.770$ & $[0.500,\,1.030]$ & 23.0\\
+Qwen & Qwen/Qwen2.5-32B-Instruct & 32B & $0.579$ & $[0.481,\,0.676]$ & 30.9 & $0.650$ & $[0.360,\,0.920]$ & 28.0\\
+InternLM & internlm/internlm2\_5-7b-chat & 7B & $0.871$ & $[0.776,\,0.962]$ & 20.1 & $0.080$ & $[-0.200,\,0.360]$ & 46.0\\
+GLM & zai-org/GLM-4-9B-0414 & 9B & $0.144$ & $[0.022,\,0.264]$ & 42.2 & $0.610$ & $[0.290,\,0.910]$ & 32.0\\
+DeepSeek & deepseek-ai/DeepSeek-V2-Lite-Chat & 16B$^\dagger$ & $0.705$ & $[0.611,\,0.799]$ & 22.1 & $-0.220$ & $[-0.500,\,0.070]$ & 53.0\\
+DeepSeek & deepseek-ai/deepseek-llm-7b-chat & 7B & $0.143$ & $[0.036,\,0.248]$ & 37.8 & $-0.140$ & $[-0.420,\,0.140]$ & 51.0\\
+Qwen & Qwen/Qwen2.5-7B-Instruct & 7B & $0.227$ & $[0.119,\,0.334]$ & 39.4 & $-0.440$ & $[-0.720,\,-0.150]$ & 58.0\\
+GLM & zai-org/GLM-Z1-32B-0414 & 32B & $-0.112$ & $[-0.222,\,-0.003]$ & 47.4 & $-0.840$ & $[-1.070,\,-0.600]$ & 70.0\\
+GLM & zai-org/GLM-Z1-9B-0414 & 9B & $-0.429$ & $[-0.533,\,-0.323]$ & 57.6 & $-0.880$ & $[-1.140,\,-0.600]$ & 71.0\\
+InternLM & internlm/internlm2\_5-1\_8b-chat & 1.8B & $-0.263$ & $[-0.362,\,-0.164]$ & 51.5 & $-1.280$ & $[-1.450,\,-1.090]$ & 87.0\\
+Qwen & Qwen/Qwen2.5-1.5B-Instruct & 1.5B & $-0.536$ & $[-0.638,\,-0.434]$ & 58.9 & $-1.530$ & $[-1.680,\,-1.370]$ & 93.0\\
+\bottomrule
+\multicolumn{9}{l}{\scriptsize $^\dagger$Approximately 2.4B active parameters per token.}
+\end{tabular}
+\end{table}
+
+\subsection{Complete Track-Level Distributions}
+
+\begin{table}[t]
+\caption{Single-turn top-level domains. Score columns report percentages
+pooled over all 13 models; CIs resample item IDs.}
+\label{tab:supp-domains}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.3pt}
+\renewcommand{\arraystretch}{1.12}
+\rowcolors{2}{supppale}{white}
+\begin{tabularx}{\textwidth}{>{\centering\arraybackslash}p{0.34in}X
+                                 >{\centering\arraybackslash}p{0.28in}
+                                 >{\centering\arraybackslash}p{0.42in}
+                                 >{\centering\arraybackslash}p{0.80in}
+                                 *{6}{>{\centering\arraybackslash}p{0.40in}}}
+\toprule
+\rowcolor{supphead}
+ID & Domain & N & Mean & 95\% CI & Neg. & $-2$ & $-1$ & $0$ & $+1$ & $+2$\\
+\midrule
+D09 & Offline personal safety & 75 & $-0.168$ & $[-0.387,\,0.056]$ & 51.2 & 32.9 & 18.3 & 3.9 & 22.6 & 22.4\\
+D08 & Property \& exploitation & 75 & $0.032$ & $[-0.175,\,0.242]$ & 44.3 & 25.0 & 19.3 & 5.2 & 28.4 & 22.1\\
+D06 & Digital platforms & 75 & $0.118$ & $[-0.078,\,0.309]$ & 41.9 & 26.8 & 15.2 & 3.2 & 29.2 & 25.6\\
+D07 & Privacy \& synthetic media & 65 & $0.173$ & $[-0.069,\,0.412]$ & 43.3 & 25.6 & 17.8 & 2.4 & 22.5 & 31.8\\
+D03 & Mental health \& AI reliance & 65 & $0.200$ & $[0.036,\,0.366]$ & 36.2 & 11.2 & 25.0 & 8.5 & 43.1 & 12.2\\
+D02 & Education decisions & 70 & $0.219$ & $[0.024,\,0.412]$ & 37.9 & 17.0 & 20.9 & 6.5 & 34.4 & 21.2\\
+D05 & Family, school \& campus & 75 & $0.308$ & $[0.117,\,0.496]$ & 36.2 & 16.9 & 19.3 & 4.9 & 33.8 & 25.0\\
+D04 & Physical health \& boundaries & 75 & $0.422$ & $[0.233,\,0.603]$ & 31.6 & 15.2 & 16.4 & 5.8 & 36.2 & 26.4\\
+D01 & Social values & 75 & $0.542$ & $[0.370,\,0.708]$ & 29.4 & 14.4 & 15.1 & 4.3 & 34.6 & 31.7\\
+D10 & Law \& public order & 65 & $1.015$ & $[0.852,\,1.167]$ & 18.9 & 9.3 & 9.6 & 2.1 & 28.0 & 50.9\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[t]
+\caption{Multi-turn mechanisms. Each row pools 13 models over ten
+domain-matched trajectories; CIs resample model--domain blocks.}
+\label{tab:supp-mechanisms}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.3pt}
+\renewcommand{\arraystretch}{1.12}
+\rowcolors{2}{supppurplepale}{white}
+\begin{tabularx}{\textwidth}{>{\centering\arraybackslash}p{0.34in}X
+                                 >{\centering\arraybackslash}p{0.28in}
+                                 >{\centering\arraybackslash}p{0.42in}
+                                 >{\centering\arraybackslash}p{0.80in}
+                                 *{6}{>{\centering\arraybackslash}p{0.40in}}}
+\toprule
+\rowcolor{supppurple!15}
+ID & Mechanism & N & Mean & 95\% CI & Neg. & $-2$ & $-1$ & $0$ & $+1$ & $+2$\\
+\midrule
+M09 & Relational pressure & 10 & $-0.792$ & $[-1.038,\,-0.538]$ & 70.0 & 48.5 & 21.5 & 3.8 & 13.1 & 13.1\\
+M02 & Cross-turn reference & 10 & $-0.569$ & $[-0.831,\,-0.292]$ & 61.5 & 46.9 & 14.6 & 1.5 & 22.3 & 14.6\\
+M08 & Rule accumulation & 10 & $-0.377$ & $[-0.623,\,-0.131]$ & 58.5 & 29.2 & 29.2 & 3.8 & 25.4 & 12.3\\
+M03 & Harmful composition & 10 & $-0.308$ & $[-0.554,\,-0.046]$ & 57.7 & 27.7 & 30.0 & 3.8 & 22.3 & 16.2\\
+M05 & Topic interruption & 10 & $-0.054$ & $[-0.315,\,0.200]$ & 50.8 & 20.8 & 30.0 & 5.4 & 21.5 & 22.3\\
+M10 & Information-boundary shift & 10 & $-0.015$ & $[-0.285,\,0.262]$ & 48.5 & 26.2 & 22.3 & 3.1 & 23.8 & 24.6\\
+M01 & Progressive intent & 10 & $0.146$ & $[-0.115,\,0.400]$ & 43.1 & 18.5 & 24.6 & 6.2 & 25.4 & 25.4\\
+M07 & Safety-state update & 10 & $0.146$ & $[-0.123,\,0.415]$ & 44.6 & 22.3 & 22.3 & 2.3 & 24.6 & 28.5\\
+M06 & Request narrowing & 10 & $0.292$ & $[0.046,\,0.531]$ & 36.9 & 13.8 & 23.1 & 7.7 & 30.8 & 24.6\\
+M04 & Purpose reversal & 10 & $0.562$ & $[0.277,\,0.838]$ & 32.3 & 20.8 & 11.5 & 3.1 & 20.0 & 44.6\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\FloatBarrier
+\begin{table}[t]
+\caption{All single-turn subdomains ordered from lower to higher mean score
+(1--25 of 50).}
+\label{tab:supp-subdomains-1}
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.18}
+\rowcolors{2}{supppale}{white}
+\begin{tabularx}{0.94\textwidth}{>{\centering\arraybackslash}p{0.32in}X
+                                     >{\centering\arraybackslash}p{0.28in}
+                                     >{\centering\arraybackslash}p{0.52in}
+                                     >{\centering\arraybackslash}p{0.52in}}
+\toprule
+\rowcolor{supphead}
+\textbf{Rank} & \textbf{Subdomain} & \textbf{N} & \textbf{Mean} & \textbf{Neg. (\%)}\\
+\midrule
+1 & Offline meetings with online contacts, unfamiliar groups, and adults & 15 & $-1.164$ & 79.0\\
+2 & Cognitive outsourcing, shallow learning, and impaired creativity & 15 & $-0.687$ & 67.2\\
+3 & Commercialization of minors, private-channel diversion, and labor rights & 15 & $-0.646$ & 61.5\\
+4 & Exposure of minors' identity, school, and family-sensitive information & 15 & $-0.492$ & 63.1\\
+5 & Fandom, livestreaming, online entertainment, and virtual social risks & 15 & $-0.410$ & 57.4\\
+6 & Running away, staying out overnight, and concealing real whereabouts & 15 & $-0.369$ & 55.4\\
+7 & Adolescent relationships, power imbalance, and controlling behavior & 15 & $-0.221$ & 51.3\\
+8 & Age-inappropriate venues, off-campus activities, and risky gatherings & 15 & $-0.221$ & 50.3\\
+9 & Missed crisis recognition and failed escalation to real-world help & 15 & $-0.195$ & 49.2\\
+10 & Impulsive and chance-based spending in games, livestreaming, and fandom & 15 & $-0.164$ & 47.2\\
+11 & Family asset misuse, payment verification, and account-transaction risks & 15 & $-0.072$ & 49.7\\
+12 & Misjudged protective intervention in situations involving actual harm & 15 & $-0.051$ & 47.2\\
+13 & Internet overuse, excessive use, and functional impairment & 15 & $0.010$ & 41.0\\
+14 & Overcollection of psychological, physical, family, and intimate experiences & 15 & $0.031$ & 44.1\\
+15 & Dangerous challenges, outdoor risks, transport risks, and unprotected experiments & 15 & $0.082$ & 48.7\\
+16 & Circumvention of youth mode, real-name checks, and platform safeguards & 15 & $0.128$ & 43.6\\
+17 & Anthropomorphic AI companionship, dependence, and intimacy boundaries & 15 & $0.138$ & 37.9\\
+18 & Commercial misinformation in training and admissions & 10 & $0.162$ & 37.7\\
+19 & Breakdown of guardianship support and concealment of serious problems & 15 & $0.174$ & 38.5\\
+20 & Vulnerable minors, boarding settings, and inadequate off-campus protection & 15 & $0.241$ & 37.4\\
+21 & Disguised advertising, anxiety marketing, and targeted consumer manipulation & 15 & $0.262$ & 36.4\\
+22 & Growth values, life outlook, labor values, and success narratives & 15 & $0.308$ & 31.3\\
+23 & Admissions policy, educational evaluation, and high-stakes decisions & 15 & $0.318$ & 29.7\\
+24 & National identity, historical culture, and shared-community misconceptions & 15 & $0.328$ & 37.4\\
+25 & Harmful community dependence and disconnection from real-world support & 10 & $0.338$ & 35.4\\
+\bottomrule
+\end{tabularx}
+\end{table}
+\begin{table}[t]
+\caption{All single-turn subdomains ordered from lower to higher mean score
+(26--50 of 50).}
+\label{tab:supp-subdomains-2}
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.18}
+\rowcolors{2}{supppale}{white}
+\begin{tabularx}{0.94\textwidth}{>{\centering\arraybackslash}p{0.32in}X
+                                     >{\centering\arraybackslash}p{0.28in}
+                                     >{\centering\arraybackslash}p{0.52in}
+                                     >{\centering\arraybackslash}p{0.52in}}
+\toprule
+\rowcolor{supphead}
+\textbf{Rank} & \textbf{Subdomain} & \textbf{N} & \textbf{Mean} & \textbf{Neg. (\%)}\\
+\midrule
+26 & Authenticity, labeling, and impersonation in AI-generated content & 15 & $0.349$ & 40.0\\
+27 & Emotional appeasement, catastrophizing, and affective echo chambers & 10 & $0.362$ & 30.8\\
+28 & Image, voice, and video forgery, impersonation, and malicious synthesis & 15 & $0.390$ & 39.0\\
+29 & Sexual abuse, pregnancy risks, and misleading help for intimate imagery & 15 & $0.441$ & 31.3\\
+30 & Unqualified diagnosis, pathological labels, and fixed self-concepts & 15 & $0.456$ & 25.6\\
+31 & Academic integrity, exam cheating, and evaluation-material fraud & 15 & $0.513$ & 36.9\\
+32 & Age-inappropriate recommendation, harmful feeds, and filter bubbles & 15 & $0.513$ & 27.7\\
+33 & Bullying, peer harm, and online amplification & 15 & $0.528$ & 28.7\\
+34 & Appearance anxiety, body shame, and extreme beauty or weight-loss advice & 15 & $0.533$ & 25.1\\
+35 & Doxxing, public shaming, and secondary privacy diffusion & 10 & $0.592$ & 33.1\\
+36 & Exploitation of minors by adults or online groups for illegal activities & 10 & $0.600$ & 30.0\\
+37 & Leakage of account credentials, verification information, and device data & 10 & $0.638$ & 29.2\\
+38 & Escalated parent-teacher conflict and peer manipulation & 15 & $0.646$ & 29.2\\
+39 & Online information judgment, factual reasoning, and media literacy & 15 & $0.656$ & 25.1\\
+40 & Pubertal development, scientific sexuality education, and age-appropriate expression & 15 & $0.672$ & 23.6\\
+41 & Illness, injury, medication, fitness, and unsafe health guidance & 15 & $0.682$ & 26.7\\
+42 & Social-cognition bias, cynical narratives, and weakened public ethics & 15 & $0.692$ & 25.6\\
+43 & Group stereotypes, social prejudice, and constrained opportunities & 15 & $0.723$ & 27.7\\
+44 & Academic pressure, grade anxiety, and conflicts with health & 15 & $0.769$ & 17.9\\
+45 & Loans, part-time work, illicit schemes, and fraud chains & 15 & $0.779$ & 26.7\\
+46 & Emergency avoidance, help seeking, and unsafe immediate responses & 15 & $0.831$ & 22.6\\
+47 & Forgery, impersonation, rule circumvention, and blame shifting & 15 & $0.928$ & 23.6\\
+48 & Normalization of misconduct, minor offenses, and weakened responsibility & 10 & $0.962$ & 22.3\\
+49 & Misinformation about legal rights, duties, and remedies & 15 & $1.077$ & 14.4\\
+50 & Online rumors, malicious reporting, opinion manipulation, and cyberbullying & 15 & $1.354$ & 9.2\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\FloatBarrier
+\subsection{Statistical Tests}
+
+\begin{table}[htbp]
+\caption{Complete inferential tests. Correlations use 13 model means; the
+Friedman and Wilcoxon tests use 130 model--domain blocks.}
+\label{tab:supp-tests}
+\centering
+\small
+\rowcolors{2}{supppale}{white}
+\begin{tabularx}{0.82\textwidth}{Xrrr}
+\toprule
+\rowcolor{supphead}
+Test & Statistic & df / N & $p$\\
+\midrule
+Pearson track correlation & $r=0.760$ & 13 models & 0.002571\\
+Spearman track correlation & $\rho=0.732$ & 13 models & 0.004465\\
+Friedman mechanism test & $\chi^2=106.52$ & 9 & 7.49e-19\\
+\bottomrule
+\end{tabularx}
+\vspace{6pt}
+\parbox{0.78\textwidth}{\centering\small Two-sided paired Wilcoxon comparisons
+against M09. Mean difference is M09 minus the comparison mechanism.}\par\smallskip
+\rowcolors{2}{supppurplepale}{white}
+\begin{tabularx}{0.78\textwidth}{Xrrr}
+\toprule
+\rowcolor{supppurple!15}
+Comparison & Mean difference & Raw $p$ & Holm $p$\\
+\midrule
+M09 vs. M01 & $-0.9385$ & 8.758e-07 & 5.255e-06\\
+M09 vs. M02 & $-0.2231$ & 0.1504 & 0.1504\\
+M09 vs. M03 & $-0.4846$ & 0.004039 & 0.01212\\
+M09 vs. M04 & $-1.3538$ & 8.587e-12 & 7.728e-11\\
+M09 vs. M05 & $-0.7385$ & 3.254e-05 & 0.0001436\\
+M09 vs. M06 & $-1.0846$ & 1.255e-09 & 1.004e-08\\
+M09 vs. M07 & $-0.9385$ & 2.328e-07 & 1.63e-06\\
+M09 vs. M08 & $-0.4154$ & 0.01945 & 0.0389\\
+M09 vs. M10 & $-0.7769$ & 2.872e-05 & 0.0001436\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Diagnostic Analyses Beyond Aggregate Scores}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/supplementary_diagnostics.pdf}
+\caption{Non-redundant diagnostics derived from the released scores.
+Panel A pairs the single-turn mean for each model--domain combination with the
+multi-turn mean for the same risk domain, averaged over mechanisms; the two
+tracks still contain different items. Panel B compares each model's overall
+multi-turn mean with the mean of its two weakest mechanisms. Panel C represents
+mechanisms as nodes sized by negative-score rate and draws an edge only when
+their scores have Spearman correlation of at least 0.40 across 130
+model--domain blocks.}
+\label{fig:supp-diagnostics}
+\end{figure}
+
+\paragraph{Partial transfer, not interchangeability.}
+At the matched domain level, the two tracks have a descriptive Spearman
+correlation of $\rho=0.584$ over 130
+model--domain pairs.  This is stronger evidence of shared competence than a
+comparison of two pooled means, yet the dispersion and displaced domain
+centroids show that knowing a model's single-turn domain score does not
+determine its performance when risks are distributed across conversation
+state.  Because the paired observations remain different challenge items, the
+association is not a causal estimate of adding turns.
+
+\paragraph{Average scores conceal a mechanism floor.}
+Across the 13 models, the median difference between the overall multi-turn
+mean and the bottom-two-mechanism mean is
+0.73 scale points.  The two largest gaps
+occur for GLM-4-9B (0.61 overall versus -0.85 tail) and GLM-4-32B (1.31 overall versus 0.15 tail).  Thus, even a favorable aggregate can coexist
+with a substantially weaker mechanism-specific floor; the comparison supports
+reporting minimum or tail criteria alongside an overall threshold.
+
+\paragraph{The hardest mechanisms are not merely one shared failure mode.}
+The co-failure graph retains 15 of the 45
+mechanism pairs at the prespecified $\rho\geq
+0.40$ display threshold.  M02 and
+M09, despite having the two largest pooled negative-score rates, have maximum
+pairwise correlations of only 0.33 and
+0.34, respectively.  Their absence of
+displayed edges does not imply statistical independence, but it does show that
+their difficulty cannot be reduced to the strongest broad co-failure clusters
+in this model set.  Separate mechanism-level diagnostics therefore carry
+information that a single safety ranking discards.

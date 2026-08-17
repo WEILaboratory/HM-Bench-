@@ -1,0 +1,46 @@
+$ vllm serve /data/jinxiang/internlm_internlm2_5-20b-chat --served-model-name internlm2.5-20b-chat --host 127.0.0.1 --port 8108 --dtype bfloat16 --max-model-len 4096 --gpu-memory-utilization 0.9 --generation-config vllm --max-num-seqs 1 --max-num-batched-tokens 4096 --enforce-eager --trust-remote-code
+
+[1;36m(APIServer pid=4052632)[0;0m The argument `trust_remote_code` is to be used with Auto classes. It has no effect here and is ignored.
+[1;36m(APIServer pid=4052632)[0;0m `torch_dtype` is deprecated! Use `dtype` instead!
+[W718 16:28:50.076534279 ProcessGroupNCCL.cpp:981] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[1;36m(EngineCore_DP0 pid=4053658)[0;0m WARNING 07-18 16:28:50 [topk_topp_sampler.py:69] FlashInfer is not available. Falling back to the PyTorch-native implementation of top-p & top-k sampling. For the best performance, please install FlashInfer.
+[1;36m(EngineCore_DP0 pid=4053658)[0;0m Loading safetensors checkpoint shards:   0% Completed | 0/21 [00:00<?, ?it/s]
+[1;36m(EngineCore_DP0 pid=4053658)[0;0m Loading safetensors checkpoint shards:   5% Completed | 1/21 [00:02<00:59,  2.95s/it]
+[1;36m(EngineCore_DP0 pid=4053658)[0;0m Loading safetensors checkpoint shards:  10% Completed | 2/21 [00:04<00:43,  2.29s/it]
+[1;36m(EngineCore_DP0 pid=4053658)[0;0m Loading safetensors checkpoint shards:  14% Completed | 3/21 [00:07<00:41,  2.29s/it]
+[1;36m(EngineCore_DP0 pid=4053658)[0;0m Loading safetensors checkpoint shards:  19% Completed | 4/21 [00:08<00:32,  1.91s/it]
+[1;36m(EngineCore_DP0 pid=4053658)[0;0m Loading safetensors checkpoint shards:  24% Completed | 5/21 [00:10<00:32,  2.02s/it]
+[1;36m(EngineCore_DP0 pid=4053658)[0;0m Loading safetensors checkpoint shards:  29% Completed | 6/21 [00:12<00:31,  2.09s/it]
+[1;36m(EngineCore_DP0 pid=4053658)[0;0m Loading safetensors checkpoint shards:  33% Completed | 7/21 [00:15<00:30,  2.15s/it]
+[1;36m(EngineCore_DP0 pid=4053658)[0;0m Loading safetensors checkpoint shards:  38% Completed | 8/21 [00:17<00:28,  2.20s/it]
+[1;36m(EngineCore_DP0 pid=4053658)[0;0m Loading safetensors checkpoint shards:  43% Completed | 9/21 [00:19<00:25,  2.09s/it]
+[1;36m(EngineCore_DP0 pid=4053658)[0;0m Loading safetensors checkpoint shards:  48% Completed | 10/21 [00:21<00:23,  2.14s/it]
+[1;36m(EngineCore_DP0 pid=4053658)[0;0m Loading safetensors checkpoint shards:  52% Completed | 11/21 [00:23<00:21,  2.16s/it]
+[1;36m(EngineCore_DP0 pid=4053658)[0;0m Loading safetensors checkpoint shards:  57% Completed | 12/21 [00:26<00:19,  2.21s/it]
+[1;36m(EngineCore_DP0 pid=4053658)[0;0m Loading safetensors checkpoint shards:  62% Completed | 13/21 [00:28<00:17,  2.23s/it]
+[1;36m(EngineCore_DP0 pid=4053658)[0;0m Loading safetensors checkpoint shards:  67% Completed | 14/21 [00:30<00:15,  2.24s/it]
+[1;36m(EngineCore_DP0 pid=4053658)[0;0m Loading safetensors checkpoint shards:  71% Completed | 15/21 [00:32<00:13,  2.19s/it]
+[1;36m(EngineCore_DP0 pid=4053658)[0;0m Loading safetensors checkpoint shards:  76% Completed | 16/21 [00:34<00:10,  2.02s/it]
+[1;36m(EngineCore_DP0 pid=4053658)[0;0m Loading safetensors checkpoint shards:  81% Completed | 17/21 [00:35<00:07,  1.91s/it]
+[1;36m(EngineCore_DP0 pid=4053658)[0;0m Loading safetensors checkpoint shards:  86% Completed | 18/21 [00:37<00:05,  1.83s/it]
+[1;36m(EngineCore_DP0 pid=4053658)[0;0m Loading safetensors checkpoint shards:  90% Completed | 19/21 [00:39<00:03,  1.82s/it]
+[1;36m(EngineCore_DP0 pid=4053658)[0;0m Loading safetensors checkpoint shards:  95% Completed | 20/21 [00:41<00:01,  1.77s/it]
+[1;36m(EngineCore_DP0 pid=4053658)[0;0m Loading safetensors checkpoint shards: 100% Completed | 21/21 [00:42<00:00,  1.75s/it]
+[1;36m(EngineCore_DP0 pid=4053658)[0;0m Loading safetensors checkpoint shards: 100% Completed | 21/21 [00:42<00:00,  2.03s/it]
+[1;36m(EngineCore_DP0 pid=4053658)[0;0m 
+[1;36m(APIServer pid=4052632)[0;0m INFO:     Started server process [4052632]
+[1;36m(APIServer pid=4052632)[0;0m INFO:     Waiting for application startup.
+[1;36m(APIServer pid=4052632)[0;0m INFO:     Application startup complete.
+[1;36m(APIServer pid=4052632)[0;0m INFO:     127.0.0.1:43498 - "GET /v1/models HTTP/1.1" 200 OK
+[1;36m(APIServer pid=4052632)[0;0m WARNING 07-18 16:29:41 [launcher.py:98] port 8108 is used by process psutil.Process(pid=4052632, name='vllm', status='running') launched with command:
+[1;36m(APIServer pid=4052632)[0;0m WARNING 07-18 16:29:41 [launcher.py:98] /home/jinxiang/miniconda3/envs/vllm_eval/bin/python /home/jinxiang/miniconda3/envs/vllm_eval/bin/vllm serve /data/jinxiang/internlm_internlm2_5-20b-chat --served-model-name internlm2.5-20b-chat --host 127.0.0.1 --port 8108 --dtype bfloat16 --max-model-len 4096 --gpu-memory-utilization 0.9 --generation-config vllm --max-num-seqs 1 --max-num-batched-tokens 4096 --enforce-eager --trust-remote-code
+[rank0]:[W718 16:29:42.204846079 ProcessGroupNCCL.cpp:1538] Warning: WARNING: destroy_process_group() was not called before program exit, which can leak resources. For more info, please see https://pytorch.org/docs/stable/distributed.html#shutdown (function operator())
+[1;36m(APIServer pid=4052632)[0;0m INFO:     Shutting down
+[1;36m(APIServer pid=4052632)[0;0m INFO:     Waiting for application shutdown.
+[1;36m(APIServer pid=4052632)[0;0m INFO:     Application shutdown complete.

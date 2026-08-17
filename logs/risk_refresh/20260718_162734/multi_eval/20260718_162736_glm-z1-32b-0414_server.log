@@ -1,0 +1,45 @@
+$ vllm serve /data/jinxiang/zai-org_GLM-Z1-32B-0414 --served-model-name glm-z1-32b-0414 --host 127.0.0.1 --port 8112 --dtype bfloat16 --max-model-len 4096 --gpu-memory-utilization 0.9 --generation-config vllm --max-num-seqs 1 --max-num-batched-tokens 4096 --enforce-eager --tensor-parallel-size 2 --distributed-executor-backend mp --disable-custom-all-reduce
+
+[1;36m(APIServer pid=4057907)[0;0m `torch_dtype` is deprecated! Use `dtype` instead!
+[W718 16:30:18.463542682 ProcessGroupNCCL.cpp:981] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[W718 16:30:18.473098313 ProcessGroupNCCL.cpp:981] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[Gloo] Rank 1 is connected to 1 peer ranks. Expected number of connected peer ranks is : 1
+[Gloo] Rank 0 is connected to 1 peer ranks. Expected number of connected peer ranks is : 1
+[Gloo] Rank 1 is connected to 1 peer ranks. Expected number of connected peer ranks is : 1
+[Gloo] Rank 0 is connected to 1 peer ranks. Expected number of connected peer ranks is : 1
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 1 peer ranks. Expected number of connected peer ranks is : 1
+[Gloo] Rank 1 is connected to 1 peer ranks. Expected number of connected peer ranks is : 1
+WARNING 07-18 16:30:18 [topk_topp_sampler.py:69] FlashInfer is not available. Falling back to the PyTorch-native implementation of top-p & top-k sampling. For the best performance, please install FlashInfer.
+WARNING 07-18 16:30:18 [topk_topp_sampler.py:69] FlashInfer is not available. Falling back to the PyTorch-native implementation of top-p & top-k sampling. For the best performance, please install FlashInfer.
+[1;36m(Worker_TP0 pid=4059684)[0;0m Loading safetensors checkpoint shards:   0% Completed | 0/14 [00:00<?, ?it/s]
+[1;36m(Worker_TP0 pid=4059684)[0;0m Loading safetensors checkpoint shards:   7% Completed | 1/14 [00:02<00:30,  2.34s/it]
+[1;36m(Worker_TP0 pid=4059684)[0;0m Loading safetensors checkpoint shards:  14% Completed | 2/14 [00:04<00:29,  2.44s/it]
+[1;36m(Worker_TP0 pid=4059684)[0;0m Loading safetensors checkpoint shards:  21% Completed | 3/14 [00:07<00:26,  2.41s/it]
+[1;36m(Worker_TP0 pid=4059684)[0;0m Loading safetensors checkpoint shards:  29% Completed | 4/14 [00:09<00:24,  2.44s/it]
+[1;36m(Worker_TP0 pid=4059684)[0;0m Loading safetensors checkpoint shards:  36% Completed | 5/14 [00:11<00:21,  2.38s/it]
+[1;36m(Worker_TP0 pid=4059684)[0;0m Loading safetensors checkpoint shards:  43% Completed | 6/14 [00:14<00:19,  2.43s/it]
+[1;36m(Worker_TP0 pid=4059684)[0;0m Loading safetensors checkpoint shards:  50% Completed | 7/14 [00:16<00:16,  2.41s/it]
+[1;36m(Worker_TP0 pid=4059684)[0;0m Loading safetensors checkpoint shards:  57% Completed | 8/14 [00:19<00:14,  2.44s/it]
+[1;36m(Worker_TP0 pid=4059684)[0;0m Loading safetensors checkpoint shards:  64% Completed | 9/14 [00:21<00:11,  2.40s/it]
+[1;36m(Worker_TP0 pid=4059684)[0;0m Loading safetensors checkpoint shards:  71% Completed | 10/14 [00:24<00:09,  2.42s/it]
+[1;36m(Worker_TP0 pid=4059684)[0;0m Loading safetensors checkpoint shards:  79% Completed | 11/14 [00:25<00:06,  2.07s/it]
+[1;36m(Worker_TP0 pid=4059684)[0;0m Loading safetensors checkpoint shards:  86% Completed | 12/14 [00:27<00:04,  2.18s/it]
+[1;36m(Worker_TP0 pid=4059684)[0;0m Loading safetensors checkpoint shards:  93% Completed | 13/14 [00:30<00:02,  2.24s/it]
+[1;36m(Worker_TP0 pid=4059684)[0;0m Loading safetensors checkpoint shards: 100% Completed | 14/14 [00:32<00:00,  2.30s/it]
+[1;36m(Worker_TP0 pid=4059684)[0;0m Loading safetensors checkpoint shards: 100% Completed | 14/14 [00:32<00:00,  2.34s/it]
+[1;36m(Worker_TP0 pid=4059684)[0;0m 
+[1;36m(APIServer pid=4057907)[0;0m INFO:     Started server process [4057907]
+[1;36m(APIServer pid=4057907)[0;0m INFO:     Waiting for application startup.
+[1;36m(APIServer pid=4057907)[0;0m INFO:     Application startup complete.
+[1;36m(APIServer pid=4057907)[0;0m INFO:     127.0.0.1:52058 - "GET /v1/models HTTP/1.1" 200 OK
+[1;36m(APIServer pid=4057907)[0;0m WARNING 07-18 16:31:01 [launcher.py:98] port 8112 is used by process psutil.Process(pid=4057907, name='vllm', status='running') launched with command:
+[1;36m(APIServer pid=4057907)[0;0m WARNING 07-18 16:31:01 [launcher.py:98] /home/jinxiang/miniconda3/envs/vllm_eval/bin/python /home/jinxiang/miniconda3/envs/vllm_eval/bin/vllm serve /data/jinxiang/zai-org_GLM-Z1-32B-0414 --served-model-name glm-z1-32b-0414 --host 127.0.0.1 --port 8112 --dtype bfloat16 --max-model-len 4096 --gpu-memory-utilization 0.9 --generation-config vllm --max-num-seqs 1 --max-num-batched-tokens 4096 --enforce-eager --tensor-parallel-size 2 --distributed-executor-backend mp --disable-custom-all-reduce
+[1;36m(APIServer pid=4057907)[0;0m INFO:     Shutting down
+[1;36m(APIServer pid=4057907)[0;0m INFO:     Waiting for application shutdown.
+[1;36m(APIServer pid=4057907)[0;0m INFO:     Application shutdown complete.

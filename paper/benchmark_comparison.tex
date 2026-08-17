@@ -1,0 +1,31 @@
+\begin{table}[!htb]
+\caption{Representative safety benchmarks. ``Mechanism control'' means that a cross-turn dependency is specified independently of the harm topic.}
+\label{tab:comparison}
+\centering
+\scriptsize
+\definecolor{comparisonhead}{HTML}{F3F4F6}
+\definecolor{comparisonours}{HTML}{EAF2F8}
+\setlength{\tabcolsep}{3.0pt}
+\setlength{\extrarowheight}{0.5pt}
+\renewcommand{\arraystretch}{1.08}
+\newcommand{\BenchRef}[2]{\textbf{#1}\par{\color{black!60}\citep{#2}}}
+\arrayrulecolor{black!18}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{1.36in}>{\raggedright\arraybackslash}p{0.55in}>{\raggedright\arraybackslash}p{0.91in}>{\raggedright\arraybackslash}p{1.04in}>{\raggedright\arraybackslash}X@{}}
+\rowcolor{comparisonhead}
+\textbf{Benchmark} & \textbf{Scope} & \textbf{Risk structure} & \textbf{Dialogue design} & \textbf{Evaluation and size} \\
+\specialrule{0.25pt}{0pt}{1.2pt}
+\BenchRef{Do-Not-Answer}{wang2024donotanswer} & EN / general & Broad harm taxonomy & Single turn; no control & Response safeguards; 939 prompts \\
+\specialrule{0.15pt}{0.8pt}{0.8pt}
+\BenchRef{Chinese Safeguards}{wang2024chinesesafeguards} & ZH / general & 6 areas; 17 types & Single turn; no control & Harmfulness and over-refusal; 3,042 prompts \\
+\specialrule{0.15pt}{0.8pt}{0.8pt}
+\BenchRef{CHiSafetyBench}{zhang2024chisafetybench} & ZH / general & 5 categories; 31 classes & Single + history-conditioned QA; no control & Recognition and refusal; 1,567 MCQ + 563 QA \\
+\specialrule{0.15pt}{0.8pt}{0.8pt}
+\BenchRef{CoSafe}{yu2024cosafe} & EN / general & 14 harm categories & Multi-turn; coreference & Harmlessness + helpfulness; 1,400 dialogues \\
+\specialrule{0.15pt}{0.8pt}{0.8pt}
+\BenchRef{SafeDialBench}{cao2026safedialbench} & ZH+EN / general & 2 levels; 6 dimensions & Multi-turn; 7 jailbreak strategies & Multi-turn safety abilities; 4,053 dialogues \\
+\specialrule{0.15pt}{0.8pt}{0.8pt}
+\BenchRef{YouthSafe}{yu2025youthsafe} & EN / adolescent & 6 / 11 / 78 taxonomy & Context snippets; no control & Detection and classification; 12,449 annotated snippets \\
+\rowcolor{comparisonours}
+\textbf{\bench{} (ours)} & \textbf{ZH / adolescent} & \textbf{10 / 50 / 143 hierarchy} & \textbf{Single + multi-turn; $10\times10$ mechanism matrix} & \textbf{Response and trajectory scoring; 715 single-turn scenarios + 100 trajectories} \\
+\end{tabularx}
+\end{table}

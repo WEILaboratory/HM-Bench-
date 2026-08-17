@@ -1,0 +1,11 @@
+$ /home/jinxiang/miniconda3/bin/python '/home/jinxiang/内容安全/scripts/eval_multi_turn.py' --api-base http://127.0.0.1:8112/v1 --api-key EMPTY --api-model glm-z1-32b-0414 --model-presets glm-z1-32b-0414 --model-root /data/jinxiang --max-new-tokens 512 --temperature 0.0 --top-p 0.9 --repetition-penalty 1.05 --request-timeout 300.0
+
+===== eval_multi_turn_vllm =====
+dataset=/home/jinxiang/内容安全/datasets/青少年内容安全多轮场景.json
+samples=100 start=0 limit=all
+model_presets=glm-z1-32b-0414
+api_base=http://127.0.0.1:8112/v1
+conversation_memory=样本内保留历史，样本间清空
+
+===== model: glm-z1-32b-0414 =====
+缺少 openai 依赖，请先运行：pip install openai

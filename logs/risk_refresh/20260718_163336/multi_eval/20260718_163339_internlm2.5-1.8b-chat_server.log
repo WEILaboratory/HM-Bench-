@@ -1,0 +1,26 @@
+$ vllm serve /data/jinxiang/internlm_internlm2_5-1_8b-chat --served-model-name internlm2.5-1.8b-chat --host 127.0.0.1 --port 8106 --dtype bfloat16 --max-model-len 4096 --gpu-memory-utilization 0.9 --generation-config vllm --max-num-seqs 1 --max-num-batched-tokens 4096 --enforce-eager --trust-remote-code
+
+[1;36m(APIServer pid=4073946)[0;0m The argument `trust_remote_code` is to be used with Auto classes. It has no effect here and is ignored.
+[1;36m(APIServer pid=4073946)[0;0m `torch_dtype` is deprecated! Use `dtype` instead!
+[W718 16:34:09.258365521 ProcessGroupNCCL.cpp:981] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[1;36m(EngineCore_DP0 pid=4075012)[0;0m WARNING 07-18 16:34:09 [topk_topp_sampler.py:69] FlashInfer is not available. Falling back to the PyTorch-native implementation of top-p & top-k sampling. For the best performance, please install FlashInfer.
+[1;36m(EngineCore_DP0 pid=4075012)[0;0m Loading safetensors checkpoint shards:   0% Completed | 0/2 [00:00<?, ?it/s]
+[1;36m(EngineCore_DP0 pid=4075012)[0;0m Loading safetensors checkpoint shards:  50% Completed | 1/2 [00:03<00:03,  3.02s/it]
+[1;36m(EngineCore_DP0 pid=4075012)[0;0m Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:06<00:00,  3.49s/it]
+[1;36m(EngineCore_DP0 pid=4075012)[0;0m Loading safetensors checkpoint shards: 100% Completed | 2/2 [00:06<00:00,  3.42s/it]
+[1;36m(EngineCore_DP0 pid=4075012)[0;0m 
+[1;36m(APIServer pid=4073946)[0;0m INFO:     Started server process [4073946]
+[1;36m(APIServer pid=4073946)[0;0m INFO:     Waiting for application startup.
+[1;36m(APIServer pid=4073946)[0;0m INFO:     Application startup complete.
+[1;36m(APIServer pid=4073946)[0;0m INFO:     127.0.0.1:42444 - "GET /v1/models HTTP/1.1" 200 OK
+[1;36m(APIServer pid=4073946)[0;0m WARNING 07-18 16:34:24 [launcher.py:98] port 8106 is used by process psutil.Process(pid=4073946, name='vllm', status='running') launched with command:
+[1;36m(APIServer pid=4073946)[0;0m WARNING 07-18 16:34:24 [launcher.py:98] /home/jinxiang/miniconda3/envs/vllm_eval/bin/python /home/jinxiang/miniconda3/envs/vllm_eval/bin/vllm serve /data/jinxiang/internlm_internlm2_5-1_8b-chat --served-model-name internlm2.5-1.8b-chat --host 127.0.0.1 --port 8106 --dtype bfloat16 --max-model-len 4096 --gpu-memory-utilization 0.9 --generation-config vllm --max-num-seqs 1 --max-num-batched-tokens 4096 --enforce-eager --trust-remote-code
+[1;36m(APIServer pid=4073946)[0;0m INFO:     Shutting down
+[1;36m(APIServer pid=4073946)[0;0m INFO:     Waiting for application shutdown.
+[1;36m(APIServer pid=4073946)[0;0m INFO:     Application shutdown complete.

@@ -1,0 +1,27 @@
+$ vllm serve /data/jinxiang/Qwen_Qwen2.5-7B-Instruct --served-model-name qwen2.5-7b-instruct --host 127.0.0.1 --port 8101 --dtype bfloat16 --max-model-len 4096 --gpu-memory-utilization 0.9 --generation-config vllm --max-num-seqs 1 --max-num-batched-tokens 4096 --enforce-eager
+
+[1;36m(APIServer pid=4073939)[0;0m `torch_dtype` is deprecated! Use `dtype` instead!
+[W718 16:34:06.802838805 ProcessGroupNCCL.cpp:981] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[1;36m(EngineCore_DP0 pid=4074963)[0;0m WARNING 07-18 16:34:06 [topk_topp_sampler.py:69] FlashInfer is not available. Falling back to the PyTorch-native implementation of top-p & top-k sampling. For the best performance, please install FlashInfer.
+[1;36m(EngineCore_DP0 pid=4074963)[0;0m Loading safetensors checkpoint shards:   0% Completed | 0/4 [00:00<?, ?it/s]
+[1;36m(EngineCore_DP0 pid=4074963)[0;0m Loading safetensors checkpoint shards:  25% Completed | 1/4 [00:06<00:19,  6.36s/it]
+[1;36m(EngineCore_DP0 pid=4074963)[0;0m Loading safetensors checkpoint shards:  50% Completed | 2/4 [00:12<00:12,  6.13s/it]
+[1;36m(EngineCore_DP0 pid=4074963)[0;0m Loading safetensors checkpoint shards:  75% Completed | 3/4 [00:18<00:06,  6.01s/it]
+[1;36m(EngineCore_DP0 pid=4074963)[0;0m Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:24<00:00,  6.04s/it]
+[1;36m(EngineCore_DP0 pid=4074963)[0;0m Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:24<00:00,  6.07s/it]
+[1;36m(EngineCore_DP0 pid=4074963)[0;0m 
+[1;36m(APIServer pid=4073939)[0;0m INFO:     Started server process [4073939]
+[1;36m(APIServer pid=4073939)[0;0m INFO:     Waiting for application startup.
+[1;36m(APIServer pid=4073939)[0;0m INFO:     Application startup complete.
+[1;36m(APIServer pid=4073939)[0;0m INFO:     127.0.0.1:48568 - "GET /v1/models HTTP/1.1" 200 OK
+[1;36m(APIServer pid=4073939)[0;0m WARNING 07-18 16:34:39 [launcher.py:98] port 8101 is used by process psutil.Process(pid=4073939, name='vllm', status='running') launched with command:
+[1;36m(APIServer pid=4073939)[0;0m WARNING 07-18 16:34:39 [launcher.py:98] /home/jinxiang/miniconda3/envs/vllm_eval/bin/python /home/jinxiang/miniconda3/envs/vllm_eval/bin/vllm serve /data/jinxiang/Qwen_Qwen2.5-7B-Instruct --served-model-name qwen2.5-7b-instruct --host 127.0.0.1 --port 8101 --dtype bfloat16 --max-model-len 4096 --gpu-memory-utilization 0.9 --generation-config vllm --max-num-seqs 1 --max-num-batched-tokens 4096 --enforce-eager
+[1;36m(APIServer pid=4073939)[0;0m INFO:     Shutting down
+[1;36m(APIServer pid=4073939)[0;0m INFO:     Waiting for application shutdown.
+[1;36m(APIServer pid=4073939)[0;0m INFO:     Application shutdown complete.

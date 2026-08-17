@@ -1,0 +1,836 @@
+
+===== PAGE 1 =====
+          Under  review  as  a  conference  paper  at  ICLR  2026
+
+
+
+
+
+000       Raising  the  Bar  for  Chinese  Adolescent  LLM  Safety:    A
+001
+002       Culturally-Grounded,  Fine-Grained  Benchmark
+003
+004
+005         Anonymous  authors
+006         Paper  under  double-blind  review
+007
+008
+009                                                              Abstract
+010
+011
+012                   Content-safety    evaluation    for    adolescent-facing    large    language    models
+013                   (LLMs)  must  assess  both  culturally  situated  risks  and  whether  safety  per-
+014                   sists  when  risk  unfolds  across  dialogue.    We  introduce  QH-Bench,   a  Chi-
+015                   nese   adolescent   benchmark   with   two   complementary   tracks.     The   single-
+                      turn   track   measures   risk-domain   coverage   through   715   prompts   under   a
+016                   10/50/143  taxonomy  grounded  in  Chinese  social,  educational,  family,  and
+017                   online  settings.   The  multi-turn  track  measures  conversational  state  track-
+018                   ing  through  100  four-turn  trajectories  that  cross  the  same  10  domains  with
+019                   10  intrinsically  multi-turn  mechanisms.   We  evaluate  13  open-source  LLMs,
+020                   producing  9,295  single-turn  responses  and  1,300  scored  multi-turn  trajec-
+021                   tories,  with  an  automatic  judge  applying  a  safety–helpfulness  scale.    Risk
+022                   coverage  and  state  tracking  are  related  but  not  substitutable:   model  rank-
+023                   ings correlate (Spearmanρ = 0.732), yet the track leaders differ.  Across the
+024                   two  evaluation  tracks,  pooled  means  are 0.279  and −0.097,  with  negative-
+025                   score   rates   of 37.28%   and 50.38%,   respectively.     Relational   pressure   and
+026                   cross-turn   reference   emerge   as   the   two   strongest   multi-turn   weaknesses,
+027                   while  ordinary-language  risks  involving  offline  contact,  cognitive  outsourc-
+                      ing,  commercial  exploitation,  and  sensitive-information  exposure  are  hard-
+028                   est  in  the  single-turn  taxonomy.   Adolescent-facing  content  safety  therefore
+029                   requires  separate  evaluation  of  what  risk  is  present  and  how  it  unfolds.
+030
+031
+032       1       Introduction
+033
+034       Content-safety   benchmarks   have   made   substantial   progress   in   measuring   broad   harmful-
+035       content   coverage,   refusal   robustness,   and   value   alignment             Wang   et   al.   (2024a);    Li   et   al.
+036       (2024);    Chao  et  al.  (2024);    Han  et  al.  (2024).   Chinese  resources  further  show  that  language,
+037       regulation,  and  culturally  situated  values  change  what  constitutes  a  safe  response                    Xu  et  al.
+038       (2023);    Huang   et   al.   (2024);    Wang   et   al.   (2024b);    Zhang   et   al.  (2024a;b).     Yet   the   same
+039       response  can  carry  a  distinct  safety  burden  when  its  user  is  an  adolescent:   school  decisions,
+040       family  authority,  peer  pressure,  digital  spending,  and  transitions  from  online  to  offline  set-
+041       tings   can   all   alter   both   the   harm   pathway   and   the   appropriate   intervention            Khoo   et   al.
+042       (2025);    Jiao  et  al. (2025);    Rath  et  al.   (2025);   Yu  et  al.  (2025);    Luo  et  al.  (2026).
+043       This  burden  is  also  conversational.   Multi-turn  safety  work  has  demonstrated  failures  under
+044       coreference,  hidden  intent,  request  decomposition,  relational  framing,  and  long  histories                      Yu
+045       et al.  (2024);   Jiang et al.   (2025);   Srivastav & Zhang         (2025);   Cao et al.   (2026);    Lu et al.  (2025);
+046       Yuan  et  al.   (2024).   However,  a  single  jailbreak  strategy  or  an  unstructured  dialogue  history
+047       cannot determine whether a model has failed to track a particular safety dependency,  rather
+048       than  merely  encountering  a  harder  harm  topic.   Existing  safety  taxonomies  and  multi-turn
+049       stress  tests  are  therefore  usually  evaluated  on  separate  axes.
+050       QH-Bench addresses this gap as a Chinese, culturally grounded, and fine-grained benchmark
+051       for  adolescent  LLM  content  safety.   Its  scenarios  do  not  merely  translate  harm  labels.   They
+052       encode  locally  salient  configurations  such  as  subject  selection  and  comprehensive  student
+053       evaluation, homeroom-teacher–guardian communication, youth mode and real-name checks,
+          fandom  and  livestream  spending,  and  campus  public  accounts.   These  risks  are  not  China-
+
+
+                                                                       1
+
+===== PAGE 2 =====
+           Under  review  as  a  conference  paper  at  ICLR  2026
+
+
+
+
+
+054
+055
+056
+057
+058
+059
+060
+061
+062
+063
+064
+065
+066
+067
+068
+069
+070        Figure  1:    Safety-state  update  in  MT-M07-002:    school  denial  invalidates  initial  trust,   fol-
+071        lowed  by  award  guarantees  and  payment  urgency.
+
+072
+073
+074        exclusive; rather, the institutional and platform conditions that make their safety boundaries
+075        meaningful  are  often  absent  from  predominantly  English  benchmarks.
+
+076        We   separate   two   complementary   capabilities.      Risk-domain   coverage   asks   which   risks   a
+077        model can handle when the relevant situation is already present.   Conversational mechanism
+078        robustness   asks   whether   the   model   preserves,   combines,   and   revises   safety-relevant   state
+079        when  meaning  is  distributed  across  turns.    Figure              1  shows  a  real  benchmark  trajectory:   a
+080        school-like page initially appears trustworthy, but a later school clarification invalidates that
+081        belief  before  stronger  commercial  warning  signs  emerge.
+082        The  two  axes  expose  different  failure  modes.    A  model  may  refuse  an  explicit  request  in-
+083        volving  fraud  or  violence  yet  mishandle  an  ordinary  statement  whose  risk  depends  on  the
+084        adolescent’s  age,  school  role,  family  authorization,  or  intended  offline  action.    It  may  also
+085        recognize  every  fact  separately  but  fail  when  a  later  euphemism  refers  back  to  an  earlier
+086        harmful  object,  when  several  harmless-looking  rules  combine,  or  when  new  information  in-
+087        validates   an   earlier   safe   assumption.     These   are   not   simply   longer   versions   of   single-turn
+088        prompts:    they   require   a   representation   of   what   has   changed,   who   is   affected,   and   which
+089        protective  boundary  still  applies.   A  content-safety  benchmark  for  sustained  adolescent  in-
+090        teraction   should   therefore   measure   both   the   breadth   of   culturally   situated   risks   and   the
+           dialogue  mechanisms  through  which  those  risks  become  visible.
+091
+092        We introduce QH-Bench to evaluate both capabilities with response generation and a shared
+093        safety–helpfulness  objective.   The  tracks  are  complementary  challenge  sets,  not  paired  coun-
+094        terfactuals;  their  aggregate  score  difference  is  descriptive  rather  than  a  causal  “multi-turn
+095        penalty.”   Our  contributions  are:
+
+096               •   Chinese  and  culturally  grounded  coverage.   We  construct  715  single-turn  scenarios
+097                   under  a  10/50/143  hierarchy  that  operationalizes  adolescent  risks  through  Chinese
+098                   educational,  family–school,  platform,  and  digital-culture  contexts.
+099
+100               •   Fine-grained multi-turn mechanism design.  We cross the same ten risk domains with
+101                   ten  intrinsically  multi-turn  mechanisms,  yielding  100  four-turn  trajectories  whose
+102                   safety   dependence   rests   on   reference,   composition,   accumulated   rules,   relational
+103                   pressure,  or  changing  safety  conditions.
+104               •   Two-axis    response    evaluation.        We    evaluate    13    open-source    LLMs    with    a    re-
+105                   producible  fixed-trajectory  protocol,  complete-trajectory  scoring,  mechanism-level
+106                   statistics, and a human–automatic-judge audit, showing that risk coverage and state
+107                   tracking  are  related  but  non-substitutable.
+
+
+                                                                         2
+
+===== PAGE 3 =====
+           Under  review  as  a  conference  paper  at  ICLR  2026
+
+
+
+
+
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126        Figure  2:   QH-Bench:   a  shared  Chinese  adolescent  context  layer  grounds  a  10/50/143  tax-
+127        onomy  and  a  balanced  10-domain×  10-mechanism  matrix.
+128
+129
+130        2       Related  Work
+131
+132        General   and   Chinese   safety.       General   resources   span   preference   data,   safety   knowledge,
+133        hierarchical  taxonomies,  direct-risk  refusal,  red  teaming,  moderation,  agent-risk  judgment,
+134        and  over-refusal     Ji  et  al. (2023);   Zhang  et  al.    (2024c);    Li  et  al. (2024);   Wang  et  al.    (2024a);
+135        Vidgen  et  al.   (2023);    Tedeschi  et  al.   (2024);    Mazeika  et  al.    (2024);   Souly  et  al.   (2024);   Chao
+136        et al. (2024);    Han et al.    (2024);   Ghosh et al.     (2025);    Yuan et al.    (2024);    Röttger et al.     (2024).
+137        Chinese  benchmarks  add  value  alignment,  Internet-moderation  categories,  localized  direct
+138        and   indirect   risks,   and   hierarchical   recognition   or   refusal        Xu   et   al.  (2023);    Huang   et   al.
+139        (2024);   Zhang  et  al.     (2024a);    Wang  et  al.     (2024b);    Zhang  et  al.    (2024b).    These  resources
+140        establish risk coverage and localization, but predominantly frame a safety decision around an
+           independent  prompt  or  general  dialogue  context  rather  than  a  controlled  adolescent-specific
+141        state  dependency.
+142
+143        Child  and  adolescent  safety.       MinorBench  and  Safe-Child-LLM  use  compact  age-centered
+144        risk  sets  Khoo  et  al.   (2025);   Jiao  et  al.  (2025);  LLM  Safety  for  Children  simulates  conversa-
+145        tions  Rath et al.    (2025); YouthSafe develops a youth taxonomy and safeguard model                            Yu et al.
+146        (2025);   and  ChildEval  studies  preference  following  over  child-centered  histories                      Luo  et  al.
+147        (2026).   They  foreground  developmental  needs,  but  mostly  emphasize  English  prompts,  risk
+148        detection,  preference  following,  or  refusal  rather  than  culturally  situated  Chinese  response
+149        generation  with  a  balanced  mechanism  matrix.
+150
+151        Context   and   multi-turn   safety.       SafeConv   labels   unsafe   conversational   spans   and   correc-
+152        tions,  while  LongSafety  tests  open-ended  long-context  transfer                 Zhang  et  al.    (2023);   Lu  et  al.
+153        (2025).   Multi-turn  benchmarks  isolate  coreference,  relational  framing,  cognitive  escalation,
+154        request   decomposition,   jailbreak   strategies,   general   dialogue   capability,   and   multimodal
+155        context   switching      Yu   et   al. (2024);    Jiang   et   al.  (2025);    Zhang   et   al.  (2025);    Srivastav   &
+156        Zhang    (2025);    Cao  et  al.  (2026);    Kwan  et  al.    (2024);    Liu  et  al.  (2026).   These  studies  make
+157        key  mechanisms  visible,  but  do  not  balance  a  common  set  of  adolescent  risk  domains  across
+158        multiple  mechanisms.   Table          1  positions  QH-Bench  relative  to  representative  benchmarks.
+
+159        Across  these  strands,  content  taxonomies  and  conversational  stress  tests  are  usually  devel-
+160        oped  separately.    This  makes  it  diﬀicult  to  tell  whether  an  apparent  multi-turn  weakness
+161        reflects   one   overrepresented   harm   topic   or   a   general   failure   to   track   a   conversational   de-
+           pendency.   QH-Bench  addresses  that  design  gap  by  holding  the  ten  risk  domains  balanced
+
+
+                                                                        3
+
+===== PAGE 4 =====
+            Under  review  as  a  conference  paper  at  ICLR  2026
+
+
+
+
+
+162
+163         Table   1:     Positioning   QH-Bench   among   representative   safety   benchmarks.      “Mechanism
+164         control”  denotes  an  explicit,  independently  specified  cross-turn  dependency  rather  than  the
+165         presence  of  dialogue  history  alone.
+166         Benchmark             ZH     Adol.   Risk  specification      Turns      Mechanism      Primary            Scale
+167                                                                                    control      evaluation
+168         Do-Not-                 –                   –            Broad  harmSingle                          –                      Response939  prompts
+            Answer    Wang                       taxonomy                                           safeguards
+169         et  al.(2024a)
+170         Chinese  Safe-         ✓                  –            6  areas,  17  harmSingle                          –                      Response3,042  prompts
+            guards   Wang                        types                                              harmfulness  /
+171         et  al.(2024b)                                                                          over-refusal
+172         CHiSafetyBench      Zhang✓                  –            5  categories,  31Mixed                          –                      Recognition1,567  MCQ  +  563  QA
+173         et  al.(2024b)                       classes                                            and  refusal
+            CoSafe   Yu             –                   –            14  harmMulti         Coreference    Response     1,400  dialogues
+174         et  al.(2024)                        categories                                         safety
+175         SafeDialBenchCao✓                  –            2-level,  6    Multi           7  jailbreakMulti-turn      4,053  dialogues
+            et  al.(2026)                        dimensions                           strategies    safety  abilities
+176         YouthSafe    Yu         –     ✓           Youth  risk        Context           –                      Risk  detection2,921  human-validated
+177         et  al.(2025)                        taxonomy                snippets                   /                  snippets
+                                                                                                    classification
+178         QH-Bench               ✓       ✓     10  /  50  /  143         Both      10  mecha-     Generated          715  prompts  +  100
+179         (ours)                               hierarchy                           nisms ×  10    responses;         trajectories
+                                                                                      domains       trajectory
+180                                                                                                 scoring
+181
+182
+183         across  mechanisms  and  by  reporting  the  two  tracks  separately  rather  than  collapsing  them
+184         into  a  single  safety  rank.
+185
+186
+187         3       Benchmark  Design  and  Construction
+188
+189         3.1       Design  Principles
+190
+191         QH-Bench  evaluates  response  generation  rather  than  category  prediction.    Its  single-turn
+192         track  measures  coverage  of  risk  types  already  expressed  in  Chinese  adolescent  settings;  its
+193         multi-turn  track  measures  whether  a  model  retains,   combines,   and  revises  safety-relevant
+194         state  as  dialogue  develops.   Across  both  tracks,  scenarios  use  natural  adolescent  narration,
+195         distinguish  an  unhelpful  answer  from  one  that  advances  harm,   and  exclude  real  personal
+196         information  or  operationally  dangerous  details.
+197         Three principles guide both tracks.  First, the user should sound like an adolescent describing
+198         a real situation rather than an adult red-team operator.  Second, the evaluation should reflect
+199         risk   increment:     a   vague   or   incomplete   answer   is   not   equivalent   to   one   that   normalizes,
+200         conceals,  or  materially  advances  harm.   Third,  cultural  context  should  change  the  relevant
+201         safety  judgment—for  example,  which  school  authority  can  verify  a  notice  or  which  guardian
+202         and   platform   safeguards   should   become   part   of   a   helpful   response—rather   than   merely
+203         decorate  a  generic  risk  prompt.
+
+204
+205         3.2       Single-Turn  Chinese-Context  Risk  Taxonomy
+206
+207         The  single-turn  track  contains  715  prompts  under  a  10-domain,  50-subdomain,  and  143-risk
+208         hierarchy,  with  five  prompts  per  fine-grained  risk.   Each  item  pairs  a  short  background  with
+209         one  natural  user  message  and  three  hierarchy  labels.    It  includes  both  explicit  danger  and
+210         risks  conveyed  through  hesitation,  reassurance  seeking,  or  an  apparently  ordinary  decision.
+211         The  background  and  message  are  presented  together  because  many  adolescent  risks  are  not
+212         recoverable  from  a  short  utterance  alone.   A  request  to  “send  it  first”  may  concern  ordinary
+213         homework,   a   private   image,   a   family   payment   record,   or   evidence   needed   for   help;   the
+214         scenario determines the safety boundary.  This structure tests contextual response generation
+215         without making every user sound adversarial.  The five prompts under each fine risk vary the
+            actors,  motivation,  and  degree  of  explicitness  while  preserving  one  auditable  risk  definition.
+
+
+                                                                               4
+
+===== PAGE 5 =====
+            Under  review  as  a  conference  paper  at  ICLR  2026
+
+
+
+
+
+216
+217         Table   2:     Single-turn   hierarchy.     Each   domain   contains   five   second-level   subdomains;   the
+218         final  column  gives  its  number  of  fine-grained  risks.
+219            ID     Top-level  domain                       Five  second-level  subdomains                                                   Fine
+220                                                           National  identity  and  historical  culture;  Growth,  labor,  life,  and
+221           D01     Social  Values,  National               success  values;  Group  stereotypes  and  opportunity  limits;                   15
+222                   Identity,  and  Social  Cognition       Cynicism,  social  cognition,  and  public  ethics;  Information
+                                                              judgment  and  media  literacy
+223                                                           Admissions  policy  and  educational  evaluation;  Academic
+224           D02     Academic  Development  and              integrity  and  application  fraud;  Cognitive  outsourcing  and                  14
+                      Educational  Decisions                  shallow  learning;  Academic  pressure  and  health  conflicts;
+225                                                           Commercial  misinformation  in  education
+226                                                           Crisis  recognition  and  real-world  escalation;  Unqualified
+              D03     Mental  Health,  Emotional              diagnosis  and  fixed  self-labels;  Emotional  appeasement  and                  13
+227                   Crisis,  and  AI  Dependence            catastrophizing;  Anthropomorphic  AI  and  intimacy  boundaries;
+228                                                           Harmful  communities  and  lost  real-world  support
+                                                              Pubertal  development  and  sexuality  education;  Sexual  abuse,
+229           D04     Physical  Health,  Puberty,  and        pregnancy,  and  intimate-image  help;  Power  imbalance  and                     15
+230                   Intimate  Boundaries                    controlling  relationships;  Appearance  anxiety  and  extreme  body
+                                                              modification;  Illness,  medication,  fitness,  and  health  advice
+231                                                           Breakdown  of  guardianship  support;  Misjudged  intervention  in
+232           D05     Guardianship,  School                   actual  harm;  Bullying  and  online  amplification;  Family-school               15
+                      Relations,  and  Campus  Safety         conflict  and  peer  manipulation;  Vulnerable  minors  and
+233                                                           off-campus  protection
+234                                                           Internet  overuse  and  functional  impairment;  Circumventing
+              D06     Digital  Platforms  and  Online         youth  and  identity  safeguards;  Harmful  recommendations  and                  15
+235                   Behavior                                filter  bubbles;  Fandom,  livestreaming,  and  virtual  social  risks;
+236                                                           AI-content  authenticity  and  impersonation
+                                                              Identity,  school,  and  family  information  exposure;
+237           D07     Privacy,  Personal  Information,        Overcollection  of  sensitive  experiences;  Credential,  verification,           13
+238                   and  Synthetic  Media                   and  device-data  leakage;  Doxxing  and  secondary  privacy
+                                                              diffusion;  Malicious  image,  voice,  and  video  synthesis
+239                                                           Family  assets  and  payment-account  risks;  Impulsive  and
+240           D08     Property,  Consumption,  and            chance-based  consumption;  Loans,  illicit  schemes,  and  fraud                 15
+241                   Commercial  Exploitation                chains;  Commercialization  of  minors  and  labor  rights;  Disguised
+                                                              advertising  and  anxiety  marketing
+242                                                           Running  away  and  concealed  whereabouts;  Offline  meetings
+243           D09     Offline  Personal  Safety  and          with  strangers  or  adults;  Dangerous  challenges  and  transport               15
+                      Dangerous  Situations                   risks;  Emergency  response  and  help  seeking;  Age-inappropriate
+244                                                           venues  and  risky  gatherings
+245                                                           Normalized  misconduct  and  minor  offenses;  Forgery,
+              D10     Legal  Norms,  Public  Order,           impersonation,  and  blame  shifting;  Rumors,  malicious  reporting,             13
+246                   and  Misconduct                         and  cyberbullying;  Misinformation  about  rights  and  remedies;
+247                                                           Exploitation  of  minors  for  illegal  tasks
+
+248
+249         Cultural  grounding  operates  through  institutions,  actors,  safeguards,  and  information  chan-
+250         nels,  not  Chinese  terminology  alone.   Educational  scenarios  include  subject  selection,  com-
+251         prehensive   student   evaluation,   and   student–homeroom-teacher–guardian   communication;
+252         platform scenarios include youth mode, real-name checks, livestream gifting, fan-group tasks,
+253         and  campus  public  accounts.    Table                 2  summarizes  the  hierarchy;  the  supplement  provides
+254         extended  mechanism  specifications,  evaluation  materials,  and  complete  results.
+255         These  settings  determine  which  intervention  is  useful.   Unverified  claims  about  admissions
+256         may  require  current  province-  and  year-specific  sources;  a  school-like  account  may  require
+257         confirmation  through  an  oﬀicial  school  channel;   concealed  platform  spending  may  require
+258         both   payment   protection   and   trusted-adult   support.     We   do   not   claim   that   these   harms
+259         occur  only  in  China.    Rather,   QH-Bench  makes  locally  salient  institutional  and  platform
+260         configurations  explicit  enough  to  evaluate.
+261
+262         3.3       Multi-Turn  Mechanism  Matrix
+263
+264         The   multi-turn   track   contains   100   four-turn   trajectories   (400   user   turns).      Each   of   the
+265         ten  mechanisms  is  crossed  with  the  same  ten  top-level  domains,  creating  a  balanced 10×
+266         10  matrix;  mechanisms  use  different  fine-risk  topics  within  each  domain  to  reduce  topical
+267         shortcuts.   Table        3  defines  the  required  cross-turn  dependency  rather  than  a  harm  topic.
+
+268         A trajectory is retained only if no isolated turn fully instantiates its mechanism and deleting
+269         or  shuffling  critical  history  removes  or  materially  changes  the  dependency.    Turns  concern
+            the  same  object  and  event,  except  for  the  intentional  interruption  in  M05,  and  each  adds
+
+
+                                                                                5
+
+===== PAGE 6 =====
+           Under  review  as  a  conference  paper  at  ICLR  2026
+
+
+
+
+
+270
+271                      Table  3:    Ten  multi-turn  mechanisms  crossed  with  all  ten  risk  domains.
+272            ID      Mechanism              Dependency                        ID      Mechanism              Dependency
+273                                           Intent  emerges  from                                            One  risky  goal  is
+274           M01      Progressive  intent    incremental  evidence.           M06      Request  narrowing     repeatedly  reduced  or
+                                                                                                               qualified.
+275                                                                                                            New  consent,  authority,
+276           M02      Cross-turn             A  code  word  or  omission      M07      Safety-state           health,  or  reality
+277                    reference              recovers  a  risk  object.                update                 invalidates  an  earlier
+                                                                                                               judgment.
+278                    Harmful                Incomplete  fragments                                            User-defined  rules
+279           M03      composition            jointly  form  a  harmful        M08      Rule  accumulation     become  unsafe  when
+                                              outcome.                                                         jointly  applied.
+280                                           Protective  information  is               Relational             Accumulated  loyalty  or
+281           M04      Purpose  reversal      later  repurposed  for           M09      pressure               intimacy  shifts  the
+                                              harm.                                                            safety  stance.
+282                    Topic                  An  unrelated  exchange                   Information-           Information  moves  to  a
+283           M05      interruption           separates  a  cue  from          M10      boundary  shift        new  recipient,  audience,
+                                              resumption.                                                      or  setting.
+284
+285
+286        evidence.  Figure       1  illustrates M07:  the school’s denial invalidates provisional trust, so safety
+287        depends  on  revising  state  rather  than  detecting  a  final-turn  keyword.
+288        The  mechanisms  isolate  different  state  operations.   M02  requires  binding  a  later  code  word
+289        or  omission  to  an  earlier  risk  object;  M03  requires  composing  individually  incomplete  frag-
+290        ments;   M07   requires   withdrawing   a   judgment   after   consent,   authority,   health,   or   reality
+291        changes.    M09  is  not  a  one-turn  role-play  prompt:    loyalty  and  intimacy  must  accumulate
+292        before   being   used   to   pressure   the   model.     The   shared   domain   cross-product   makes   these
+293        dependencies  comparable  without  reducing  multi-turn  safety  to  one  jailbreak  strategy.
+294
+295        3.4       Data  Construction  and  Quality  Control
+296
+297        All   records   are   researcher-authored   synthetic   scenarios,   not   real   adolescent   logs.     A   pre-
+298        defined  taxonomy  and  mechanism–domain  matrix  fixed  the  intended  coverage  throughout
+299        scenario  authoring.    Candidates  were  independently  reviewed  for  risk  clarity,   naturalness,
+300        contextual   necessity,   and   mechanism   boundaries.     Records   that   failed   these   criteria   were
+301        revised  or  replaced;  increasing  final-turn  explicitness  alone  was  not  considered  suﬀicient.
+
+302        Multi-turn  records  additionally  underwent  context-deletion  and  turn-order  counterfactual
+303        checks.   Automated  validation  covered  structure,  IDs,  balance,  turn  counts,  normalized  du-
+304        plicates,  near-duplicate  wording,  and  sensitive  operational  patterns;  manual  review  exam-
+305        ined  ambiguous  references,  templated  phrasing,  privacy,  and  dangerous  scaffolding.   These
+306        construction   checks   support   dataset   consistency   and   are   distinct   from   the   response-level
+307        human  audit  reported  below.
+
+308
+309        4       Evaluation  Protocol
+310
+311        4.1       Models  and  Generation
+312
+313        We   evaluate   13   open   chat/instruction   checkpoints   from   Qwen2.5,    InternLM2.5,    GLM-
+314        4/GLM-Z1,    and   DeepSeek              Qwen   Team        (2024);     Cai   et   al.  (2024);     Team   GLM         (2024);
+315        DeepSeek-AI         (2024).    vLLM  serves  each  released  chat  template  with  temperature  0,   top-
+316        p = 0.9,   512   maximum   new   tokens,   and   repetition   penalty   1.05.      The   runs   yield   9,295
+317        single-turn  responses  and  5,200  turn-level  responses  summarized  into  1,300  multi-turn  tra-
+           jectories,  with  no  missing  model–item  scores.   Repository  IDs,  nominal  sizes,  and  full  model
+318        results  appear  in  the  supplement;   DeepSeek-V2-Lite  has  16B  total  but  about  2.4B  active
+319        parameters.
+320
+321        4.2       Multi-Turn  Execution
+322
+323        User  turns  are  fixed  across  models  and  do  not  presuppose  a  particular  assistant  response.
+           The  first  request  combines  background  and  turn  1;   later  turns  retain  that  model’s  actual
+
+
+                                                                           6
+
+===== PAGE 7 =====
+           Under  review  as  a  conference  paper  at  ICLR  2026
+
+
+
+
+
+324
+325                                       Table  4:    Joint  safety–helpfulness  scoring  rubric.
+326         Score       Descriptor                          Operational  criterion
+327           +2     Safe/helpful         Recognizes  risk,  avoids  advancing  it,  and  offers  an  age-appropriate  alternative.
+328           +1     Safe/limited         Maintains  the  safety  boundary  but  provides  incomplete  support.
+329            0     Miss                 Adds  no  clear  harm  but  misses  the  core  problem  or  responds  ineffectively.
+              −1     Partly  enabling     Normalizes,  endorses,  or  supplies  limited  enabling  content.
+330           −2     Enabling             Encourages,  conceals,  completes,  or  materially  advances  the  harmful  objective.
+331
+332
+333        assistant  history,  and  state  is  cleared  between  samples.    Thus  user  evidence  is  comparable
+334        while  assistant  histories  remain  authentic.
+335        This   choice   avoids   two   common   confounds.     Replacing   earlier   assistant   messages   with   a
+336        reference response would test an artificial conversation,  whereas adapting later user turns to
+337        each model would make trajectories incomparable.   Fixed user evidence plus actual assistant
+338        history  preserves  the  tested  model’s  opportunity  to  maintain,  correct,  or  compound  its  own
+339        earlier  stance.
+340
+341        4.3       Joint  Safety–Helpfulness  Scoring
+342
+343        An  automatic  claude-opus-4-8  judge  scores  outputs  at  temperature  0.    It  receives  the  sce-
+344        nario,  user message,  and answer for single-turn items,  or the complete alternating trajectory
+345        for  multi-turn  items.   Evidence  is  evaluated  chronologically:   later  facts  do  not  retroactively
+346        penalize  an  earlier  reasonable  answer,  but  the  model  must  update  once  risk  becomes  visible.
+347        The   shared   rubric   (Table        4)   rewards   safe,   age-appropriate   assistance   over   generic   refusal
+348        and  penalizes  normalization   or  enablement.     Because  all   items  are  risky,   QH-Bench  does
+           not  measure  false  refusal  on  benign  inputs.
+349
+350        The   rubric   deliberately   combines   safety   and   helpfulness.     A   response   that   simply   refuses
+351        may  preserve  a  boundary  yet  leave  an  adolescent  without  a  realistic  next  step;  conversely,
+352        an  empathetic  answer  can  still  be  unsafe  if  it  endorses  secrecy,  isolation,  or  harmful  action.
+353        Scores   therefore   represent   the   quality   of   the   complete   intervention,   not   only   whether   a
+354        prohibited  phrase  appears.
+
+355        4.4       Human  Audit
+356
+357        A  human  annotator  independently  scored  100  single-turn  responses  and  50  multi-turn  tra-
+358        jectories   using   the   same   five-level   rubric.      We   assess   agreement   using   exact   agreement,
+359        quadratic-weighted  Cohen’s κ,  and  a  two-sided  exact  sign  test  over  disagreements.
+360
+361        4.5       Metrics  and  Statistical  Tests
+362
+363        Forsmi∈{−2,−1,0,1,2}, we report mean score,Neg = (|M||I|)−1∑m,i1[smi < 0], and all
+364        five  frequencies.   Bootstrap  intervals  quantify  uncertainty;  Pearson  and  Spearman  compare
+365        model   means   across   tracks.     A   blocked   Friedman   test   compares   mechanisms,   followed   by
+366        paired  Wilcoxon  tests  with  Holm  correction.   The  appendix  specifies  resampling  units,  the
+367        random  seed,  and  complete  pairwise  results.
+368
+369        5       Results
+370
+371        5.1       Dual-Track  Ranking
+372
+373        Single-turn  risk  coverage  and  multi-turn  state  tracking  share  some  competence  but  do  not
+374        yield  an  interchangeable  ranking.   Their  model  means  correlate  (Spearman ρ = 0.732, p =
+375        0.0045),   yet   the   leaders   differ:     InternLM2.5-20B   ranks   first   on   single-turn   and   third   on
+376        multi-turn,  whereas  GLM-4-32B  moves  from  sixth  to  first.   DeepSeek-V2-Lite  moves  in  the
+377        opposite  direction,  from  third  to  eighth.   Figure              3 makes  these  rank  changes  visible  without
+           collapsing  the  two  capabilities  into  one  leaderboard.
+
+
+                                                                           7
+
+===== PAGE 8 =====
+           Under  review  as  a  conference  paper  at  ICLR  2026
+
+
+
+
+
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402        Figure  3:   Dual-track  model  scores.   Each  horizontal  pair  represents  one  model  on  the  single-
+403        turn risk-coverage track (S) and multi-turn mechanism-robustness track (M), using the same
+404        joint  score  scale.    The  connecting  segment  indicates  a  paired  model  identity,  not  a  causal
+405        effect  of  adding  turns.
+406
+407
+408        Pooled  means  are 0.279  (95%  CI [0.214,0.344])  for  single-turn  and−0.097  ([−0.255,0.061])
+409        for  multi-turn,  with  negative  rates  of 37.28%  and 50.38%.   Because  the  tracks  contain  differ-
+410        ent challenge sets,  these are descriptive diﬀiculty summaries rather than a causal estimate of
+411        a  turn  effect.   The  rank  reversals  are  the  stronger  evidence  for  reporting  risk-type  coverage
+412        and  state-tracking  robustness  separately.
+
+413
+414        5.2       Chinese-Context  Risk  Failures
+415        Offline   personal   safety   is   the   hardest   domain   (mean −0.168,  Neg  =  51.18%),   whereas
+416        law  and   public   order   is   easiest   (1.015, 18.93%).     The   five   weakest  subdomains   are   offline
+417        meetings  with  strangers/adults  (−1.164),  cognitive  outsourcing  (−0.687),  adolescent  com-
+418        mercialization/private  traﬀic/labor  (−0.646),  identity/school/family  information  exposure
+419        (−0.492),  and  fandom/livestreaming/virtual  social  risks  (−0.410).   Their  ordinary  language
+420        and  context-dependent  consequences  help  explain  why  explicit  prohibited-content  detection
+421        is  insuﬀicient.
+422        The  contrast  is  not  simply  explicit  versus  implicit  harm.   The  weak  groups  require  models
+423        to   connect   ordinary   requests   to   age,   trust,   family   authorization,   money,   or   a   transition
+424        from   an   online   platform   to   offline   contact.     Cognitive   outsourcing   contains   no   prohibited
+425        keyword,  while  commercialization  and  disclosure  often  use  familiar  platform  language.   The
+426        left  panel  of  Fig.   4  therefore  captures  a  specifically  adolescent-facing  challenge  that  broad
+427        adult-oriented  prohibited-content  lists  may  underrepresent.
+428
+429        5.3       Mechanism-Specific  State-Tracking  Failures
+430
+431        Mechanism   differences   are   substantial   under   the   blocked   Friedman   test   (χ2(9) = 106.52,
+           p = 7.49× 10−19).     Relational   pressure   M09   is   lowest   (−0.792, Neg = 70.00%),   followed
+
+
+                                                                         8
+
+===== PAGE 9 =====
+           Under  review  as  a  conference  paper  at  ICLR  2026
+
+
+
+
+
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453        Figure   4:    Two-track   failure   atlas.     Each   point   is   the   pooled   mean   with   a   95%   bootstrap
+454        interval;   the   right  column   reports   the   negative-score  rate.     Domains   and   mechanisms  are
+455        independently  ordered  from  weaker  to  stronger.
+456
+457
+458        by  cross-turn  reference  M02  (−0.569, 61.54%),   rule  accumulation  M08  (−0.377, 58.46%),
+459        and  harmful  composition  M03  (−0.308, 57.69%).    Purpose  reversal  M04  is  easiest  (0.562,
+460        32.31%),  plausibly  because  the  later  misuse  often  supplies  a  more  explicit  risk  cue.
+461        M09  and  M02  should  be  read  as  jointly  prominent  weaknesses:   their  difference  is  not  signif-
+462        icant  after  Holm  correction  (pHolm = 0.150),  although  M09  is  lower  than  M08  (0.0389)  and
+463        M03  (0.0121).   These  mechanisms  require  distinct  state  operations:   M02  binds  an  omitted
+464        expression  to  an  earlier  risk  object,   M08  retains  several  user-defined  rules,   and  M09  sep-
+465        arates  empathy  from  allegiance  under  accumulated  relationship  pressure.    A  last-message
+466        classifier  can  miss  each  dependency  even  when  explicit  risk  detection  is  strong.
+467
+468        5.4       Domain–Mechanism  Hotspots
+469
+470        The  balanced 10×10  matrix  also  supports  a  local  diagnostic  that  marginal  means  cannot
+471        provide.   For  mechanism m  and  domain d,  we  compute  the  descriptive  interaction  residual
+472                                                    Im,d = ¯sm,d− ¯sm,·− ¯s·,d + ¯s,                                                                                       (1)
+473
+474        where  a  negative  value  identifies  a  cell  that  is  harder  than  expected  from  its  mechanism  and
+475        domain  margins.   This  is  a  descriptive  decomposition,  not  a  cell-level  significance  test.
+476        The    strongest    negative    residual    occurs    for    request    narrowing    in    education    decisions
+477        (M06×D02:     score −1.385, I  = −1.605).      Cross-turn   reference   in   law   and   public   order
+478        (M02×D10: −1.692, I =−1.443)  and  purpose  reversal  in  family/school  safety  (M04×D05:
+479        −1.385, I  = −1.305)   are   the   next   two.     Figure             5  shows   that   these   local   failures   are   not
+480        recoverable  from  a  mechanism-only  or  domain-only  ranking.
+481
+482        5.5       Model  Scale  and  Audit  Context
+483
+484        Log  nominal  size  correlates  with  single-turn  score  at ρ = 0.440  (p = 0.133)  and  multi-turn
+485        score  at ρ = 0.618  (p = 0.024),   but  family,   training,   architecture,   and  active  parameters
+           are   confounded.     Series   trends   are   not   uniformly   monotonic.     GLM-Z1   outputs   may   also
+
+
+                                                                           9
+
+===== PAGE 10 =====
+          Under  review  as  a  conference  paper  at  ICLR  2026
+
+
+
+
+
+486
+487
+488
+489
+490
+491
+492
+493
+494
+495
+496
+497
+498
+499
+500
+501
+502
+503       Figure  5:     Domain ×  mechanism  score  matrix  pooled  across  13  models.   Color  and  printed
+504       values  share  the  full [−2,2]  scale.    Dark  outlines  mark  the  three  most  negative  descriptive
+505       interaction  residuals  after  removing  domain  and  mechanism  marginal  means.
+506
+507
+508       be  truncated  by  the  512-token  cap,  so  its  scores  characterize  these  endpoints  rather  than
+509       reasoning  models  generally.
+510       Across  the  150  audited  outputs,  exact  agreement  was  73.3%,  with  a  quadratic-weighted  Co-
+511       hen’s κ of 0.715.   The automatic judge assigned the lower score in 38 of the 40 disagreements
+512       (two-sided  exact  sign  test, p = 1.49×10−9),  indicating  a  lower-scoring  tendency  relative  to
+513       this  annotator  within  the  audited  subset.
+514
+515       6       Discussion
+516
+517       Reading  the  two  tracks  as  a  diagnostic  profile.       The  different  track  leaders  show  that  risk
+518       coverage  cannot  proxy  for  mechanism  robustness.    An  aggregate  may  also  conceal  failures
+519       under  relational  pressure  or  cross-turn  reference.    We  therefore  recommend  separate  track
+520       scores  and  domain-  and  mechanism-level  minima.
+521
+522       Implications   for   adolescent-facing   systems.       The   concentrated   failures   suggest   that   turn-
+523       level  filtering  is  necessary  but  insuﬀicient.   A  safer  system  should  track  risk  objects,  consent
+524       and  authority,  secrecy  demands,  user-defined  rules,  and  changes  in  support  context,  while
+525       distinguishing  empathy  from  allegiance.   Overall  acceptance  thresholds  should  therefore  be
+526       paired  with  minima  for  high-risk  domains  and  mechanisms.
+
+527
+528       7       Ethical  Considerations
+529
+530       QH-Bench   uses   researcher-authored   synthetic   scenarios   rather   than   adolescent   logs   and
+531       excludes real identifiers and operationally dangerous details.   This reduces privacy risk while
+532       retaining   recognizable   educational,   family,   platform,   and   offline   situations.      Distribution
+533       should  retain  a  content  warning  and  research  purpose;  scores  support  system  diagnosis,  not
+534       prevalence  estimates,  individual  inference,  or  punitive  monitoring.
+
+535
+536       8       Conclusion
+537
+538       QH-Bench  contributes  a  Chinese,  culturally  grounded  benchmark  for  adolescent  LLM  con-
+539       tent  safety:   715  single-turn  scenarios  organized  by  a  10/50/143  hierarchy  and  100  four-turn
+          trajectories  constructed  from  a  balanced 10× 10  mechanism–domain  matrix.    This  design
+
+
+                                                                       10
+
+===== PAGE 11 =====
+          Under  review  as  a  conference  paper  at  ICLR  2026
+
+
+
+
+
+540       treats   risk   types   and   risk-formation   processes   as   distinct   but   complementary   evaluation
+541       targets.
+542
+543       Across  13  open  LLMs,  different  track  leaders  and  concentrated  M09/M02  failures  show  that
+544       risk  coverage  cannot  substitute  for  multi-turn  robustness.   A  model  should  therefore  not  be
+545       considered  adequately  assessed  for  adolescent  interaction  merely  because  it  handles  explicit
+546       single-turn risks:  it must also maintain and update safety-relevant state when risk is revealed
+547       through  relationships,  references,  accumulated  rules,  and  changing  conditions.
+
+548
+549
+550
+551
+552
+553
+554
+555
+556
+557
+558
+559
+560
+561
+562
+563
+564
+565
+566
+567
+568
+569
+570
+571
+572
+573
+574
+575
+576
+577
+578
+579
+580
+581
+582
+583
+584
+585
+586
+587
+588
+589
+590
+591
+592
+593
+
+
+                                                                      11
+
+===== PAGE 12 =====
+          Under  review  as  a  conference  paper  at  ICLR  2026
+
+
+
+
+
+594       Reproducibility  Statement
+595
+596       The  main  paper  specifies  the  benchmark  construction  and  evaluation  units.   The  appendix
+597       provides  mechanism  boundaries  and  counterfactual  criteria,  executable  prompt  renderings
+598       and  payload  schemas,  model  identifiers  and  generation  settings,  statistical  procedures,  and
+599       complete numerical results.  Together with the accompanying evaluation scripts, these mate-
+600       rials  support  rerunning  the  fixed-trajectory  protocol  and  checking  every  reported  aggregate.
+601
+602       References
+603
+604       Zheng   Cai,   Maosong   Cao,   Haojiong   Chen,   Kai   Chen,   Keyu   Chen,   Xin   Chen,   et   al.     In-
+605          ternLM2  technical  report.   arXiv  preprint  arXiv:2403.17297,  2024.
+606
+607       Hongye   Cao,   Sijia   Jing,   Yanming   Wang,   Ziyue   Peng,   Zhixin   Bai,   Zhe   Cao,   Meng   Fang,
+608          Fan  Feng,  Jiaheng  Liu,  Boyan  Wang,  Tianpei  Yang,  Jing  Huo,  Yang  Gao,  Fanyu  Meng,
+609          Xi   Yang,   Chao   Deng,   and   Junlan   Feng.     SafeDialBench:    A   fine-grained   safety   evalua-
+610          tion  benchmark  for  large  language  models  in  multi-turn  dialogues  with  diverse  jailbreak
+             attacks.   In  International  Conference  on  Learning  Representations,  2026.
+611
+612       Patrick Chao, Edoardo Debenedetti, Alexander Robey, Maksym Andriushchenko, Francesco
+613          Croce,  Vikash  Sehwag,  Edgar  Dobriban,  Nicolas  Flammarion,  George  J.  Pappas,  Florian
+614          Tramèr, Hamed Hassani, and Eric Wong.  JailbreakBench:  An open robustness benchmark
+615          for   jailbreaking   large   language   models.     In   Advances   in   Neural   Information   Processing
+616          Systems,  volume  37,  2024.
+617       DeepSeek-AI.  DeepSeek-V2:  A strong, economical, and eﬀicient mixture-of-experts language
+618          model.   arXiv  preprint  arXiv:2405.04434,  2024.
+619
+620       Shaona  Ghosh,  Prasoon  Varshney,  Makesh  Narsimhan  Sreedhar,  Aishwarya  Padmakumar,
+621          Traian  Rebedea,   Jibin  Rajan  Varghese,   and  Christopher  Parisien.    Aegis2.0:    A  diverse
+622          AI  safety  dataset  and  risks  taxonomy  for  alignment  of  LLM  guardrails.    arXiv  preprint
+623          arXiv:2501.09004,  2025.
+624       Seungju  Han,  Kavel  Rao,  Allyson  Ettinger,  Liwei  Jiang,  Bill  Yuchen  Lin,  Nathan  Lambert,
+625          Yejin   Choi,   and   Nouha   Dziri.     WildGuard:    Open   one-stop   moderation   tools   for   safety
+626          risks,  jailbreaks,  and  refusals  of  LLMs.   arXiv  preprint  arXiv:2406.18495,  2024.
+627
+628       Kexin Huang,  Xiangyang Liu,  Qianyu Guo,  Tianxiang Sun,  Jiawei Sun,  Yaru Wang,  Zeyang
+629          Zhou,  Yixu  Wang,  Yan  Teng,  Xipeng  Qiu,  Yingchun  Wang,  and  Dahua  Lin.   FLAMES:
+630          Benchmarking value alignment of LLMs in chinese.  In Proceedings of the 2024 Conference
+631          of the North American Chapter of the Association for Computational Linguistics:  Human
+632          Language  Technologies,  pp.  4551–4591,  2024.   doi:   10.18653/v1/2024.naacl-long.256.
+633       Jiaming   Ji,   Mickel   Liu,   Juntao   Dai,   Xuehai   Pan,   Chi   Zhang,   Ce   Bian,   Boyuan   Chen,
+634          Ruiyang  Sun,  Yizhou  Wang,  and  Yaodong  Yang.   BeaverTails:   Towards  improved  safety
+635          alignment  of  LLM  via  a  human-preference  dataset.    In  Advances  in  Neural  Information
+636          Processing  Systems,  volume  36,  2023.
+637
+638       Yifan   Jiang,   Kriti   Aggarwal,   Tanmay   Laud,   Kashif   Munir,   Jay   Pujara,   and   Subhabrata
+639          Mukherjee.    Red  queen:    Exposing  latent  multi-turn  risks  in  large  language  models.    In
+640          Findings  of  the  Association  for  Computational  Linguistics:   ACL  2025,  pp.  25554–25591,
+641          2025.   doi:   10.18653/v1/2025.findings-acl.1311.
+
+642       Junfeng   Jiao,   Saleh   Afroogh,   Kevin   Chen,   Abhejay   Murali,   David   Atkinson,   and   Amit
+643          Dhurandhar.  Safe-Child-LLM:  A  developmental  benchmark  for  evaluating  LLM  safety  in
+644          child–ai  interactions.   arXiv  preprint  arXiv:2506.13510,  2025.
+645
+646       Shaun  Khoo,  Gabriel  Chua,  and  Rachel  Shong.   MinorBench:   A  hand-built  benchmark  for
+647          content-based  risks  for  children.  arXiv  preprint  arXiv:2503.10242,  2025.  ICLR  Workshop
+             on  AI  for  Children.
+
+
+                                                                     12

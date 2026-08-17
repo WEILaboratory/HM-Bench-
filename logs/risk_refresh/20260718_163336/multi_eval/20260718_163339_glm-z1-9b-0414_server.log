@@ -1,0 +1,27 @@
+$ vllm serve /data/jinxiang/zai-org_GLM-Z1-9B-0414 --served-model-name glm-z1-9b-0414 --host 127.0.0.1 --port 8111 --dtype bfloat16 --max-model-len 4096 --gpu-memory-utilization 0.9 --generation-config vllm --max-num-seqs 1 --max-num-batched-tokens 4096 --enforce-eager
+
+[1;36m(APIServer pid=4079697)[0;0m `torch_dtype` is deprecated! Use `dtype` instead!
+[W718 16:35:23.950740933 ProcessGroupNCCL.cpp:981] Warning: TORCH_NCCL_AVOID_RECORD_STREAMS is the default now, this environment variable is thus deprecated. (function operator())
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[Gloo] Rank 0 is connected to 0 peer ranks. Expected number of connected peer ranks is : 0
+[1;36m(EngineCore_DP0 pid=4080902)[0;0m WARNING 07-18 16:35:23 [topk_topp_sampler.py:69] FlashInfer is not available. Falling back to the PyTorch-native implementation of top-p & top-k sampling. For the best performance, please install FlashInfer.
+[1;36m(EngineCore_DP0 pid=4080902)[0;0m Loading safetensors checkpoint shards:   0% Completed | 0/4 [00:00<?, ?it/s]
+[1;36m(EngineCore_DP0 pid=4080902)[0;0m Loading safetensors checkpoint shards:  25% Completed | 1/4 [00:05<00:15,  5.26s/it]
+[1;36m(EngineCore_DP0 pid=4080902)[0;0m Loading safetensors checkpoint shards:  50% Completed | 2/4 [00:09<00:08,  4.46s/it]
+[1;36m(EngineCore_DP0 pid=4080902)[0;0m Loading safetensors checkpoint shards:  75% Completed | 3/4 [00:11<00:03,  3.69s/it]
+[1;36m(EngineCore_DP0 pid=4080902)[0;0m Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:14<00:00,  3.16s/it]
+[1;36m(EngineCore_DP0 pid=4080902)[0;0m Loading safetensors checkpoint shards: 100% Completed | 4/4 [00:14<00:00,  3.57s/it]
+[1;36m(EngineCore_DP0 pid=4080902)[0;0m 
+[1;36m(APIServer pid=4079697)[0;0m INFO:     Started server process [4079697]
+[1;36m(APIServer pid=4079697)[0;0m INFO:     Waiting for application startup.
+[1;36m(APIServer pid=4079697)[0;0m INFO:     Application startup complete.
+[1;36m(APIServer pid=4079697)[0;0m INFO:     127.0.0.1:37100 - "GET /v1/models HTTP/1.1" 200 OK
+[1;36m(APIServer pid=4079697)[0;0m WARNING 07-18 16:35:44 [launcher.py:98] port 8111 is used by process psutil.Process(pid=4079697, name='vllm', status='running') launched with command:
+[1;36m(APIServer pid=4079697)[0;0m WARNING 07-18 16:35:44 [launcher.py:98] /home/jinxiang/miniconda3/envs/vllm_eval/bin/python /home/jinxiang/miniconda3/envs/vllm_eval/bin/vllm serve /data/jinxiang/zai-org_GLM-Z1-9B-0414 --served-model-name glm-z1-9b-0414 --host 127.0.0.1 --port 8111 --dtype bfloat16 --max-model-len 4096 --gpu-memory-utilization 0.9 --generation-config vllm --max-num-seqs 1 --max-num-batched-tokens 4096 --enforce-eager
+[1;36m(APIServer pid=4079697)[0;0m INFO:     Shutting down
+[1;36m(APIServer pid=4079697)[0;0m INFO:     Waiting for application shutdown.
+[1;36m(APIServer pid=4079697)[0;0m INFO:     Application shutdown complete.

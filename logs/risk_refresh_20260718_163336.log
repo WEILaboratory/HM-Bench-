@@ -1,0 +1,88 @@
+===== risk refresh =====
+workflow=single_score || (multi_eval -> multi_score)
+models=qwen2.5-1.5b-instruct,qwen2.5-7b-instruct,qwen2.5-14b-instruct,qwen2.5-32b-instruct,deepseek-llm-7b-chat,deepseek-v2-lite-chat,internlm2.5-1.8b-chat,internlm2.5-7b-chat,internlm2.5-20b-chat,glm4-9b-0414,glm4-32b-0414,glm-z1-9b-0414,glm-z1-32b-0414 mode=resume log_dir=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336
+[start] single_score log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/single_score.log
+[failed] single_score exit=1 log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/single_score.log
+[model-ready] qwen2.5-1.5b-instruct source=/data/jinxiang/Qwen_Qwen2.5-1.5B-Instruct
+[model-ready] qwen2.5-7b-instruct source=/data/jinxiang/Qwen_Qwen2.5-7B-Instruct
+[model-ready] qwen2.5-14b-instruct source=/data/jinxiang/Qwen_Qwen2.5-14B-Instruct
+[model-ready] qwen2.5-32b-instruct source=/data/jinxiang/Qwen_Qwen2.5-32B-Instruct
+[model-ready] deepseek-llm-7b-chat source=/data/jinxiang/deepseek-ai_deepseek-llm-7b-chat
+[model-ready] deepseek-v2-lite-chat source=/data/jinxiang/deepseek-ai_DeepSeek-V2-Lite-Chat
+[model-ready] internlm2.5-1.8b-chat source=/data/jinxiang/internlm_internlm2_5-1_8b-chat
+[model-ready] internlm2.5-7b-chat source=/data/jinxiang/internlm_internlm2_5-7b-chat
+[model-ready] internlm2.5-20b-chat source=/data/jinxiang/internlm_internlm2_5-20b-chat
+[model-ready] glm4-9b-0414 source=/data/jinxiang/zai-org_GLM-4-9B-0414
+[model-ready] glm4-32b-0414 source=/data/jinxiang/zai-org_GLM-4-32B-0414
+[model-ready] glm-z1-9b-0414 source=/data/jinxiang/zai-org_GLM-Z1-9B-0414
+[model-ready] glm-z1-32b-0414 source=/data/jinxiang/zai-org_GLM-Z1-32B-0414
+[vllm-start] qwen2.5-7b-instruct gpus=[3] port=8101 log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_qwen2.5-7b-instruct_server.log
+[vllm-start] qwen2.5-14b-instruct gpus=[4] port=8102 log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_qwen2.5-14b-instruct_server.log
+[vllm-start] qwen2.5-1.5b-instruct gpus=[2] port=8100 log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_qwen2.5-1.5b-instruct_server.log
+[vllm-start] deepseek-llm-7b-chat gpus=[7] port=8104 log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_deepseek-llm-7b-chat_server.log[vllm-start] qwen2.5-32b-instruct gpus=[5, 6] port=8103 log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_qwen2.5-32b-instruct_server.log
+
+[vllm-start] internlm2.5-1.8b-chat gpus=[1] port=8106 log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_internlm2.5-1.8b-chat_server.log
+[vllm-start] deepseek-v2-lite-chat gpus=[0] port=8105 log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_deepseek-v2-lite-chat_server.log
+[vllm-ready] qwen2.5-1.5b-instruct
+[eval-start] qwen2.5-1.5b-instruct log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_qwen2.5-1.5b-instruct_multi.log
+[vllm-stop] qwen2.5-1.5b-instruct
+[vllm-start] internlm2.5-7b-chat gpus=[2] port=8107 log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_internlm2.5-7b-chat_server.log
+[vllm-ready] internlm2.5-1.8b-chat
+[eval-start] internlm2.5-1.8b-chat log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_internlm2.5-1.8b-chat_multi.log
+[vllm-stop] internlm2.5-1.8b-chat
+[vllm-start] internlm2.5-20b-chat gpus=[1] port=8108 log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_internlm2.5-20b-chat_server.log
+[vllm-ready] qwen2.5-7b-instruct
+[eval-start] qwen2.5-7b-instruct log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_qwen2.5-7b-instruct_multi.log
+[vllm-stop] qwen2.5-7b-instruct
+[vllm-start] glm4-9b-0414 gpus=[3] port=8109 log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_glm4-9b-0414_server.log
+[vllm-ready] qwen2.5-14b-instruct
+[eval-start] qwen2.5-14b-instruct log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_qwen2.5-14b-instruct_multi.log
+[vllm-stop] qwen2.5-14b-instruct
+[vllm-start] glm-z1-9b-0414 gpus=[4] port=8111 log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_glm-z1-9b-0414_server.log
+[vllm-ready] deepseek-v2-lite-chat
+[eval-start] deepseek-v2-lite-chat log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_deepseek-v2-lite-chat_multi.log
+[vllm-ready] deepseek-llm-7b-chat
+[eval-start] deepseek-llm-7b-chat log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_deepseek-llm-7b-chat_multi.log
+[vllm-stop] deepseek-v2-lite-chat
+[vllm-stop] deepseek-llm-7b-chat
+[vllm-start] glm4-32b-0414 gpus=[0, 7] port=8110 log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_glm4-32b-0414_server.log
+[vllm-ready] internlm2.5-7b-chat
+[eval-start] internlm2.5-7b-chat log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_internlm2.5-7b-chat_multi.log
+[vllm-stop] internlm2.5-7b-chat
+[vllm-ready] qwen2.5-32b-instruct
+[eval-start] qwen2.5-32b-instruct log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_qwen2.5-32b-instruct_multi.log
+[vllm-stop] qwen2.5-32b-instruct
+[vllm-start] glm-z1-32b-0414 gpus=[2, 5] port=8112 log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_glm-z1-32b-0414_server.log
+[vllm-ready] glm4-9b-0414
+[eval-start] glm4-9b-0414 log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_glm4-9b-0414_multi.log
+[vllm-ready] internlm2.5-20b-chat
+[eval-start] internlm2.5-20b-chat log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_internlm2.5-20b-chat_multi.log
+[vllm-stop] internlm2.5-20b-chat
+[vllm-stop] glm4-9b-0414
+[vllm-ready] glm-z1-9b-0414
+[eval-start] glm-z1-9b-0414 log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_glm-z1-9b-0414_multi.log
+[vllm-stop] glm-z1-9b-0414
+[vllm-ready] glm4-32b-0414
+[eval-start] glm4-32b-0414 log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_glm4-32b-0414_multi.log
+[vllm-stop] glm4-32b-0414
+[vllm-ready] glm-z1-32b-0414
+[eval-start] glm-z1-32b-0414 log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_glm-z1-32b-0414_multi.log
+[vllm-stop] glm-z1-32b-0414
+[model-failed] deepseek-llm-7b-chat RuntimeError: 多轮测评失败，returncode=1，log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_deepseek-llm-7b-chat_multi.log
+[model-failed] deepseek-v2-lite-chat RuntimeError: 多轮测评失败，returncode=1，log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_deepseek-v2-lite-chat_multi.log
+[model-failed] glm-z1-32b-0414 RuntimeError: 多轮测评失败，returncode=1，log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_glm-z1-32b-0414_multi.log
+[model-failed] glm-z1-9b-0414 RuntimeError: 多轮测评失败，returncode=1，log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_glm-z1-9b-0414_multi.log
+[model-failed] glm4-32b-0414 RuntimeError: 多轮测评失败，returncode=1，log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_glm4-32b-0414_multi.log
+[model-failed] glm4-9b-0414 RuntimeError: 多轮测评失败，returncode=1，log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_glm4-9b-0414_multi.log
+[model-failed] internlm2.5-1.8b-chat RuntimeError: 多轮测评失败，returncode=1，log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_internlm2.5-1.8b-chat_multi.log
+[model-failed] internlm2.5-20b-chat RuntimeError: 多轮测评失败，returncode=1，log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_internlm2.5-20b-chat_multi.log
+[model-failed] internlm2.5-7b-chat RuntimeError: 多轮测评失败，returncode=1，log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_internlm2.5-7b-chat_multi.log
+[model-failed] qwen2.5-1.5b-instruct RuntimeError: 多轮测评失败，returncode=1，log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_qwen2.5-1.5b-instruct_multi.log
+[model-failed] qwen2.5-14b-instruct RuntimeError: 多轮测评失败，returncode=1，log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_qwen2.5-14b-instruct_multi.log
+[model-failed] qwen2.5-32b-instruct RuntimeError: 多轮测评失败，returncode=1，log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_qwen2.5-32b-instruct_multi.log
+[model-failed] qwen2.5-7b-instruct RuntimeError: 多轮测评失败，returncode=1，log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval/20260718_163339_qwen2.5-7b-instruct_multi.log
+[blocked] multi_score 未启动，因为 multi_eval 失败。
+===== summary =====
+single_score: failed log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/single_score.log
+multi_eval: failed log=/home/jinxiang/内容安全/logs/risk_refresh/20260718_163336/multi_eval
+multi_score: blocked by multi_eval
