@@ -1,0 +1,8 @@
+# A clean build needs one initial pdfLaTeX pass and at most two reruns for
+# BibTeX and cross-references. Capping the reruns prevents harmless page-label
+# churn in the combined main-plus-supplement PDF from exhausting Overleaf's
+# free-plan compile window.
+$max_repeat = 2;
+
+# Stop at the first real TeX error so Overleaf reports the cause immediately.
+$pdflatex = 'pdflatex -interaction=nonstopmode -halt-on-error -file-line-error %O %S';

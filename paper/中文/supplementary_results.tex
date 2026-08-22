@@ -1,0 +1,338 @@
+\subsection{完整模型结果}
+
+\begin{table}[!h]
+\caption{全部 13 个模型的单轮结果。置信区间以 715 个单轮测试样本为重采样单位；“低于 0 分”表示该模型的 715 个回答中评分低于 0 的比例。}
+\label{tab:supp-models}
+\centering
+\bodytablefont
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.16}
+\rowcolors{2}{supppale}{white}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.57in}X
+                              >{\centering\arraybackslash}p{0.46in}
+                              >{\centering\arraybackslash}p{0.47in}
+                              >{\centering\arraybackslash}p{1.02in}
+                              >{\centering\arraybackslash}p{0.62in}}
+\toprule
+\rowcolor{supphead}
+系列 & 模型仓库标识 & 参数量 & 均值 & 95\% CI & 低于 0 分（\%）\\
+\midrule
+InternLM & internlm/internlm2\_5-20b-chat~\cite{internlm25_20b_card} & 20B & $1.138$ & $[1.052,\,1.222]$ & 14.8\\
+GLM & zai-org/GLM-4-32B-0414~\cite{glm4_32b_0414_card} & 32B & $0.463$ & $[0.341,\,0.583]$ & 35.5\\
+Qwen & Qwen/Qwen2.5-14B-Instruct~\cite{qwen25_14b_card} & 14B & $0.697$ & $[0.593,\,0.799]$ & 26.3\\
+Qwen & Qwen/Qwen2.5-32B-Instruct~\cite{qwen25_32b_card} & 32B & $0.579$ & $[0.481,\,0.676]$ & 30.9\\
+InternLM & internlm/internlm2\_5-7b-chat~\cite{internlm25_7b_card} & 7B & $0.871$ & $[0.776,\,0.962]$ & 20.1\\
+GLM & zai-org/GLM-4-9B-0414~\cite{glm4_9b_0414_card} & 9B & $0.144$ & $[0.022,\,0.264]$ & 42.2\\
+DeepSeek & deepseek-ai/DeepSeek-V2-Lite-Chat~\cite{deepseek_v2_lite_card} & 16B$^\dagger$ & $0.705$ & $[0.611,\,0.799]$ & 22.1\\
+DeepSeek & deepseek-ai/deepseek-llm-7b-chat~\cite{deepseek_llm_7b_card} & 7B & $0.143$ & $[0.036,\,0.248]$ & 37.8\\
+Qwen & Qwen/Qwen2.5-7B-Instruct~\cite{qwen25_7b_card} & 7B & $0.227$ & $[0.119,\,0.334]$ & 39.4\\
+GLM & zai-org/GLM-Z1-32B-0414~\cite{glmz1_32b_0414_card} & 32B & $-0.112$ & $[-0.222,\,-0.003]$ & 47.4\\
+GLM & zai-org/GLM-Z1-9B-0414~\cite{glmz1_9b_0414_card} & 9B & $-0.429$ & $[-0.533,\,-0.323]$ & 57.6\\
+InternLM & internlm/internlm2\_5-1\_8b-chat~\cite{internlm25_18b_card} & 1.8B & $-0.263$ & $[-0.362,\,-0.164]$ & 51.5\\
+Qwen & Qwen/Qwen2.5-1.5B-Instruct~\cite{qwen25_15b_card} & 1.5B & $-0.536$ & $[-0.638,\,-0.434]$ & 58.9\\
+\bottomrule
+\multicolumn{6}{l}{\bodytablefont $^\dagger$每个词元约激活 2.4B 参数。}
+\end{tabularx}
+\end{table}
+
+\begin{table}[!h]
+\caption{全部 13 个模型的多轮结果。每个模型包含 100 次由固定用户脚本驱动的四轮交互；置信区间以多轮测试样本为重采样单位。}
+\label{tab:supp-models-multi}
+\centering
+\bodytablefont
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.16}
+\rowcolors{2}{supppurplepale}{white}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{0.57in}X
+                              >{\centering\arraybackslash}p{0.46in}
+                              >{\centering\arraybackslash}p{0.47in}
+                              >{\centering\arraybackslash}p{1.02in}
+                              >{\centering\arraybackslash}p{0.62in}}
+\toprule
+\rowcolor{supppurple!15}
+系列 & 模型仓库标识 & 参数量 & 均值 & 95\% CI & 低于 0 分（\%）\\
+\midrule
+InternLM & internlm/internlm2\_5-20b-chat & 20B & $0.650$ & $[0.380,\,0.910]$ & 30.0\\
+GLM & zai-org/GLM-4-32B-0414 & 32B & $1.310$ & $[1.060,\,1.540]$ & 13.0\\
+Qwen & Qwen/Qwen2.5-14B-Instruct & 14B & $0.770$ & $[0.500,\,1.030]$ & 23.0\\
+Qwen & Qwen/Qwen2.5-32B-Instruct & 32B & $0.650$ & $[0.360,\,0.920]$ & 28.0\\
+InternLM & internlm/internlm2\_5-7b-chat & 7B & $0.080$ & $[-0.200,\,0.360]$ & 46.0\\
+GLM & zai-org/GLM-4-9B-0414 & 9B & $0.610$ & $[0.290,\,0.910]$ & 32.0\\
+DeepSeek & deepseek-ai/DeepSeek-V2-Lite-Chat & 16B$^\dagger$ & $-0.220$ & $[-0.500,\,0.070]$ & 53.0\\
+DeepSeek & deepseek-ai/deepseek-llm-7b-chat & 7B & $-0.140$ & $[-0.420,\,0.140]$ & 51.0\\
+Qwen & Qwen/Qwen2.5-7B-Instruct & 7B & $-0.440$ & $[-0.720,\,-0.150]$ & 58.0\\
+GLM & zai-org/GLM-Z1-32B-0414 & 32B & $-0.840$ & $[-1.070,\,-0.600]$ & 70.0\\
+GLM & zai-org/GLM-Z1-9B-0414 & 9B & $-0.880$ & $[-1.140,\,-0.600]$ & 71.0\\
+InternLM & internlm/internlm2\_5-1\_8b-chat & 1.8B & $-1.280$ & $[-1.450,\,-1.090]$ & 87.0\\
+Qwen & Qwen/Qwen2.5-1.5B-Instruct & 1.5B & $-1.530$ & $[-1.680,\,-1.370]$ & 93.0\\
+\bottomrule
+\multicolumn{6}{l}{\bodytablefont $^\dagger$每个词元约激活 2.4B 参数。}
+\end{tabularx}
+\end{table}
+
+\subsection{两类评测的完整汇总结果}
+
+\begin{table}[t]
+\caption{单轮一级风险领域的汇总结果。置信区间以各领域内的测试样本为重采样单位。}
+\label{tab:supp-domains}
+\centering
+\bodytablefont
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.12}
+\rowcolors{2}{supppale}{white}
+\begin{tabularx}{\textwidth}{>{\centering\arraybackslash}p{0.38in}X
+                                 >{\centering\arraybackslash}p{0.48in}
+                                 >{\centering\arraybackslash}p{0.55in}
+                                 >{\centering\arraybackslash}p{1.10in}
+                                 >{\centering\arraybackslash}p{0.70in}}
+\toprule
+\rowcolor{supphead}
+编号 & 风险领域 & 样本数 & 均值 & 95\% CI & 低于 0 分（\%）\\
+\midrule
+D09 & 线下人身安全 & 75 & $-0.168$ & $[-0.387,\,0.056]$ & 51.2\\
+D08 & 财产、消费与商业利用 & 75 & $0.032$ & $[-0.175,\,0.242]$ & 44.3\\
+D06 & 数字平台与网络行为 & 75 & $0.118$ & $[-0.078,\,0.309]$ & 41.9\\
+D07 & 隐私与合成媒体 & 65 & $0.173$ & $[-0.069,\,0.412]$ & 43.3\\
+D03 & 心理健康与 AI 依赖 & 65 & $0.200$ & $[0.036,\,0.366]$ & 36.2\\
+D02 & 教育决策 & 70 & $0.219$ & $[0.024,\,0.412]$ & 37.9\\
+D05 & 家庭、学校与校园 & 75 & $0.308$ & $[0.117,\,0.496]$ & 36.2\\
+D04 & 身体健康与亲密边界 & 75 & $0.422$ & $[0.233,\,0.603]$ & 31.6\\
+D01 & 社会价值与社会认知 & 75 & $0.542$ & $[0.370,\,0.708]$ & 29.4\\
+D10 & 法律规范与公共秩序 & 65 & $1.015$ & $[0.852,\,1.167]$ & 18.9\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[t]
+\caption{单轮一级风险领域的五级评分分布（\%）。每行汇总该领域全部测试样本在 13 个模型上的评分。}
+\label{tab:supp-domain-distribution}
+\centering
+\bodytablefont
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.12}
+\rowcolors{2}{supppale}{white}
+\begin{tabularx}{0.91\textwidth}{>{\centering\arraybackslash}p{0.38in}X*{5}{>{\centering\arraybackslash}p{0.48in}}}
+\toprule
+\rowcolor{supphead}
+编号 & 风险领域 & $-2$ & $-1$ & $0$ & $+1$ & $+2$\\
+\midrule
+D09 & 线下人身安全 & 32.9 & 18.3 & 3.9 & 22.6 & 22.4\\
+D08 & 财产、消费与商业利用 & 25.0 & 19.3 & 5.2 & 28.4 & 22.1\\
+D06 & 数字平台与网络行为 & 26.8 & 15.2 & 3.2 & 29.2 & 25.6\\
+D07 & 隐私与合成媒体 & 25.6 & 17.8 & 2.4 & 22.5 & 31.8\\
+D03 & 心理健康与 AI 依赖 & 11.2 & 25.0 & 8.5 & 43.1 & 12.2\\
+D02 & 教育决策 & 17.0 & 20.9 & 6.5 & 34.4 & 21.2\\
+D05 & 家庭、学校与校园 & 16.9 & 19.3 & 4.9 & 33.8 & 25.0\\
+D04 & 身体健康与亲密边界 & 15.2 & 16.4 & 5.8 & 36.2 & 26.4\\
+D01 & 社会价值与社会认知 & 14.4 & 15.1 & 4.3 & 34.6 & 31.7\\
+D10 & 法律规范与公共秩序 & 9.3 & 9.6 & 2.1 & 28.0 & 50.9\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[t]
+\caption{十种多轮风险机制的汇总结果。每种机制包含 10 个测试样本，并产生 $10\times13=130$ 个完整四轮交互评分；置信区间先在模型内对十个一级风险领域取均值，再以 13 个模型为重采样单位。}
+\label{tab:supp-mechanisms}
+\centering
+\bodytablefont
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.12}
+\rowcolors{2}{supppurplepale}{white}
+\begin{tabularx}{\textwidth}{>{\centering\arraybackslash}p{0.38in}X
+                                 >{\centering\arraybackslash}p{0.48in}
+                                 >{\centering\arraybackslash}p{0.55in}
+                                 >{\centering\arraybackslash}p{1.10in}
+                                 >{\centering\arraybackslash}p{0.70in}}
+\toprule
+\rowcolor{supppurple!15}
+编号 & 多轮风险机制 & 样本数 & 均值 & 95\% CI & 低于 0 分（\%）\\
+\midrule
+M09 & 关系框架累积与立场迁移 & 10 & $-0.792$ & $[-1.254,\,-0.300]$ & 70.0\\
+M02 & 跨轮指代与风险省略 & 10 & $-0.569$ & $[-0.923,\,-0.223]$ & 61.5\\
+M08 & 跨轮规则累积与惯性套用 & 10 & $-0.377$ & $[-0.877,\,0.131]$ & 58.5\\
+M03 & 跨轮拆解与有害组合 & 10 & $-0.308$ & $[-0.823,\,0.215]$ & 57.7\\
+M05 & 话题插入与风险回接 & 10 & $-0.054$ & $[-0.577,\,0.477]$ & 50.8\\
+M10 & 信息流边界迁移 & 10 & $-0.015$ & $[-0.631,\,0.592]$ & 48.5\\
+M01 & 意图渐显与风险递进 & 10 & $0.146$ & $[-0.354,\,0.646]$ & 43.1\\
+M07 & 安全条件更新与旧结论惯性 & 10 & $0.146$ & $[-0.446,\,0.715]$ & 44.6\\
+M06 & 持续改问与请求收缩 & 10 & $0.292$ & $[-0.192,\,0.754]$ & 36.9\\
+M04 & 安全铺垫与用途反转 & 10 & $0.562$ & $[0.046,\,1.031]$ & 32.3\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[t]
+\caption{十种多轮风险机制的五级评分分布（\%）。每行汇总 10 个测试样本在 13 个模型上的 130 个完整四轮交互评分。}
+\label{tab:supp-mechanism-distribution}
+\centering
+\bodytablefont
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.12}
+\rowcolors{2}{supppurplepale}{white}
+\begin{tabularx}{0.91\textwidth}{>{\centering\arraybackslash}p{0.38in}X*{5}{>{\centering\arraybackslash}p{0.48in}}}
+\toprule
+\rowcolor{supppurple!15}
+编号 & 多轮风险机制 & $-2$ & $-1$ & $0$ & $+1$ & $+2$\\
+\midrule
+M09 & 关系框架累积与立场迁移 & 48.5 & 21.5 & 3.8 & 13.1 & 13.1\\
+M02 & 跨轮指代与风险省略 & 46.9 & 14.6 & 1.5 & 22.3 & 14.6\\
+M08 & 跨轮规则累积与惯性套用 & 29.2 & 29.2 & 3.8 & 25.4 & 12.3\\
+M03 & 跨轮拆解与有害组合 & 27.7 & 30.0 & 3.8 & 22.3 & 16.2\\
+M05 & 话题插入与风险回接 & 20.8 & 30.0 & 5.4 & 21.5 & 22.3\\
+M10 & 信息流边界迁移 & 26.2 & 22.3 & 3.1 & 23.8 & 24.6\\
+M01 & 意图渐显与风险递进 & 18.5 & 24.6 & 6.2 & 25.4 & 25.4\\
+M07 & 安全条件更新与旧结论惯性 & 22.3 & 22.3 & 2.3 & 24.6 & 28.5\\
+M06 & 持续改问与请求收缩 & 13.8 & 23.1 & 7.7 & 30.8 & 24.6\\
+M04 & 安全铺垫与用途反转 & 20.8 & 11.5 & 3.1 & 20.0 & 44.6\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\FloatBarrier
+\begin{table}[t]
+\caption{按平均分由低到高排列的全部单轮二级风险类别（第 1--25 名，共 50 类）。}
+\label{tab:supp-subdomains-1}
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.18}
+\rowcolors{2}{supppale}{white}
+\begin{tabularx}{0.94\textwidth}{>{\centering\arraybackslash}p{0.32in}X
+                                     >{\centering\arraybackslash}p{0.28in}
+                                     >{\centering\arraybackslash}p{0.52in}
+                                     >{\centering\arraybackslash}p{0.52in}}
+\toprule
+\rowcolor{supphead}
+\textbf{排名} & \textbf{二级风险类别} & \textbf{样本数} & \textbf{均值} & \textbf{低于 0 分（\%）}\\
+\midrule
+1 & 与网友、陌生群体或成年人线下见面 & 15 & $-1.164$ & 79.0\\
+2 & 认知外包、浅层学习与创造力受损 & 15 & $-0.687$ & 67.2\\
+3 & 未成年人商业化、私域导流与劳动权益 & 15 & $-0.646$ & 61.5\\
+4 & 未成年人身份、学校与家庭敏感信息暴露 & 15 & $-0.492$ & 63.1\\
+5 & 粉丝文化、直播、网络娱乐与虚拟社交风险 & 15 & $-0.410$ & 57.4\\
+6 & 离家出走、夜不归宿与隐瞒真实行踪 & 15 & $-0.369$ & 55.4\\
+7 & 青少年亲密关系、权力不对等与控制行为 & 15 & $-0.221$ & 51.3\\
+8 & 不适龄场所、校外活动与高风险聚会 & 15 & $-0.221$ & 50.3\\
+9 & 危机识别遗漏与未能升级至现实求助 & 15 & $-0.195$ & 49.2\\
+10 & 游戏、直播和粉丝消费中的冲动与随机性支出 & 15 & $-0.164$ & 47.2\\
+11 & 家庭资产误用、支付核验与账户交易风险 & 15 & $-0.072$ & 49.7\\
+12 & 对真实伤害情境中的保护性干预作出误判 & 15 & $-0.051$ & 47.2\\
+13 & 网络过度使用、沉迷与功能受损 & 15 & $0.010$ & 41.0\\
+14 & 过度收集心理、身体、家庭与亲密经历 & 15 & $0.031$ & 44.1\\
+15 & 危险挑战、户外与交通风险及无保护实验 & 15 & $0.082$ & 48.7\\
+16 & 规避青少年模式、实名核验与平台保护 & 15 & $0.128$ & 43.6\\
+17 & AI 拟人化陪伴、依赖与亲密边界 & 15 & $0.138$ & 37.9\\
+18 & 培训与招生中的商业误导 & 10 & $0.162$ & 37.7\\
+19 & 监护支持失效与隐瞒严重问题 & 15 & $0.174$ & 38.5\\
+20 & 困境未成年人、寄宿环境与校外保护不足 & 15 & $0.241$ & 37.4\\
+21 & 伪装广告、焦虑营销与定向消费操控 & 15 & $0.262$ & 36.4\\
+22 & 成长观、人生观、劳动观与成功叙事 & 15 & $0.308$ & 31.3\\
+23 & 招生政策、教育评价与高风险决策 & 15 & $0.318$ & 29.7\\
+24 & 国家认同、历史文化与共同体认知误区 & 15 & $0.328$ & 37.4\\
+25 & 有害社群依赖与现实支持断裂 & 10 & $0.338$ & 35.4\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[t]
+\caption{按平均分由低到高排列的全部单轮二级风险类别（第 26--50 名，共 50 类）。}
+\label{tab:supp-subdomains-2}
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.18}
+\rowcolors{2}{supppale}{white}
+\begin{tabularx}{0.94\textwidth}{>{\centering\arraybackslash}p{0.32in}X
+                                     >{\centering\arraybackslash}p{0.28in}
+                                     >{\centering\arraybackslash}p{0.52in}
+                                     >{\centering\arraybackslash}p{0.52in}}
+\toprule
+\rowcolor{supphead}
+\textbf{排名} & \textbf{二级风险类别} & \textbf{样本数} & \textbf{均值} & \textbf{低于 0 分（\%）}\\
+\midrule
+26 & AI 生成内容的真实性、标识与冒充 & 15 & $0.349$ & 40.0\\
+27 & 情绪安抚、灾难化与情绪回音室 & 10 & $0.362$ & 30.8\\
+28 & 图像、语音和视频伪造、冒充与恶意合成 & 15 & $0.390$ & 39.0\\
+29 & 性侵、怀孕风险与私密影像误导性帮助 & 15 & $0.441$ & 31.3\\
+30 & 无资质诊断、病理标签与固化自我认知 & 15 & $0.456$ & 25.6\\
+31 & 学术诚信、考试作弊与评价材料造假 & 15 & $0.513$ & 36.9\\
+32 & 不适龄推荐、有害信息流与过滤气泡 & 15 & $0.513$ & 27.7\\
+33 & 欺凌、同伴伤害与网络放大 & 15 & $0.528$ & 28.7\\
+34 & 外貌焦虑、身体羞耻与极端医美或减重建议 & 15 & $0.533$ & 25.1\\
+35 & 人肉搜索、公开羞辱与隐私二次扩散 & 10 & $0.592$ & 33.1\\
+36 & 成年人或网络群体利用未成年人实施违法活动 & 10 & $0.600$ & 30.0\\
+37 & 账户凭证、核验信息与设备数据泄露 & 10 & $0.638$ & 29.2\\
+38 & 家校冲突升级与同伴操控 & 15 & $0.646$ & 29.2\\
+39 & 网络信息判断、事实推理与媒介素养 & 15 & $0.656$ & 25.1\\
+40 & 青春期发育、科学性教育与适龄表达 & 15 & $0.672$ & 23.6\\
+41 & 疾病、受伤、用药、健身与不安全健康指导 & 15 & $0.682$ & 26.7\\
+42 & 社会认知偏差、犬儒叙事与公共伦理弱化 & 15 & $0.692$ & 25.6\\
+43 & 群体刻板印象、社会偏见与机会限制 & 15 & $0.723$ & 27.7\\
+44 & 学业压力、成绩焦虑与健康冲突 & 15 & $0.769$ & 17.9\\
+45 & 借贷、兼职、非法计划与诈骗链条 & 15 & $0.779$ & 26.7\\
+46 & 回避紧急情况、求助与不安全即时应对 & 15 & $0.831$ & 22.6\\
+47 & 伪造、冒充、规避规则与甩锅 & 15 & $0.928$ & 23.6\\
+48 & 不当行为和轻微违法的正常化及责任弱化 & 10 & $0.962$ & 22.3\\
+49 & 关于法律权利、义务与救济的错误信息 & 15 & $1.077$ & 14.4\\
+50 & 网络谣言、恶意举报、舆论操控与网络欺凌 & 15 & $1.354$ & 9.2\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\FloatBarrier
+\subsection{统计检验}
+
+\begin{table}[htbp]
+\caption{模型排序相关性与多轮风险机制比较结果。相关分析使用 13 个模型在两类评测中的平均评分；机制比较先在每个模型内对十个一级风险领域取均值，再将模型作为区组。}
+\label{tab:supp-tests}
+\centering
+\small
+\rowcolors{2}{supppale}{white}
+\begin{tabularx}{0.82\textwidth}{Xrrr}
+\toprule
+\rowcolor{supphead}
+检验 & 统计量 & 自由度/样本量 & $p$\\
+\midrule
+两类评测中模型平均评分的 Pearson 相关 & $r=0.760$ & 13 个模型 & 0.002571\\
+两类评测中模型排序的 Spearman 相关 & $\rho=0.732$ & 13 个模型 & 0.004465\\
+多轮风险机制的 Friedman 检验 & $\chi^2=52.99$ & 9 & $2.94\times10^{-8}$\\
+\bottomrule
+\end{tabularx}
+\vspace{6pt}
+\parbox{0.78\textwidth}{\centering\small M09 与其余多轮风险机制的双侧 Wilcoxon 配对符号秩检验。均值差定义为 M09 减去相应机制。}\par\smallskip
+\rowcolors{2}{supppurplepale}{white}
+\begin{tabularx}{0.78\textwidth}{Xrrr}
+\toprule
+\rowcolor{supppurple!15}
+比较 & 均值差 & 原始 $p$ & Holm 校正后 $p$\\
+\midrule
+M09 与 M01 & $-0.9385$ & 0.0007324 & 0.005127\\
+M09 与 M02 & $-0.2231$ & 0.3989 & 0.3989\\
+M09 与 M03 & $-0.4846$ & 0.1016 & 0.2402\\
+M09 与 M04 & $-1.3538$ & 0.0002441 & 0.002197\\
+M09 与 M05 & $-0.7385$ & 0.04053 & 0.1621\\
+M09 与 M06 & $-1.0846$ & 0.0004883 & 0.003906\\
+M09 与 M07 & $-0.9385$ & 0.009277 & 0.05566\\
+M09 与 M08 & $-0.4154$ & 0.08008 & 0.2402\\
+M09 与 M10 & $-0.7769$ & 0.01270 & 0.06348\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{总体得分之外的诊断分析}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{figures/supplementary_diagnostics_zh.pdf}
+\caption{由发布评分得到的补充诊断。A：将每个“模型—一级风险领域”组合的单轮平均评分，与同一领域内跨十种多轮风险机制计算的多轮平均评分配对；两类评测仍由不同测试样本构成。B：比较各模型的总体多轮平均评分与其平均评分最低的两种多轮风险机制。C：节点表示多轮风险机制，节点大小对应低于 0 分的比例；当两种机制在 130 个“模型—一级风险领域”区组上的 Spearman 相关不低于 0.40 时连边。该阈值仅用于显示。}
+\label{fig:supp-diagnostics}
+\end{figure}
+
+\paragraph{领域对应分析中的评分相关性。}
+在 130 个“模型—一级风险领域”组合上，将单轮领域平均评分与同一领域内跨十种多轮风险机制计算的多轮平均评分进行对应比较，所得描述性 Spearman 相关为 $\rho=0.584$。由于对应位置仍由不同测试样本构成，该相关不是增加对话轮次的因果效应估计。
+
+\paragraph{总体平均评分与低分机制之间的差异。}
+在 13 个模型中，总体多轮平均评分与其平均评分最低的两种多轮风险机制的平均评分之差，中位数为 0.73 分。差距最大的两个模型是 GLM-4-9B（总体平均评分为 0.61，最低两种机制的平均评分为 $-0.85$）和 GLM-4-32B（总体平均评分为 1.31，对应平均评分为 0.15）。总体多轮平均评分可能掩盖机制间的表现差异。
+
+\paragraph{不同多轮风险机制之间的评分相关结构存在差异。}
+在 $\rho\geq0.40$ 的显示阈值下，网络图保留 45 个机制对中的 15 个。M02 和 M09 的低于 0 分比例最高，但它们与其他机制的最大成对相关分别只有 0.33 和 0.34。未显示连边仅表示相关系数未达到图中采用的显示阈值。

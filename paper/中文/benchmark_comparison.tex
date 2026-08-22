@@ -1,0 +1,31 @@
+\begin{table}[!htb]
+\caption{相关安全基准的对象、风险分类和对话设置。表中信息用于说明评测范围差异，不构成性能比较。}
+\label{tab:comparison}
+\centering
+\bodytablefont
+\definecolor{comparisonhead}{HTML}{F3F4F6}
+\definecolor{comparisonours}{HTML}{EAF2F8}
+\setlength{\tabcolsep}{3.0pt}
+\setlength{\extrarowheight}{0.5pt}
+\renewcommand{\arraystretch}{1.08}
+\newcommand{\BenchRef}[2]{\textbf{#1}\par{\color{black!60}\citep{#2}}}
+\arrayrulecolor{black!18}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{1.36in}>{\raggedright\arraybackslash}p{0.61in}>{\raggedright\arraybackslash}p{0.91in}>{\raggedright\arraybackslash}p{1.06in}>{\raggedright\arraybackslash}X@{}}
+\rowcolor{comparisonhead}
+\textbf{基准} & \textbf{范围} & \textbf{风险结构} & \textbf{对话设计} & \textbf{评价任务与规模} \\
+\specialrule{0.25pt}{0pt}{1.2pt}
+\BenchRef{Do-Not-Answer}{wang2024donotanswer} & 英文/通用 & 宽泛危害分类 & 单轮 & 回答安全措施；939 条提示 \\
+\specialrule{0.15pt}{0.8pt}{0.8pt}
+\BenchRef{Chinese Safeguards}{wang2024chinesesafeguards} & 中文/通用 & 6 个领域、17 类 & 单轮 & 有害性与过度拒答；3,042 条提示 \\
+\specialrule{0.15pt}{0.8pt}{0.8pt}
+\BenchRef{CHiSafetyBench}{zhang2024chisafetybench} & 中文/通用 & 5 个类别、31 类 & 单轮+历史条件问答 & 识别与拒答；1,567 道选择题+563 道问答 \\
+\specialrule{0.15pt}{0.8pt}{0.8pt}
+\BenchRef{CoSafe}{yu2024cosafe} & 英文/通用 & 14 类危害 & 多轮；共指 & 无害性+帮助性；1,400 段对话 \\
+\specialrule{0.15pt}{0.8pt}{0.8pt}
+\BenchRef{SafeDialBench}{cao2026safedialbench} & 中英/通用 & 2 层、6 维 & 多轮；7 种越狱策略 & 多轮安全评分；4,053 段对话 \\
+\specialrule{0.15pt}{0.8pt}{0.8pt}
+\BenchRef{YouthSafe}{yu2025youthsafe} & 英文/青少年 & 6/11/91 三级分类；发布数据覆盖 78 个低层风险类型 & 上下文片段 & 检测与分类；12,449 个标注片段 \\
+\rowcolor{comparisonours}
+\textbf{\bench{}（本文）} & \textbf{中文/青少年} & \textbf{10/50/143 三级分类} & \textbf{单轮+多轮；$10\times10$ 领域—机制设计} & \textbf{单轮回答与完整多轮交互评分；715+100 个测试样本} \\
+\end{tabularx}
+\end{table}

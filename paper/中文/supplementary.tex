@@ -1,0 +1,64 @@
+\PassOptionsToPackage{table}{xcolor}
+\documentclass{article}
+% Match the faster pdfLaTeX settings used by the combined manuscript.
+\ifdefined\pdfcompresslevel
+  \pdfcompresslevel=1
+  \pdfobjcompresslevel=1
+\fi
+\usepackage{CJKutf8}
+\usepackage{iclr2026_conference,times}
+\renewcommand{\scdefault}{n}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{placeins}
+\usepackage{hyperref}
+\usepackage{url}
+\hypersetup{hidelinks}
+\setlength{\headheight}{13pt}
+\makeatletter
+\renewcommand\normalsize{\@setfontsize\normalsize{10.3pt}{14.2pt}}
+\renewcommand\small{\@setfontsize\small{9.7pt}{13.2pt}}
+\renewcommand\footnotesize{\@setfontsize\footnotesize{9pt}{12pt}}
+\renewcommand\large{\@setfontsize\large{12.5pt}{16.5pt}}
+\renewcommand\Large{\@setfontsize\Large{14pt}{18pt}}
+\renewcommand\LARGE{\@setfontsize\LARGE{17pt}{21pt}}
+\long\def\@makecaption#1#2{%
+  \vskip\abovecaptionskip
+  \begingroup\fontsize{9pt}{12.5pt}\selectfont
+  \sbox\@tempboxa{\textbf{#1：}#2}%
+  \ifdim \wd\@tempboxa >\hsize
+    \textbf{#1：}#2\par
+  \else
+    \global \@minipagefalse
+    \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
+  \fi
+  \endgroup
+  \vskip\belowcaptionskip}
+\setlength{\@fptop}{0pt}
+\makeatother
+\normalsize
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0.15em}
+\setlength{\abovecaptionskip}{6pt}
+\setlength{\belowcaptionskip}{2pt}
+\renewcommand{\figurename}{图}
+\renewcommand{\tablename}{表}
+\newcommand{\bench}{\textsf{QH-Bench}}
+\newcommand{\risk}{\ensuremath{\operatorname{Neg}}}
+\newcommand{\bodytablefont}{\fontsize{8.6pt}{11.2pt}\selectfont}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\begin{document}
+\begin{CJK*}{UTF8}{gbsn}
+\lhead{作为 ICLR 2026 会议论文接受匿名评审}
+\appendix
+\input{supplementary_content}
+\clearpage
+\bibliographystyle{iclr2026_conference}
+\bibliography{references}
+\end{CJK*}
+\end{document}

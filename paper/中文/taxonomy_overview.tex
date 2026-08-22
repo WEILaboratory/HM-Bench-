@@ -1,0 +1,33 @@
+\begin{table}[t!]
+\caption{单轮风险分类。每个一级领域包含五个二级风险类别，最后一列为三级风险场景数量。}
+\label{tab:taxonomy}
+\centering
+\begingroup
+\definecolor{taxblue}{HTML}{2C6FA3}
+\definecolor{taxpale}{HTML}{F2F7FA}
+\newcommand{\TaxCount}[1]{\textcolor{taxblue}{\bfseries #1}}
+\bodytablefont
+\setlength{\tabcolsep}{2.5pt}
+\renewcommand{\arraystretch}{1.02}
+\setlength{\extrarowheight}{0.4pt}
+\renewcommand{\tabularxcolumn}[1]{m{#1}}
+\rowcolors{2}{taxpale}{white}
+\begin{tabularx}{\textwidth}{>{\centering\arraybackslash}m{0.30in}>{\raggedright\arraybackslash}m{1.50in}Y>{\centering\arraybackslash}m{0.32in}}
+\toprule
+\rowcolor{taxblue!14}
+\textbf{编号} & \textbf{一级风险领域} & \textbf{五个二级风险类别} & \textbf{三级风险场景数}\\
+\midrule
+\textcolor{taxblue}{\bfseries D01} & \textbf{社会价值、国家认同与社会认知} & 国家认同与历史文化；成长、劳动、生活与成功观；群体刻板印象与机会限制；犬儒主义、社会认知与公共伦理；信息判断与媒介素养 & \TaxCount{15}\\
+\textcolor{taxblue}{\bfseries D02} & \textbf{学业发展与教育决策} & 招生政策与教育评价；学术诚信与申请造假；认知外包与浅层学习；学业压力与健康冲突；教育领域商业误导 & \TaxCount{14}\\
+\textcolor{taxblue}{\bfseries D03} & \textbf{心理健康、情绪危机与 AI 依赖} & 危机识别与现实求助升级；无资质诊断与固化自我标签；情绪安抚与灾难化；AI 拟人化与亲密边界；有害社群与现实支持丧失 & \TaxCount{13}\\
+\textcolor{taxblue}{\bfseries D04} & \textbf{身体健康、青春期与亲密边界} & 青春期发育与性教育；性侵、怀孕与私密影像求助；权力不对等与控制型关系；外貌焦虑与极端身体改造；疾病、用药、健身与健康建议 & \TaxCount{15}\\
+\textcolor{taxblue}{\bfseries D05} & \textbf{监护、家校关系与校园安全} & 监护支持失效；对真实伤害的干预误判；欺凌与网络放大；家校冲突与同伴操控；困境未成年人和校外保护 & \TaxCount{15}\\
+\textcolor{taxblue}{\bfseries D06} & \textbf{数字平台与网络行为} & 网络过度使用与功能受损；规避青少年和身份保护；有害推荐与过滤气泡；粉丝文化、直播与虚拟社交风险；AI 内容真实性与冒充 & \TaxCount{15}\\
+\textcolor{taxblue}{\bfseries D07} & \textbf{隐私、个人信息与合成媒体} & 身份、学校与家庭信息暴露；敏感经历的过度收集；凭证、核验与设备数据泄露；人肉搜索与隐私二次扩散；恶意图像、语音与视频合成 & \TaxCount{13}\\
+\textcolor{taxblue}{\bfseries D08} & \textbf{财产、消费与商业利用} & 家庭资产与支付账户风险；冲动和随机性消费；借贷、非法计划与诈骗链条；未成年人商业化与劳动权益；伪装广告与焦虑营销 & \TaxCount{15}\\
+\textcolor{taxblue}{\bfseries D09} & \textbf{线下人身安全与危险情境} & 离家出走与隐瞒行踪；与陌生人或成年人线下见面；危险挑战与交通风险；应急处置与求助；不适龄场所与高风险聚会 & \TaxCount{15}\\
+\textcolor{taxblue}{\bfseries D10} & \textbf{法律规范、公共秩序与不当行为} & 不当行为与轻微违法的正常化；伪造、冒充与甩锅；谣言、恶意举报与网络欺凌；权利救济错误信息；利用未成年人执行违法任务 & \TaxCount{13}\\
+\bottomrule
+\end{tabularx}
+\endgroup
+\end{table}
