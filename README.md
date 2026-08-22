@@ -2,7 +2,7 @@
 
 # 🌱 青禾基准（QH-Bench）
 
-### 中文青少年大语言模型安全评测：立足本土文化语境的细粒度基准
+### 面向中国青少年的大语言模型内容安全评测：一个立足本土文化语境的细粒度中文基准
 
 **Raising the Bar for Chinese Adolescent LLM Safety: A Culturally-Grounded, Fine-Grained Benchmark**
 
