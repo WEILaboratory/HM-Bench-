@@ -25,7 +25,7 @@ from matplotlib.transforms import Bbox
 from scipy.stats import friedmanchisquare, pearsonr, spearmanr, wilcoxon
 
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parents[2]
 PAPER_DIR = Path(__file__).resolve().parent
 FIGURE_DIR = PAPER_DIR / "figures"
 SINGLE_DATASET = ROOT / "datasets" / "青少年内容安全单轮场景.json"
@@ -384,12 +384,16 @@ def model_rows(
 def multi_block_values(
     models: list[str], multi_reports: dict[str, ModelReport], mechanisms: list[str]
 ) -> dict[str, np.ndarray]:
-    output: dict[str, list[float]] = {mechanism: [] for mechanism in mechanisms}
+    output: dict[str, list[list[float]]] = {mechanism: [] for mechanism in mechanisms}
     for model in models:
         score_map = multi_reports[model].scores
-        for domain_index in range(1, 11):
-            for mechanism in mechanisms:
-                output[mechanism].append(float(score_map[f"MT-{mechanism}-{domain_index:03d}"]))
+        for mechanism in mechanisms:
+            output[mechanism].append(
+                [
+                    float(score_map[f"MT-{mechanism}-{domain_index:03d}"])
+                    for domain_index in range(1, 11)
+                ]
+            )
     return {key: np.asarray(value) for key, value in output.items()}
 
 
@@ -408,10 +412,13 @@ def holm_adjust(p_values: Iterable[float]) -> list[float]:
 def mechanism_statistics(blocks: dict[str, np.ndarray]) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     rng = np.random.default_rng(SEED + 1)
     rows: list[dict[str, Any]] = []
-    for mechanism, array in blocks.items():
-        ci = block_bootstrap_ci(array, rng)
+    model_means = {mechanism: array.mean(axis=1) for mechanism, array in blocks.items()}
+    for mechanism, matrix in blocks.items():
+        array = matrix.reshape(-1)
+        ci = block_bootstrap_ci(model_means[mechanism], rng)
         unsafe_array = (array < 0).astype(float)
-        unsafe_ci = block_bootstrap_ci(unsafe_array, rng)
+        model_unsafe_rates = (matrix < 0).mean(axis=1)
+        unsafe_ci = block_bootstrap_ci(model_unsafe_rates, rng)
         rows.append(
             {
                 "mechanism": mechanism,
@@ -426,19 +433,19 @@ def mechanism_statistics(blocks: dict[str, np.ndarray]) -> tuple[list[dict[str, 
         )
     rows.sort(key=lambda row: row["mean"])
 
-    friedman = friedmanchisquare(*(blocks[key] for key in sorted(blocks)))
+    friedman = friedmanchisquare(*(model_means[key] for key in sorted(model_means)))
     comparisons: list[dict[str, Any]] = []
     raw_p: list[float] = []
-    reference = blocks["M09"]
-    for mechanism in sorted(blocks):
+    reference = model_means["M09"]
+    for mechanism in sorted(model_means):
         if mechanism == "M09":
             continue
-        test = wilcoxon(reference, blocks[mechanism], zero_method="wilcox", alternative="two-sided")
+        test = wilcoxon(reference, model_means[mechanism], zero_method="wilcox", alternative="two-sided")
         raw_p.append(float(test.pvalue))
         comparisons.append(
             {
                 "mechanism": mechanism,
-                "mean_difference": float(reference.mean() - blocks[mechanism].mean()),
+                "mean_difference": float(reference.mean() - model_means[mechanism].mean()),
                 "raw_p": float(test.pvalue),
             }
         )

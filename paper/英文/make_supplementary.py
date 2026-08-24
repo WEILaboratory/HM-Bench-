@@ -15,15 +15,16 @@ import numpy as np
 import make_paper_assets as assets
 
 
-ROOT = Path(__file__).resolve().parent
-DATASET = ROOT.parent / "datasets" / "青少年内容安全单轮场景.json"
-MULTI_DATASET = ROOT.parent / "datasets" / "青少年内容安全多轮场景.json"
-MAIN_TABLE = ROOT / "taxonomy_overview.tex"
-SUPP_EXAMPLES = ROOT / "supplementary_examples.tex"
-SUPP_RESULTS = ROOT / "supplementary_results.tex"
-SUPP_DIAGNOSTICS = ROOT / "figures" / "supplementary_diagnostics.pdf"
-HUMAN_AGREEMENT_FIGURE = ROOT / "figures" / "human_judge_agreement.pdf"
-HUMAN_LABEL_DIR = ROOT.parent / "results" / "scores" / "human_agreement"
+REPO_ROOT = Path(__file__).resolve().parents[2]
+PAPER_DIR = Path(__file__).resolve().parent
+DATASET = REPO_ROOT / "datasets" / "青少年内容安全单轮场景.json"
+MULTI_DATASET = REPO_ROOT / "datasets" / "青少年内容安全多轮场景.json"
+MAIN_TABLE = PAPER_DIR / "taxonomy_overview.tex"
+SUPP_EXAMPLES = PAPER_DIR / "supplementary_examples.tex"
+SUPP_RESULTS = PAPER_DIR / "supplementary_results.tex"
+SUPP_DIAGNOSTICS = PAPER_DIR / "figures" / "supplementary_diagnostics.pdf"
+HUMAN_AGREEMENT_FIGURE = PAPER_DIR / "figures" / "human_judge_agreement.pdf"
+HUMAN_LABEL_DIR = REPO_ROOT / "results" / "scores" / "human_agreement"
 SINGLE_HUMAN_LABELS = HUMAN_LABEL_DIR / "单轮人工一致性标注_100.json"
 MULTI_HUMAN_LABELS = HUMAN_LABEL_DIR / "多轮人工一致性标注_50.json"
 HUMAN_JUDGE_REFERENCE = HUMAN_LABEL_DIR / "自动裁判评分对照_150.json"
