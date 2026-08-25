@@ -334,6 +334,19 @@ python scripts/analyze_results.py --tables-only
 - [评测与评分脚本](scripts/)
 - [模型回答、评分与分析结果](results/)
 
+## 📖 Citation
+
+If you use QH-Bench, please cite:
+
+```bibtex
+@misc{qhbench2026,
+  title  = {Raising the Bar for Chinese Adolescent LLM Safety: A Culturally-Grounded, Fine-Grained Benchmark},
+  author = {Wang, Jinxiang and Liu, Yifan and Tan, Jing and Zhao, Xiangyu and Yao, Xin and Wei, Xuetao},
+  year   = {2026},
+  url    = {https://github.com/WEILaboratory/QH-Bench}
+}
+```
+
 <div align="center">
 
 **让面向青少年的大模型回答，不仅安全，而且真正有帮助。**
