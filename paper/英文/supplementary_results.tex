@@ -41,8 +41,9 @@ Qwen & Qwen/Qwen2.5-1.5B-Instruct & 1.5B & $-0.536$ & $[-0.638,\,-0.434]$ & 58.9
 \subsection{Complete Track-Level Distributions}
 
 \begin{table}[t]
-\caption{Single-turn top-level domains. Score columns report percentages
-pooled over all 13 models; CIs resample item IDs.}
+\caption{Single-turn top-level domains. Domain names are shortened display labels
+for the full taxonomy. Score columns report percentages pooled over all 13
+models; CIs resample item IDs.}
 \label{tab:supp-domains}
 \centering
 \scriptsize
@@ -59,22 +60,24 @@ pooled over all 13 models; CIs resample item IDs.}
 ID & Domain & N & Mean & 95\% CI & Neg. & $-2$ & $-1$ & $0$ & $+1$ & $+2$\\
 \midrule
 D09 & Offline personal safety & 75 & $-0.168$ & $[-0.387,\,0.056]$ & 51.2 & 32.9 & 18.3 & 3.9 & 22.6 & 22.4\\
-D08 & Property \& exploitation & 75 & $0.032$ & $[-0.175,\,0.242]$ & 44.3 & 25.0 & 19.3 & 5.2 & 28.4 & 22.1\\
+D08 & Property and commercial exploitation & 75 & $0.032$ & $[-0.175,\,0.242]$ & 44.3 & 25.0 & 19.3 & 5.2 & 28.4 & 22.1\\
 D06 & Digital platforms & 75 & $0.118$ & $[-0.078,\,0.309]$ & 41.9 & 26.8 & 15.2 & 3.2 & 29.2 & 25.6\\
-D07 & Privacy \& synthetic media & 65 & $0.173$ & $[-0.069,\,0.412]$ & 43.3 & 25.6 & 17.8 & 2.4 & 22.5 & 31.8\\
-D03 & Mental health \& AI reliance & 65 & $0.200$ & $[0.036,\,0.366]$ & 36.2 & 11.2 & 25.0 & 8.5 & 43.1 & 12.2\\
+D07 & Privacy and synthetic media & 65 & $0.173$ & $[-0.069,\,0.412]$ & 43.3 & 25.6 & 17.8 & 2.4 & 22.5 & 31.8\\
+D03 & Mental health and AI reliance & 65 & $0.200$ & $[0.036,\,0.366]$ & 36.2 & 11.2 & 25.0 & 8.5 & 43.1 & 12.2\\
 D02 & Education decisions & 70 & $0.219$ & $[0.024,\,0.412]$ & 37.9 & 17.0 & 20.9 & 6.5 & 34.4 & 21.2\\
-D05 & Family, school \& campus & 75 & $0.308$ & $[0.117,\,0.496]$ & 36.2 & 16.9 & 19.3 & 4.9 & 33.8 & 25.0\\
-D04 & Physical health \& boundaries & 75 & $0.422$ & $[0.233,\,0.603]$ & 31.6 & 15.2 & 16.4 & 5.8 & 36.2 & 26.4\\
+D05 & Family, school and campus & 75 & $0.308$ & $[0.117,\,0.496]$ & 36.2 & 16.9 & 19.3 & 4.9 & 33.8 & 25.0\\
+D04 & Physical health and boundaries & 75 & $0.422$ & $[0.233,\,0.603]$ & 31.6 & 15.2 & 16.4 & 5.8 & 36.2 & 26.4\\
 D01 & Social values & 75 & $0.542$ & $[0.370,\,0.708]$ & 29.4 & 14.4 & 15.1 & 4.3 & 34.6 & 31.7\\
-D10 & Law \& public order & 65 & $1.015$ & $[0.852,\,1.167]$ & 18.9 & 9.3 & 9.6 & 2.1 & 28.0 & 50.9\\
+D10 & Law and public order & 65 & $1.015$ & $[0.852,\,1.167]$ & 18.9 & 9.3 & 9.6 & 2.1 & 28.0 & 50.9\\
 \bottomrule
 \end{tabularx}
 \end{table}
 
 \begin{table}[t]
-\caption{Multi-turn mechanisms. Each row pools 13 models over ten
-domain-matched trajectories; CIs resample model--domain blocks.}
+\caption{Multi-turn mechanisms. Each row reports 130 scores from 13 models over
+ten domain-matched trajectories. For the confidence interval, scores are first
+averaged across domains within each model and then resampled over the 13 model
+means.}
 \label{tab:supp-mechanisms}
 \centering
 \scriptsize
@@ -90,16 +93,16 @@ domain-matched trajectories; CIs resample model--domain blocks.}
 \rowcolor{supppurple!15}
 ID & Mechanism & N & Mean & 95\% CI & Neg. & $-2$ & $-1$ & $0$ & $+1$ & $+2$\\
 \midrule
-M09 & Relational pressure & 10 & $-0.792$ & $[-1.038,\,-0.538]$ & 70.0 & 48.5 & 21.5 & 3.8 & 13.1 & 13.1\\
-M02 & Cross-turn reference & 10 & $-0.569$ & $[-0.831,\,-0.292]$ & 61.5 & 46.9 & 14.6 & 1.5 & 22.3 & 14.6\\
-M08 & Rule accumulation & 10 & $-0.377$ & $[-0.623,\,-0.131]$ & 58.5 & 29.2 & 29.2 & 3.8 & 25.4 & 12.3\\
-M03 & Harmful composition & 10 & $-0.308$ & $[-0.554,\,-0.046]$ & 57.7 & 27.7 & 30.0 & 3.8 & 22.3 & 16.2\\
-M05 & Topic interruption & 10 & $-0.054$ & $[-0.315,\,0.200]$ & 50.8 & 20.8 & 30.0 & 5.4 & 21.5 & 22.3\\
-M10 & Information-boundary shift & 10 & $-0.015$ & $[-0.285,\,0.262]$ & 48.5 & 26.2 & 22.3 & 3.1 & 23.8 & 24.6\\
-M01 & Progressive intent & 10 & $0.146$ & $[-0.115,\,0.400]$ & 43.1 & 18.5 & 24.6 & 6.2 & 25.4 & 25.4\\
-M07 & Safety-state update & 10 & $0.146$ & $[-0.123,\,0.415]$ & 44.6 & 22.3 & 22.3 & 2.3 & 24.6 & 28.5\\
-M06 & Request narrowing & 10 & $0.292$ & $[0.046,\,0.531]$ & 36.9 & 13.8 & 23.1 & 7.7 & 30.8 & 24.6\\
-M04 & Purpose reversal & 10 & $0.562$ & $[0.277,\,0.838]$ & 32.3 & 20.8 & 11.5 & 3.1 & 20.0 & 44.6\\
+M09 & Relational pressure & 10 & $-0.792$ & $[-1.254,\,-0.300]$ & 70.0 & 48.5 & 21.5 & 3.8 & 13.1 & 13.1\\
+M02 & Cross-turn reference & 10 & $-0.569$ & $[-0.923,\,-0.223]$ & 61.5 & 46.9 & 14.6 & 1.5 & 22.3 & 14.6\\
+M08 & Rule accumulation & 10 & $-0.377$ & $[-0.877,\,0.131]$ & 58.5 & 29.2 & 29.2 & 3.8 & 25.4 & 12.3\\
+M03 & Harmful composition & 10 & $-0.308$ & $[-0.823,\,0.215]$ & 57.7 & 27.7 & 30.0 & 3.8 & 22.3 & 16.2\\
+M05 & Topic interruption & 10 & $-0.054$ & $[-0.577,\,0.477]$ & 50.8 & 20.8 & 30.0 & 5.4 & 21.5 & 22.3\\
+M10 & Information-boundary shift & 10 & $-0.015$ & $[-0.631,\,0.592]$ & 48.5 & 26.2 & 22.3 & 3.1 & 23.8 & 24.6\\
+M01 & Progressive intent & 10 & $0.146$ & $[-0.354,\,0.646]$ & 43.1 & 18.5 & 24.6 & 6.2 & 25.4 & 25.4\\
+M07 & Safety-state update & 10 & $0.146$ & $[-0.446,\,0.715]$ & 44.6 & 22.3 & 22.3 & 2.3 & 24.6 & 28.5\\
+M06 & Request narrowing & 10 & $0.292$ & $[-0.192,\,0.754]$ & 36.9 & 13.8 & 23.1 & 7.7 & 30.8 & 24.6\\
+M04 & Purpose reversal & 10 & $0.562$ & $[0.046,\,1.031]$ & 32.3 & 20.8 & 11.5 & 3.1 & 20.0 & 44.6\\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -200,8 +203,9 @@ M04 & Purpose reversal & 10 & $0.562$ & $[0.277,\,0.838]$ & 32.3 & 20.8 & 11.5 &
 \subsection{Statistical Tests}
 
 \begin{table}[htbp]
-\caption{Complete inferential tests. Correlations use 13 model means; the
-Friedman and Wilcoxon tests use 130 model--domain blocks.}
+\caption{Complete inferential tests. Correlations use 13 model means. The
+Friedman and Wilcoxon tests use 13 model-level blocks, with each mechanism
+represented by a mean over ten domains.}
 \label{tab:supp-tests}
 \centering
 \small
@@ -213,7 +217,7 @@ Test & Statistic & df / N & $p$\\
 \midrule
 Pearson track correlation & $r=0.760$ & 13 models & 0.002571\\
 Spearman track correlation & $\rho=0.732$ & 13 models & 0.004465\\
-Friedman mechanism test & $\chi^2=106.52$ & 9 & 7.49e-19\\
+Friedman mechanism test & $\chi^2=52.99$ & 9 & $2.94\times10^{-8}$\\
 \bottomrule
 \end{tabularx}
 \vspace{6pt}
@@ -225,15 +229,15 @@ against M09. Mean difference is M09 minus the comparison mechanism.}\par\smallsk
 \rowcolor{supppurple!15}
 Comparison & Mean difference & Raw $p$ & Holm $p$\\
 \midrule
-M09 vs. M01 & $-0.9385$ & 8.758e-07 & 5.255e-06\\
-M09 vs. M02 & $-0.2231$ & 0.1504 & 0.1504\\
-M09 vs. M03 & $-0.4846$ & 0.004039 & 0.01212\\
-M09 vs. M04 & $-1.3538$ & 8.587e-12 & 7.728e-11\\
-M09 vs. M05 & $-0.7385$ & 3.254e-05 & 0.0001436\\
-M09 vs. M06 & $-1.0846$ & 1.255e-09 & 1.004e-08\\
-M09 vs. M07 & $-0.9385$ & 2.328e-07 & 1.63e-06\\
-M09 vs. M08 & $-0.4154$ & 0.01945 & 0.0389\\
-M09 vs. M10 & $-0.7769$ & 2.872e-05 & 0.0001436\\
+M09 vs. M01 & $-0.9385$ & 0.0007324 & 0.005127\\
+M09 vs. M02 & $-0.2231$ & 0.3989 & 0.3989\\
+M09 vs. M03 & $-0.4846$ & 0.1016 & 0.2402\\
+M09 vs. M04 & $-1.3538$ & 0.0002441 & 0.002197\\
+M09 vs. M05 & $-0.7385$ & 0.04053 & 0.1621\\
+M09 vs. M06 & $-1.0846$ & 0.0004883 & 0.003906\\
+M09 vs. M07 & $-0.9385$ & 0.009277 & 0.05566\\
+M09 vs. M08 & $-0.4154$ & 0.08008 & 0.2402\\
+M09 vs. M10 & $-0.7769$ & 0.01270 & 0.06348\\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -243,43 +247,38 @@ M09 vs. M10 & $-0.7769$ & 2.872e-05 & 0.0001436\\
 \begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{figures/supplementary_diagnostics.pdf}
-\caption{Non-redundant diagnostics derived from the released scores.
-Panel A pairs the single-turn mean for each model--domain combination with the
-multi-turn mean for the same risk domain, averaged over mechanisms; the two
-tracks still contain different items. Panel B compares each model's overall
-multi-turn mean with the mean of its two weakest mechanisms. Panel C represents
-mechanisms as nodes sized by negative-score rate and draws an edge only when
-their scores have Spearman correlation of at least 0.40 across 130
-model--domain blocks.}
+\caption{Additional diagnostics derived from the released scores.
+Panel A pairs each model's single-turn domain mean with its multi-turn mean for
+the same domain, averaged over mechanisms. The tracks still contain different
+items. Panel B compares each model's overall multi-turn mean with the mean of
+its two weakest mechanisms. Panel C shows mechanisms as nodes sized by
+negative-score rate. An edge appears when their scores have Spearman
+correlation of at least 0.40 across 130 model--domain blocks.}
 \label{fig:supp-diagnostics}
 \end{figure}
 
 \paragraph{Partial transfer, not interchangeability.}
 At the matched domain level, the two tracks have a descriptive Spearman
-correlation of $\rho=0.584$ over 130
-model--domain pairs.  This is stronger evidence of shared competence than a
-comparison of two pooled means, yet the dispersion and displaced domain
-centroids show that knowing a model's single-turn domain score does not
-determine its performance when risks are distributed across conversation
-state.  Because the paired observations remain different challenge items, the
+correlation of $\rho=0.584$ over 130 model--domain pairs. This association is
+more informative about shared competence than two pooled means. However, the
+spread and displaced domain centroids show that a model's single-turn domain
+score does not determine its performance when risk is distributed across the
+conversation. The paired observations are different challenge items, so this
 association is not a causal estimate of adding turns.
 
 \paragraph{Average scores conceal a mechanism floor.}
-Across the 13 models, the median difference between the overall multi-turn
-mean and the bottom-two-mechanism mean is
-0.73 scale points.  The two largest gaps
-occur for GLM-4-9B (0.61 overall versus -0.85 tail) and GLM-4-32B (1.31 overall versus 0.15 tail).  Thus, even a favorable aggregate can coexist
-with a substantially weaker mechanism-specific floor; the comparison supports
-reporting minimum or tail criteria alongside an overall threshold.
+Across the 13 models, the median gap between the overall multi-turn mean and
+the mean of the two weakest mechanisms is 0.73 scale points. The largest gaps
+occur for GLM-4-9B (0.61 overall versus -0.85 for the weakest mechanisms) and
+GLM-4-32B (1.31 versus 0.15). A favorable aggregate can therefore coexist with
+a much weaker mechanism-specific floor. Minimum or tail criteria should be
+reported alongside an overall threshold.
 
 \paragraph{The hardest mechanisms are not merely one shared failure mode.}
-The co-failure graph retains 15 of the 45
-mechanism pairs at the prespecified $\rho\geq
-0.40$ display threshold.  M02 and
-M09, despite having the two largest pooled negative-score rates, have maximum
-pairwise correlations of only 0.33 and
-0.34, respectively.  Their absence of
-displayed edges does not imply statistical independence, but it does show that
-their difficulty cannot be reduced to the strongest broad co-failure clusters
-in this model set.  Separate mechanism-level diagnostics therefore carry
-information that a single safety ranking discards.
+The co-failure graph retains 15 of 45 mechanism pairs at the prespecified
+$\rho\geq0.40$ display threshold. M02 and M09 have the two largest pooled
+negative-score rates, yet their maximum pairwise correlations are only 0.33 and
+0.34. The absence of displayed edges does not imply statistical independence.
+It does show that their difficulty is not captured by the strongest broad
+co-failure clusters in this model set. Mechanism-level diagnostics therefore
+retain information that a single safety ranking would discard.

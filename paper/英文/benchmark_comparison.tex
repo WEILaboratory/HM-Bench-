@@ -1,8 +1,8 @@
 \begin{table}[!htb]
-\caption{Representative safety benchmarks. ``Mechanism control'' means that a cross-turn dependency is specified independently of the harm topic.}
+\caption{Scope, risk structure and dialogue settings of related safety benchmarks. The table highlights coverage differences and is not a performance comparison.}
 \label{tab:comparison}
 \centering
-\scriptsize
+\bodytablefont
 \definecolor{comparisonhead}{HTML}{F3F4F6}
 \definecolor{comparisonours}{HTML}{EAF2F8}
 \setlength{\tabcolsep}{3.0pt}
@@ -10,22 +10,22 @@
 \renewcommand{\arraystretch}{1.08}
 \newcommand{\BenchRef}[2]{\textbf{#1}\par{\color{black!60}\citep{#2}}}
 \arrayrulecolor{black!18}
-\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{1.36in}>{\raggedright\arraybackslash}p{0.55in}>{\raggedright\arraybackslash}p{0.91in}>{\raggedright\arraybackslash}p{1.04in}>{\raggedright\arraybackslash}X@{}}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{1.36in}>{\raggedright\arraybackslash}p{0.61in}>{\raggedright\arraybackslash}p{0.91in}>{\raggedright\arraybackslash}p{1.06in}>{\raggedright\arraybackslash}X@{}}
 \rowcolor{comparisonhead}
-\textbf{Benchmark} & \textbf{Scope} & \textbf{Risk structure} & \textbf{Dialogue design} & \textbf{Evaluation and size} \\
+\textbf{Benchmark} & \textbf{Scope} & \textbf{Risk structure} & \textbf{Dialogue design} & \textbf{Evaluation task and scale} \\
 \specialrule{0.25pt}{0pt}{1.2pt}
-\BenchRef{Do-Not-Answer}{wang2024donotanswer} & EN / general & Broad harm taxonomy & Single turn; no control & Response safeguards; 939 prompts \\
+\BenchRef{Do-Not-Answer}{wang2024donotanswer} & English/\allowbreak general & Broad harm taxonomy & Single-turn & Response safety; 939 prompts \\
 \specialrule{0.15pt}{0.8pt}{0.8pt}
-\BenchRef{Chinese Safeguards}{wang2024chinesesafeguards} & ZH / general & 6 areas; 17 types & Single turn; no control & Harmfulness and over-refusal; 3,042 prompts \\
+\BenchRef{Chinese Safeguards}{wang2024chinesesafeguards} & Chinese/\allowbreak general & 6 domains, 17 types & Single-turn & Harmfulness and over-refusal; 3,042 prompts \\
 \specialrule{0.15pt}{0.8pt}{0.8pt}
-\BenchRef{CHiSafetyBench}{zhang2024chisafetybench} & ZH / general & 5 categories; 31 classes & Single + history-conditioned QA; no control & Recognition and refusal; 1,567 MCQ + 563 QA \\
+\BenchRef{CHiSafetyBench}{zhang2024chisafetybench} & Chinese/\allowbreak general & 5 categories, 31 types & Single-turn + history-conditioned QA & Recognition and refusal; 1,567 multiple-choice + 563 QA items \\
 \specialrule{0.15pt}{0.8pt}{0.8pt}
-\BenchRef{CoSafe}{yu2024cosafe} & EN / general & 14 harm categories & Multi-turn; coreference & Harmlessness + helpfulness; 1,400 dialogues \\
+\BenchRef{CoSafe}{yu2024cosafe} & English/\allowbreak general & 14 harm types & Multi-turn; coreference & Harmlessness + helpfulness; 1,400 dialogues \\
 \specialrule{0.15pt}{0.8pt}{0.8pt}
-\BenchRef{SafeDialBench}{cao2026safedialbench} & ZH+EN / general & 2 levels; 6 dimensions & Multi-turn; 7 jailbreak strategies & Multi-turn safety abilities; 4,053 dialogues \\
+\BenchRef{SafeDialBench}{cao2026safedialbench} & Chinese/\allowbreak English/\allowbreak general & 2 levels, 6 dimensions & Multi-turn; 7 jailbreak strategies & Multi-turn safety scoring; 4,053 dialogues \\
 \specialrule{0.15pt}{0.8pt}{0.8pt}
-\BenchRef{YouthSafe}{yu2025youthsafe} & EN / adolescent & 6 / 11 / 78 taxonomy & Context snippets; no control & Detection and classification; 12,449 annotated snippets \\
+\BenchRef{YouthSafe}{yu2025youthsafe} & English/\allowbreak adolescent & 6/11/91 hierarchy; released data cover 78 low-level risk types & Contextual spans & Detection and classification; 12,449 labelled spans \\
 \rowcolor{comparisonours}
-\textbf{\bench{} (ours)} & \textbf{ZH / adolescent} & \textbf{10 / 50 / 143 hierarchy} & \textbf{Single + multi-turn; $10\times10$ mechanism matrix} & \textbf{Response and trajectory scoring; 715 single-turn scenarios + 100 trajectories} \\
+\textbf{\bench{} (this work)} & \textbf{Chinese/\allowbreak adolescent} & \textbf{10/50/143 hierarchy} & \textbf{Single- + multi-turn; $10\times10$ domain--mechanism design} & \textbf{Single responses and complete multi-turn interactions; 715+100 test items} \\
 \end{tabularx}
 \end{table}

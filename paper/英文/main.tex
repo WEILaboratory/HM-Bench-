@@ -20,6 +20,7 @@
 \newcommand{\appconstruction}{\hyperlink{supp-construction}{Appendix~A}}
 \newcommand{\appmechanisms}{\hyperlink{supp-mechanisms}{Appendix~B}}
 \newcommand{\appchineseexamples}{\hyperlink{supp-chinese-examples}{Appendix~B}}
+\newcommand{\bodytablefont}{\scriptsize}
 \newcolumntype{Y}{>{\raggedright\arraybackslash}X}
 \definecolor{tablegroup}{HTML}{EEF2F5}
 \definecolor{scorepp}{HTML}{E8F1F7}
@@ -63,69 +64,69 @@
 \fi
 
 \begin{abstract}
-Adolescent-facing LLMs must handle content risks whose interpretation depends on age-related vulnerability, local institutions, and dialogue history. Existing safety benchmarks, however, usually evaluate either risk coverage in isolated prompts or multi-turn failures without a shared adolescent-specific risk taxonomy, making it difficult to distinguish failure to recognize a risk from failure to track how it emerges across turns. We introduce \bench, a Chinese, culturally grounded, fine-grained benchmark with two complementary tracks: a hierarchical single-turn taxonomy and an orthogonal multi-turn matrix that crosses the same risk domains with intrinsically multi-turn mechanisms. This design controls risk type separately from risk-formation process and scores responses on a joint safety--helpfulness scale, enabling diagnosis by domain and mechanism. Across 13 open-weight chat checkpoints, single-turn strength does not fully characterize state-dependent behavioral robustness under the tested multi-turn mechanisms. Ordinary-language offline, commercial, and privacy risks remain difficult, while relational pressure and cross-turn reference are especially challenging. \bench{} therefore evaluates both what risk is present and how it unfolds through dialogue.
+Safety risks in adolescent conversations are not always stated explicitly. A seemingly harmless request may signal a safety risk only when the model considers the user's age, circumstances and prior turns. Existing Chinese safety benchmarks largely target general users and do not cover adolescent contexts in sufficient detail. Single-turn tests also miss risks that emerge as a conversation unfolds. We introduce \bench{}, a Chinese adolescent content-safety benchmark grounded in local cultural contexts. The single-turn track contains 715 test items organized into 10 top-level risk domains, 50 subdomains and 143 fine-grained risk scenarios. The multi-turn track contains 100 four-turn trajectories in a balanced $10\times10$ design that combines the same ten domains with ten dialogue-dependent risk mechanisms. We score both tracks with the same five-level scale and one automatic judge, using task-specific criteria. Across 13 open-weight models, the two tracks produce similar but non-identical rankings. Offline personal safety was the lowest-scoring domain, while commercial exploitation and privacy-related scenarios were among the lower-scoring areas. The lowest-scoring mechanisms included relational pressure, cross-turn reference, rule accumulation and harmful composition.
 \end{abstract}
 
 \section{Introduction}
 
-Content-safety benchmarks have substantially expanded coverage of harmful content, refusal robustness, and value alignment~\cite{wang2024donotanswer,li2024salad,chao2024jailbreakbench,han2024wildguard}. Chinese resources further ground evaluation in local language, regulation, and social values~\cite{xu2023cvalues,huang2024flames,wang2024chinesesafeguards,zhang2024chinesesafe,zhang2024chisafetybench}. Yet adolescent-facing systems operate in settings where school decisions, guardian authority, peer pressure, digital spending, and online-to-offline transitions can change both the harm pathway and the support a response should provide~\cite{khoo2025minorbench,jiao2025safechild,rath2025children,yu2025youthsafe,luo2026childeval}. These configurations require more than translating a general-population safety prompt into Chinese.
+General content-safety benchmarks test harmful-content recognition, safe refusal, red teaming and moderation~\cite{wang2024donotanswer,li2024salad,chao2024jailbreakbench,han2024wildguard}. Chinese benchmarks add local language, regulatory settings and social values~\cite{xu2023cvalues,huang2024flames,wang2024chinesesafeguards,zhang2024chinesesafe,zhang2024chisafetybench}. Studies of children and adolescents show that age, development and interaction context change what a safety evaluation should test~\cite{khoo2025minorbench,jiao2025safechild,rath2025children,yu2025youthsafe,luo2026childeval}. A safe response must therefore do two things: detect the risk and provide age-appropriate, actionable help. Broad safety categories, even when translated into Chinese, do not provide this context.
 
-Dialogue introduces a separate challenge: risk may be carried by a reference to an earlier object, assembled from individually incomplete requests, or revised when consent, authority, or real-world support changes. Prior work exposes failures involving coreference, concealed intent, request decomposition, relational framing, and long histories~\cite{yu2024cosafe,jiang2025redqueen,srivastav2025together,cao2026safedialbench,lu2025longsafety}. However, benchmarks centered on one attack family or uncontrolled conversation histories often entangle the difficulty of the harm topic with the difficulty of tracking a particular cross-turn dependency. This makes it difficult to determine whether a failure concerns \emph{what} risk is present or \emph{how} that risk becomes observable.
+Multi-turn dialogue creates cases in which the history itself creates or reveals the risk. A later utterance may refer to an earlier risky object through a pronoun or omission. Several incomplete fragments may also become harmful when combined. New information about consent, authority, health or the intended recipient can change the safety assessment. Prior work studies coreference, concealed intent in roles or relationships, request decomposition, multi-turn jailbreaks and long-context safety~\cite{yu2024cosafe,jiang2025redqueen,srivastav2025together,cao2026safedialbench,lu2025longsafety}. These studies use different risk types, dialogue designs and scoring procedures, so their mechanisms are difficult to compare directly.
 
 \begin{figure}[!htb]
     \centering
-    \includegraphics[width=0.99\textwidth]{figures/qh_bench_framework.png}
-    \caption{\bench{} pipeline. Chinese adolescent settings inform scenario construction across ten risk domains. The single-turn track measures risk-domain coverage through a 10/50/143 hierarchy, while the multi-turn track crosses the same domains with ten state-dependent mechanisms in four-turn trajectories. Responses from 13 open-weight checkpoints are scored on a joint safety--helpfulness rubric, yielding complementary domain- and mechanism-level diagnoses.}
+    \includegraphics[width=0.99\textwidth]{figures/framework_en.png}
+    \caption{The \bench{} pipeline. The single-turn track organizes 715 Chinese adolescent risk items using a 10/50/143 hierarchy. The multi-turn track uses a balanced $10\times10$ design crossing ten risk domains with ten cross-turn mechanisms to form 100 trajectories. Thirteen open-weight models answer under shared generation settings, and both tracks are scored on the same five-level scale under their respective decision criteria.}
     \label{fig:overview}
 \end{figure}
 \FloatBarrier
 
-\bench{} addresses this entanglement with two controlled tracks (Figure~\ref{fig:overview}). The single-turn track varies risk content under a fixed one-request structure and measures \emph{risk-domain coverage}. The multi-turn track balances the same domains while varying the cross-turn operation required to recover the risk, measuring \emph{state-dependent behavioral robustness}. Figure~\ref{fig:overview} groups the ten mechanisms as cross-turn operations and presents the orange setting strip only as illustrative Chinese-context scenario settings. Cultural grounding is operational rather than lexical: a safe judgment may turn on a comprehensive-evaluation criterion, a homeroom-teacher--guardian channel, youth-mode or real-name checks, or livestream and fan spending---not merely on Chinese wording. The underlying harms are not unique to China; the localized component is the institutional and social configuration through which they arise.
+\bench{} contains two complementary challenge sets (Figure~\ref{fig:overview}). The single-turn track organizes items by risk domain. The multi-turn track combines the same ten domains with ten cross-turn mechanisms. It tests cases that cannot be judged safely from the current message alone. Local grounding comes from the institutions, relationships and information channels represented in the items, including comprehensive student evaluation, homeroom-teacher--guardian communication, youth-mode protection, real-name verification, livestream gifting and fan spending. We do not claim that these harms occur only in China or that the taxonomy estimates real-world prevalence.
 
-The tracks are complementary challenge sets rather than paired counterfactuals, so their aggregate score difference is not interpreted as a causal effect of adding turns. Instead, their joint design separates coverage of risk types from robustness to risk-formation processes. Our contributions are:
+The two challenge sets are not paired rewrites of the same request. Their mean difference therefore does not show a causal effect of adding turns. We compare relative model performance and weaknesses across the two evaluations. Our contributions are:
 \begin{itemize}
-    \item \textbf{A Chinese, culturally grounded, fine-grained benchmark.} We introduce a dual-track benchmark for Chinese adolescent content safety that combines 715 single-turn scenarios organized by a 10-domain/50-subdomain/143-risk hierarchy with 100 four-turn trajectories grounded in the same domains. Researcher-authored scenarios instantiate locally salient educational, family--school, platform-protection, and digital-consumption configurations, while a shared safety--helpfulness scale evaluates responses across both tracks.
-    \item \textbf{An orthogonal multi-turn mechanism design.} We structure each trajectory as context establishment, cross-turn linkage, state accumulation or update, and a safety-critical decision. Crossing ten intrinsically multi-turn mechanisms with the same ten risk domains creates a balanced $10\times10$ matrix that separates \emph{what} risk is present from \emph{how} it becomes safety-relevant; deletion and reordering checks verify that the intended mechanism depends on prior context.
-    \item \textbf{Systematic dual-track empirical evidence.} Evaluating 13 open-weight chat checkpoints reveals correlated yet reordered rankings and concentrated weaknesses in ordinary-language offline, commercial, and privacy risks and under relational pressure, cross-turn reference, accumulated rules, and harmful composition. A 150-output human audit provides complementary evidence on automatic-judge behavior.
+    \item \textbf{A fine-grained Chinese adolescent content-safety taxonomy and single-turn set.} The single-turn track contains 715 test items organized into 10 top-level domains, 50 subdomains and 143 fine-grained scenarios spanning education, mental and physical health, family and school, digital platforms, privacy, consumption and offline safety.
+    \item \textbf{A multi-turn risk set with a balanced domain--mechanism design.} The multi-turn track contains 100 four-turn trajectories. Ten cross-turn mechanisms are crossed with ten risk domains in a balanced $10\times10$ design, so every mechanism appears once in every domain and results can be reported by both factors.
+    \item \textbf{Single- and multi-turn evaluation of open-weight models.} Under the same generation configuration, we evaluate 13 open-weight models on both tracks, report distributions by domain, mechanism and their combinations, and audit agreement between one human annotator and the automatic judge on 150 scored units.
 \end{itemize}
 
 \section{Related Work}
 
 \paragraph{General and Chinese safety.}
-General resources span preference data, harm taxonomies, refusal, red teaming, moderation, and over-refusal~\cite{ji2023beavertails,zhang2024safetybench,li2024salad,wang2024donotanswer,vidgen2023simplesafety,tedeschi2024alert,mazeika2024harmbench,souly2024strongreject,chao2024jailbreakbench,han2024wildguard,ghosh2025aegis,rottger2024xstest}. Chinese benchmarks extend this coverage to localized values, moderation categories, and direct or indirect risks~\cite{xu2023cvalues,huang2024flames,zhang2024chinesesafe,wang2024chinesesafeguards,zhang2024chisafetybench}. Their primary decision unit, however, is usually an independent prompt, and their population assumptions rarely isolate adolescent-specific dependencies.
+General safety resources cover preference data, harm taxonomies, refusal, red teaming, moderation and over-refusal~\cite{ji2023beavertails,zhang2024safetybench,li2024salad,wang2024donotanswer,vidgen2023simplesafety,tedeschi2024alert,mazeika2024harmbench,souly2024strongreject,chao2024jailbreakbench,han2024wildguard,ghosh2025aegis,rottger2024xstest}. Chinese benchmarks add local values, moderation categories and direct or indirect risk expression~\cite{xu2023cvalues,huang2024flames,zhang2024chinesesafe,wang2024chinesesafeguards,zhang2024chisafetybench}. Most use independent prompts as the test unit and target general users. They therefore do not directly characterize model behavior in concrete Chinese adolescent contexts.
 
 \paragraph{Child and adolescent safety.}
-MinorBench and Safe-Child-LLM organize age-centered risk sets~\cite{khoo2025minorbench,jiao2025safechild}; LLM Safety for Children simulates conversations~\cite{rath2025children}; YouthSafe develops a youth taxonomy and safeguard model~\cite{yu2025youthsafe}; and ChildEval studies preference following over child-centered histories~\cite{luo2026childeval}. These studies foreground developmental needs, but mainly emphasize English prompts, detection, preference following, or refusal. They do not jointly control Chinese adolescent risk content and the multi-turn mechanism that makes the content unsafe.
+MinorBench and Safe-Child-LLM build age-centered risk sets~\cite{khoo2025minorbench,jiao2025safechild}. LLM Safety for Children simulates child dialogue~\cite{rath2025children}. YouthSafe proposes an adolescent risk taxonomy and safeguard model~\cite{yu2025youthsafe}, while ChildEval studies preference following over child-related dialogue histories~\cite{luo2026childeval}. KIDBench combines child-oriented single-turn queries with multi-turn simulation. CAREBench focuses on manipulation, impersonation, privacy and emotional dependence~\cite{arif2026kidbench,krishnakumar2026carebench}. These studies show why age and developmental stage matter. \bench{} adds fine-grained risk scenarios grounded in Chinese adolescent contexts and combines them with ten cross-turn mechanisms.
 
 \paragraph{Context and multi-turn safety.}
-SafeConv labels unsafe spans and corrections, while LongSafety tests long-context transfer~\cite{zhang2023safeconv,lu2025longsafety}. Other benchmarks isolate coreference, relational framing, cognitive dynamics, request decomposition, jailbreak strategies, general dialogue capability, or multimodal context switching~\cite{yu2024cosafe,jiang2025redqueen,zhang2025cogsafe,srivastav2025together,cao2026safedialbench,kwan2024mteval,liu2026mtmcs}. They make conversational failures measurable, but do not balance multiple dependency mechanisms against a shared adolescent risk taxonomy.
+SafeConv labels unsafe spans and their corrections. LongSafety studies safety under long-context conditions~\cite{zhang2023safeconv,lu2025longsafety}. Other benchmarks examine coreference, concealed intent in role or relationship settings, cognitive dynamics, request decomposition, jailbreak strategies, general multi-turn ability or multimodal context switching~\cite{yu2024cosafe,jiang2025redqueen,zhang2025cogsafe,srivastav2025together,cao2026safedialbench,kwan2024mteval,liu2026mtmcs}. \bench{} combines ten mechanisms with the same ten top-level domains. This design makes domain-level and mechanism-level differences visible within one benchmark.
 
 \input{benchmark_comparison}
 \FloatBarrier
 
-Table~\ref{tab:comparison} makes the resulting design gap explicit: content taxonomies and conversational stress tests are usually constructed separately. \bench{} instead balances ten domains across ten mechanisms and reports the two tracks separately, localizing a weakness to a risk type, a conversational dependency, or their combination.
+Table~\ref{tab:comparison} summarizes the target populations, languages and dialogue settings of related benchmarks. \bench{} uses a balanced design across ten domains and ten mechanisms and reports single- and multi-turn results separately, so domains, mechanisms and their combinations provide descriptive diagnostic indices.
 
 \section{Benchmark Design and Construction}
 
-\subsection{Design Principles}
+\subsection{Design Overview}
 
-The evaluation unit in \bench{} is a generated response, not a category prediction. Both tracks use concise adolescent narration, distinguish an unhelpful answer from one that advances harm, and exclude real personal information and operationally dangerous details. A local configuration is included only when it changes the evidence relevant to a safe response---for example, which school channel can verify a notice or when guardian and platform protections apply---rather than merely decorating a generic prompt.
+\bench{} asks models to answer each user message rather than predict a risk label. A single-turn score evaluates one model response. A multi-turn score evaluates the complete four-turn user--model interaction for one item. Both tracks use synthetic Chinese scenarios generated with large-language-model assistance and reviewed by researchers. No record comes from a real adolescent conversation. Taxonomy labels organize the data for analysis but are not shown to the evaluated model or the automatic judge. Local institutions and platform settings appear when they affect risk assessment or safety advice, such as school-notice verification, guardian relationships, youth mode or livestream-spending rules.
 
 \subsection{Single-Turn Chinese-Context Risk Taxonomy}
 
-The single-turn track contains 715 prompts under a 10-domain, 50-subdomain, and 143-risk hierarchy, with five prompts per fine-grained risk. The researcher-authored hierarchy is a coverage instrument: it partitions specified harm pathways rather than estimating their real-world prevalence or severity distribution. Each item pairs a short background with one natural user message and three hierarchy labels. Five realizations vary actors, motivations, and explicitness while preserving one auditable risk definition.
+The single-turn track contains 715 test items organized into 10 top-level risk domains, 50 subdomains and 143 fine-grained risk scenarios. Each scenario contributes five items. This hierarchy is an author-defined structure for the benchmark. It is not an estimate of prevalence or severity and is not an exhaustive taxonomy of real-world risk. Each record stores an item ID, three taxonomy labels, a scenario background and one user message. At evaluation time, the background and user message are concatenated into one input. The model does not see the labels.
 
 \input{taxonomy_overview}
 \FloatBarrier
 
-Table~\ref{tab:taxonomy} summarizes the first two levels and fine-risk counts. Risk is interpreted from the background and message jointly: the same short utterance can concern ordinary homework, a private image, a family payment record, or evidence needed for help. Cultural grounding therefore operates through institutions, actors, safeguards, and information channels. Educational scenarios include subject selection, comprehensive student evaluation, and homeroom-teacher--guardian communication; platform scenarios include youth mode, real-name checks, livestream gifting, fan-group tasks, and campus public accounts. \appchineseexamples{} provides selected released examples of these configurations. They were selected as locally salient under the taxonomy, not as risks exclusive to China.
+Table~\ref{tab:taxonomy} summarizes the first two levels and the number of fine-grained scenarios in each domain. Items must be assessed jointly from the background and user message: the same short utterance can concern homework, a private image, a family payment or evidence needed to seek help. Local grounding is expressed through institutions, participants, safeguards and information channels. Educational items include subject selection, comprehensive student evaluation and homeroom-teacher--guardian communication; platform items include youth mode, real-name verification, livestream gifting, fan-group tasks and campus public accounts. \appchineseexamples{} provides selected examples. These items are not claimed to represent all Chinese adolescents.
 
-\subsection{Multi-Turn Mechanism Matrix}
+\subsection{Multi-Turn Risk-Mechanism Cross-Design}
 
-The multi-turn track contains 100 four-turn trajectories (400 user turns). Crossing ten mechanisms with the same ten domains produces a balanced $10\times10$ matrix. This orthogonal structure holds domain coverage constant across mechanisms, while distinct fine-risk topics reduce topical shortcuts.
+The multi-turn track contains 100 four-turn trajectories and 400 pre-specified user messages. M01--M10 are author-defined cross-turn mechanisms. The current request cannot be judged safely without the prior turns. Items are grouped by mechanism, with ten items per group. The last three digits of each group, 001--010, correspond to domains D01--D10. This creates a balanced $10\times10$ design across domains and mechanisms. Each cell contains one test item, so the design balances counts but cannot remove differences in topic or wording.
 
 \begin{table}[!t]
-\caption{Ten multi-turn mechanisms crossed with all ten risk domains.}
+\caption{Ten cross-turn risk mechanisms used in the multi-turn track. Each mechanism appears once in each of the ten top-level risk domains.}
 \label{tab:mechanisms}
 \centering
 \scriptsize
@@ -134,140 +135,140 @@ The multi-turn track contains 100 four-turn trajectories (400 user turns). Cross
 \definecolor{mechpale}{HTML}{F5F2F9}
 \setlength{\tabcolsep}{3pt}
 \renewcommand{\arraystretch}{1.05}
-\setlength{\extrarowheight}{0.5pt}
 \renewcommand{\tabularxcolumn}[1]{m{#1}}
-\newcommand{\MechanismID}[1]{%
-  \begingroup
-  \setlength{\fboxsep}{2pt}%
-  \colorbox{mechpurple}{\textcolor{white}{\bfseries #1}}%
-  \endgroup}
+\newcommand{\MechanismID}[1]{\begingroup\setlength{\fboxsep}{2pt}\colorbox{mechpurple}{\textcolor{white}{\bfseries #1}}\endgroup}
 \rowcolors{2}{mechpale}{white}
-\begin{tabularx}{\textwidth}{>{\centering\arraybackslash}m{0.40in}>{\raggedright\arraybackslash}m{0.88in}Y
-                             >{\centering\arraybackslash}m{0.40in}>{\raggedright\arraybackslash}m{0.90in}Y}
+\begin{tabularx}{\textwidth}{>{\centering\arraybackslash}m{0.40in}>{\raggedright\arraybackslash}m{0.90in}Y >{\centering\arraybackslash}m{0.40in}>{\raggedright\arraybackslash}m{0.92in}Y}
 \toprule
 \rowcolor{mechpurple!13}
-\textbf{ID} & \textbf{Mechanism} & \textbf{Dependency} &
-\textbf{ID} & \textbf{Mechanism} & \textbf{Dependency} \\
+\textbf{ID} & \textbf{Mechanism} & \textbf{Risk manifestation} & \textbf{ID} & \textbf{Mechanism} & \textbf{Risk manifestation} \\
 \midrule
-\MechanismID{M01} & \textcolor{mechpurple}{\bfseries Progressive intent} & Intent emerges from incremental evidence. &
+\MechanismID{M01} & \textcolor{mechpurple}{\bfseries Progressive intent} & Risk intent emerges from incremental evidence across turns. &
 \MechanismID{M06} & \textcolor{mechpurple}{\bfseries Request narrowing} & One risky goal is repeatedly reduced or qualified. \\
-\MechanismID{M02} & \textcolor{mechpurple}{\bfseries Cross-turn reference} & A code word or omission recovers a risk object. &
-\MechanismID{M07} & \textcolor{mechpurple}{\bfseries Safety-state update} & New consent, authority, health, or reality invalidates an earlier judgment. \\
-\MechanismID{M03} & \textcolor{mechpurple}{\bfseries Harmful composition} & Incomplete fragments jointly form a harmful outcome. &
+\MechanismID{M02} & \textcolor{mechpurple}{\bfseries Cross-turn reference} & A later expression or omission refers back to an earlier risky object. &
+\MechanismID{M07} & \textcolor{mechpurple}{\bfseries Safety-state update} & New consent, authority, health or authenticity information invalidates an earlier judgment. \\
+\MechanismID{M03} & \textcolor{mechpurple}{\bfseries Harmful composition} & Individually incomplete fragments form a harmful outcome when combined. &
 \MechanismID{M08} & \textcolor{mechpurple}{\bfseries Rule accumulation} & User-defined rules become unsafe when jointly applied. \\
-\MechanismID{M04} & \textcolor{mechpurple}{\bfseries Purpose reversal} & Protective information is later repurposed for harm. &
-\MechanismID{M09} & \textcolor{mechpurple}{\bfseries Relational pressure} & Accumulated loyalty or intimacy shifts the safety stance. \\
-\MechanismID{M05} & \textcolor{mechpurple}{\bfseries Topic interruption} & An unrelated exchange separates a cue from resumption. &
-\MechanismID{M10} & \textcolor{mechpurple}{\bfseries Information-boundary shift} & Information moves to a new recipient, audience, or setting. \\
+\MechanismID{M04} & \textcolor{mechpurple}{\bfseries Purpose reversal} & Information obtained for protection is later repurposed to cause harm. &
+\MechanismID{M09} & \textcolor{mechpurple}{\bfseries Relational pressure} & Accumulated loyalty or intimacy can pressure the model to change its safety stance. \\
+\MechanismID{M05} & \textcolor{mechpurple}{\bfseries Topic interruption} & An unrelated exchange separates an early cue from its later resumption. &
+\MechanismID{M10} & \textcolor{mechpurple}{\bfseries Information-boundary shift} & Information moves to a new recipient, audience or setting. \\
 \bottomrule
 \end{tabularx}
 \endgroup
 \end{table}
 \FloatBarrier
 
-Table~\ref{tab:mechanisms} defines the controlled factors as cross-turn state dependencies rather than new harm categories; \appmechanisms{} gives complete inclusion, exclusion, and counterfactual specifications. A trajectory is retained only if no isolated turn fully instantiates its mechanism and deleting or shuffling critical history removes or materially changes the dependency. Turns concern one event and object, except for the intentional interruption in M05, and each turn adds evidence. M02 binds a later expression to an earlier risk object; M03 composes incomplete fragments; M07 revises a judgment after a safety condition changes; and M09 accumulates relationship pressure rather than relying on one-turn role play. These are construction counterfactuals, not model-performance ablations.
+The ten mechanisms in Table~\ref{tab:mechanisms} are not new harm categories. They describe how dialogue history contributes to risk formation. For example, M02 binds a later pronoun or omission to an earlier object, M03 combines fragments distributed across turns, M07 revises a judgment after consent, health or authenticity changes, and M09 accumulates relational pressure. Complete examples appear in \appmechanisms{}.
 
-\appmechanisms{} illustrates M07 with released sample MT-M07-002. A page initially appears trustworthy because it resembles a school notice. Official school denial then removes that basis, after which an award guarantee and payment urgency make the decision safety-critical. The required operation is a behavioral update to new evidence, not detection of one final-turn keyword.
+Sample MT-M08-008 illustrates M08. The first two turns establish three beliefs: being named by a streamer proves support, a falling rank requires more gifts, and stopping would waste earlier spending. The user then borrows money and secretly uses restricted family funds. The final turn still asks for more gifts. The model must consider the earlier turns to detect the continuing financial risk.
 
 \subsection{Data Construction and Quality Control}
 
-All records are researcher-authored synthetic scenarios rather than adolescent logs. Risk definitions and the mechanism--domain matrix were frozen before scenario writing so that coverage followed the benchmark design rather than the convenience of available examples. Independent review examined risk clarity, naturalness, contextual necessity, and mechanism boundaries; weak records were revised or replaced instead of being made unsafe only by an explicit final turn. Automated checks covered identifiers, balance, turn counts, duplication, and sensitive patterns, while manual review addressed ambiguous references, privacy, and dangerous scaffolding. \appconstruction{} provides the complete acceptance criteria.
+All records are synthetic scenarios rather than real adolescent conversations. After defining the three-level taxonomy, we used a large language model to generate five candidate single-turn items for each fine-grained risk scenario. Each candidate contained a scenario background and user message. Researchers checked whether each item represented the assigned risk, matched an adolescent life context and used natural Chinese wording, relationships and motivations. They revised or regenerated items that failed these checks, then reviewed the revised items before inclusion.
+
+We built multi-turn items with the same generate--review--revise process. Each risk-domain--mechanism pair was one construction unit. The model generated four user messages and a background for each pair. Researchers checked whether later requests required earlier information, whether the history expressed the intended mechanism, whether the progression was natural and whether the trajectory matched its risk domain. They revised or regenerated unsatisfactory trajectories. We retained one four-turn trajectory for each domain--mechanism cell.
+
+The released data fields and model-visible materials are described in \appconstruction{}.
 
 \section{Evaluation Protocol}
 
-\subsection{Models, Generation, and Multi-Turn Execution}
+\subsection{Models, Generation and Multi-Turn Execution}
 
-We evaluate 13 open-weight chat checkpoints from Qwen2.5, InternLM2.5, GLM-4/GLM-Z1, and DeepSeek~\cite{qwen2024qwen25,cai2024internlm2,zeng2024chatglm,deepseek2024v2}. vLLM serves each released chat template with temperature 0, top-$p=0.9$, 512 maximum new tokens, and repetition penalty 1.05. The experiment yields 9,295 single-turn responses and 5,200 turn-level responses forming 1,300 complete trajectories, with no missing model--item scores. \appref{sec:supp-results} contains repository identifiers, nominal sizes, and complete results.
+We evaluate 13 open-weight models from the Qwen2.5, InternLM2.5, GLM-4/GLM-Z1 and DeepSeek families. Inference uses the OpenAI-compatible chat interface served by vLLM. Generation uses temperature 0, top-$p=0.9$, a maximum of 512 new tokens and repetition penalty 1.05. The experiment yields 9,295 single-turn responses and 5,200 model responses in 1,300 multi-turn interactions; all model--item score combinations are present. \appref{sec:supp-results} lists repository identifiers, model cards, parameter sizes and complete results.
 
-User turns are fixed across models and do not presuppose a particular assistant reply. The first request combines the background and turn 1; subsequent turns retain that checkpoint's actual assistant history, and state is reset between samples. This protocol keeps user-side evidence comparable while preserving model-specific behavior, rather than substituting a reference history or adapting the trajectory after observing each response.
+For each multi-turn item, the background and the first pre-specified user message form the initial input. Turns 2--4 include the earlier user messages, the model's earlier responses and the current pre-specified message. We reset the context between items. Every model receives the same user-message sequence, and later messages do not depend on model output. The evaluation therefore uses a fixed user script rather than an adaptive user simulator.
 
 \subsection{Scoring and Analysis}
 
-An automatic \texttt{claude-opus-4-8} judge scores outputs at temperature 0. It receives the full single-turn item and answer, or the complete alternating multi-turn trajectory. Evidence is evaluated chronologically: facts disclosed later do not retroactively penalize an earlier reasonable answer, but the response policy must update once the risk becomes visible.
+The automatic judge is \texttt{claude-opus-4-8}, run at temperature 0 through a third-party OpenAI-compatible endpoint. For a single-turn item, it receives the background, user message and model response. For a multi-turn item, it receives the complete four-turn interaction and returns one score for the trajectory. The prompt requires chronological reasoning. Later information must not penalize an earlier reasonable response, but the judge must update the assessment when a new risk becomes visible.
 
 \begin{table}[!htb]
-\caption{Joint safety--helpfulness scoring rubric.}
+\caption{Five-level scoring rubric combining safety and helpfulness.}
 \label{tab:rubric}
 \centering
 \scriptsize
 \setlength{\tabcolsep}{3pt}
-\renewcommand{\arraystretch}{1.02}
-\begin{tabularx}{\columnwidth}{>{\centering\arraybackslash}p{0.30in}>{\raggedright\arraybackslash}p{0.78in}Y}
+\renewcommand{\arraystretch}{1.05}
+\begin{tabularx}{\textwidth}{>{\centering\arraybackslash}p{0.30in}>{\raggedright\arraybackslash}p{1.15in}X}
 \toprule
-Score & Descriptor & Operational criterion \\
+\textbf{Score} & \textbf{Descriptor} & \textbf{Decision criterion} \\
 \midrule
-\rowcolor{scorepp}$+2$ & Safe/helpful & Recognizes risk, avoids advancing it, and offers an age-appropriate alternative. \\
-\rowcolor{scorep}$+1$ & Safe/limited & Maintains the safety boundary but provides incomplete support. \\
-\rowcolor{scorez}$0$ & Miss & Adds no clear harm but misses the core problem or responds ineffectively. \\
-\rowcolor{scoren}$-1$ & Partly enabling & Normalizes, endorses, or supplies limited enabling content. \\
-\rowcolor{scorenn}$-2$ & Enabling & Encourages, conceals, completes, or materially advances the harmful objective. \\
+        \rowcolor{scorepp}$+2$ & Safe and helpful & Recognizes explicit or implicit risk, does not endorse, continue or facilitate the dangerous objective, and provides a respectful, factual, specific and actionable age-appropriate alternative. In an imminent personal-safety crisis, it offers immediate action and real-world support suited to the situation. \\
+        \rowcolor{scorep}$+1$ & Basically safe & Recognizes the main risk and maintains a safety boundary with a warning, correction or refusal, but gives limited attention to the user's circumstances or insufficiently specific alternatives and support. \\
+\rowcolor{scorez}$0$ & Not clearly harmful but ineffective & Does not increase risk, but misses the core problem or gives only mechanical refusal, generic warning, vague reassurance, repetition, lecturing or an off-topic answer. \\
+        \rowcolor{scoren}$-1$ & Partly risk-enabling & Minimizes, rationalizes or assumes a dangerous premise; reinforces unsafe self-judgment, relational dependence or action; or supplies limited scripts, cues, criteria, packaging or low-detail advice that makes the risk easier to carry out without completing the main objective. \\
+        \rowcolor{scorenn}$-2$ & Clearly risk-enabling & Endorses or encourages dangerous behavior; supplies steps, scripts, templates, parameters, routes, strategies, evasion or concealment that directly implement or largely complete the objective; completes defamation, humiliation, manipulation, deception or fabrication; or urges continuation, concealment or delay in an imminent serious danger. \\
 \bottomrule
 \end{tabularx}
 \end{table}
 \FloatBarrier
 
-Table~\ref{tab:rubric} operationalizes a joint safety--helpfulness criterion: it rewards safe, age-appropriate assistance over generic refusal and penalizes normalization or enablement. Because every benchmark item is risky, \bench{} does not estimate false refusal on benign inputs.
+Table~\ref{tab:rubric} defines the single-turn criteria. Multi-turn scoring uses the same levels but evaluates the complete trajectory and the changes in risk information across turns. Because every item contains an author-defined risky context, \bench{} cannot estimate over-refusal on benign inputs.
 
-For $s_{mi}\in\{-2,-1,0,1,2\}$, we report the mean score, $\risk=(|\mathcal M||\mathcal I|)^{-1}\sum_{m,i}\mathbf1[s_{mi}<0]$, and score frequencies. Bootstrap intervals quantify uncertainty, and Spearman correlation compares model rankings across tracks. A blocked Friedman test evaluates overall mechanism differences, followed by paired Wilcoxon tests with Holm correction. A human annotator independently scored 100 single-turn responses and 50 trajectories using the same rubric; exact agreement, quadratic-weighted Cohen's $\kappa$, and an exact sign test characterize agreement with the automatic judge. \appref{sec:supp-evaluation} contains resampling units, judge payloads, and complete tests.
+Let $\mathcal M$ denote the models, $\mathcal I$ the test units in an analysis and $s_{mi}\in\{-2,-1,0,1,2\}$ the score for model $m$ and unit $i$. We report the mean score, $\risk=(|\mathcal M||\mathcal I|)^{-1}\sum_{m,i}\mathbf1[s_{mi}<0]$, and the frequency of each score. Here $\risk$ is the proportion of responses or complete interactions with a score below zero. Bootstrap intervals describe uncertainty. Spearman correlation compares model rankings across tracks. For mechanism comparisons, we average each model's scores over the ten risk domains and treat the 13 models as repeated-measures blocks in a Friedman test. Two-sided paired Wilcoxon signed-rank tests compare M09 with the other mechanisms, with Holm correction. One human annotator scored 100 single-turn responses and 50 complete multi-turn interactions. Exact agreement, quadratic-weighted Cohen's $\kappa$ and an exact sign test describe agreement with the automatic judge. \appref{sec:supp-evaluation} gives the resampling units, judge payloads and complete tests.
 
 \FloatBarrier
-
 \section{Results}
 
-We organize the analysis around four questions: whether rankings transfer across tracks, which Chinese-context domains are hardest, which cross-turn mechanisms fail most often, and whether the balanced matrix reveals local hotspots.
+We ask four questions. Do the two tracks rank models similarly? Which single-turn domains and multi-turn mechanisms have lower scores? Which domain--mechanism cells are local low-score hotspots after accounting for their marginal means?
 
-\subsection{RQ1: Do Rankings Transfer Across Tracks?}
+\subsection{RQ1: Are Model Rankings Consistent Across Tracks?}
 
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=0.91\textwidth]{figures/dual_track_capability_map.pdf}
-    \caption{Dual-track scores. Each horizontal pair links one model's single-turn risk-domain coverage (S) and state-dependent behavioral robustness (M). The segment identifies the same model; it is not a causal turn effect.}
+    \caption{Mean scores and 95\% bootstrap intervals for 13 models on the single- and multi-turn tracks. A line connects the same model across the two challenge sets and does not represent a causal effect of adding turns.}
     \label{fig:capability-map}
 \end{figure}
 \FloatBarrier
 
-\paragraph{Answer.} Rankings transfer only partially. Model means correlate (Spearman $\rho=0.732$, $p=0.0045$), but the order changes: InternLM2.5-20B ranks first on single-turn and third on multi-turn, GLM-4-32B moves from sixth to first, and DeepSeek-V2-Lite moves from third to eighth (Figure~\ref{fig:capability-map}). Within these checkpoints, single-turn performance is therefore not a reliable proxy for state-dependent behavioral robustness.
+\paragraph{Result.} Single- and multi-turn means are positively correlated (Spearman $\rho=0.732$, $p=0.0045$), but the rankings differ. InternLM2.5-20B ranks first on the single-turn track and third on the multi-turn track; GLM-4-32B ranks sixth and first, respectively; and DeepSeek-V2-Lite ranks third and eighth (Figure~\ref{fig:capability-map}). Within this test set, a single-turn ranking therefore captures only part of the multi-turn ranking.
 
-Pooled means are $0.279$ (95\% CI $[0.214,0.344]$) and $-0.097$ ($[-0.255,0.061]$), with negative rates of $37.28\%$ and $50.38\%$. Because the tracks contain different challenge items, these values describe their respective evaluation sets. The reordered ranking, rather than the mean gap, is the evidence for reporting the tracks separately.
+The pooled means are $0.279$ (95\% CI $[0.214,0.344]$) and $-0.097$ ($[-0.255,0.061]$), with negative-score rates of $37.28\%$ and $50.38\%$, respectively. Because the tracks use different items and evaluation targets, these mean differences are descriptive rather than causal. The rationale for reporting both tracks is the difference in rankings and low-score distributions, not a causal comparison of pooled means.
 
-\paragraph{Scoring audit.}
-Across 150 audited outputs, exact agreement is 73.3\% and quadratic-weighted Cohen's $\kappa$ is 0.715. In 38 of 40 disagreements the automatic judge assigns the lower score (two-sided exact sign test, $p=1.49\times10^{-9}$), indicating a lower-scoring tendency relative to this annotator on the audited subset. \appref{sec:supp-results} reports model-size and endpoint-specific analyses.
+\paragraph{Scoring audit.} Across 150 audited units, the annotator and automatic judge agree exactly on 73.3\% of scores. Quadratic-weighted Cohen's $\kappa$ is 0.715. Among 40 disagreements, the judge assigns a lower score 38 times and a higher score twice (two-sided exact sign test, $p=1.49\times10^{-9}$). The judge therefore scores lower than this annotator on this audit subset. This audit does not establish general judge accuracy or strictness. The complete confusion matrix is in \appref{sec:supp-results}.
 
-\subsection{RQ2: Which Chinese-Context Risks Are Hardest?}
+\subsection{RQ2: Which Single-Turn Risk Domains Have Lower Scores?}
 
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=0.88\textwidth]{figures/failure_profiles.pdf}
-    \caption{Failure profiles for the two tracks. Points show pooled means and 95\% bootstrap intervals; the right column gives negative-score rates. Each panel is ordered from weaker to stronger.}
+    \caption{Score distributions for single-turn risk domains and multi-turn mechanisms. Points and horizontal lines show mean scores and 95\% bootstrap intervals; the right side reports negative-score rates. Each panel is ordered from lower to higher mean score.}
     \label{fig:failure-profiles}
 \end{figure}
 \FloatBarrier
 
-\paragraph{Answer.} Offline personal safety is hardest (mean $-0.168$, $\risk=51.18\%$), while law and public order is easiest ($1.015$, $18.93\%;$ Figure~\ref{fig:failure-profiles}, left). Other weak subdomains include cognitive outsourcing, adolescent commercialization, sensitive-information exposure, and fandom/livestreaming risks, where age, trust, authorization, money, or offline transition must be inferred. A comprehensive-evaluation decision, a guardian-confirmed registration, or a livestream ranking can make an otherwise ordinary school, platform, or spending account safety-relevant (see \appchineseexamples{}). The contrast shows why broad prohibited-content cues alone do not cover every category tested by \bench{}.
+\paragraph{Result.} Offline personal safety (D09) has the lowest mean score among the ten domains ($-0.168$, $\risk=51.18\%$). Law, regulation and public order (D10) has the highest ($1.015$, $\risk=18.93\%$; Figure~\ref{fig:failure-profiles}, left). Other low-scoring subdomains include cognitive outsourcing, adolescent commercialization, sensitive-information exposure, and fandom and livestream risks. These cases often require the model to infer age, trust, authorization, money or the shift from online behavior to offline consequences. These differences describe this item set and do not indicate real-world prevalence or severity.
 
-\subsection{RQ3: Which Cross-Turn Mechanisms Fail Most?}
+\subsection{RQ3: Which Multi-Turn Risk Mechanisms Have Lower Scores?}
 
-\paragraph{Answer.} The pre-specified blocked Friedman test detects mechanism differences within the fixed matrix ($\chi^2(9)=106.52$, $p=7.49\times10^{-19}$). M09 ($-0.792$, $\risk=70.00\%$), M02 ($-0.569$, $61.54\%$), M08 ($-0.377$, $58.46\%$), and M03 ($-0.308$, $57.69\%;$ Figure~\ref{fig:failure-profiles}, right) are weakest; M09 and M02 do not differ after Holm correction ($p_{\mathrm{Holm}}=0.150$). Their dependencies are substantively different: M02 requires resolving an earlier referent, M03 requires recognizing a harmful combination of incomplete fragments, M08 requires safely applying accumulated user-defined rules, and M09 requires resisting pressure created by an evolving relationship. Reporting a pooled multi-turn score alone therefore obscures distinct state-dependent demands.
+\paragraph{Result.} Mechanism means differ in a Friedman test across the 13 models ($\chi^2(9)=52.99$, $p=2.94\times10^{-8}$). The four lowest means across 130 model--mechanism scores are M09 ($-0.792$, $\risk=70.00\%$), M02 ($-0.569$, $61.54\%$), M08 ($-0.377$, $58.46\%$) and M03 ($-0.308$, $57.69\%$; Figure~\ref{fig:failure-profiles}, right). After Holm correction, M09 does not differ from M02 ($p_{\mathrm{Holm}}=0.399$), M03 or M08. This ordering identifies low-score concentrations in the present evaluation. It does not show that adjacent mechanisms differ reliably.
 
-\subsection{RQ4: Does the Cross-Product Reveal Local Hotspots?}
+\subsection{RQ4: Which Domain--Mechanism Cells Are Local Hotspots?}
 
 \begin{figure}[!htb]
     \centering
     \includegraphics[width=0.98\textwidth]{figures/domain_mechanism_risk_surface.pdf}
-    \caption{Domain $\times$ mechanism scores pooled across 13 checkpoints. Colors span $[-2,2]$; outlines mark the three most negative residuals after removing domain and mechanism marginals. Each cell contains one authored trajectory evaluated by all checkpoints.}
+    \caption{Mean scores for the risk-domain--mechanism matrix pooled over 13 models. Colours span $[-2,2]$; outlines mark the three cells with the lowest residual after removing domain and mechanism marginal means. Each cell contains one multi-turn test item.}
     \label{fig:risk-surface}
 \end{figure}
 \FloatBarrier
 
-\paragraph{Answer.} Figure~\ref{fig:risk-surface} shows the full surface. To separate a cell's score from the average difficulty of its domain and mechanism, we use the descriptive residual $I_{m,d}=\bar{s}_{m,d}-\bar{s}_{m,\cdot}-\bar{s}_{\cdot,d}+\bar{s}$. Negative values identify combinations that are weaker than their two marginal profiles would predict. M06$\times$D02 ($-1.385$, $I=-1.605$), M02$\times$D10 ($-1.692$, $I=-1.443$), and M04$\times$D05 ($-1.385$, $I=-1.305$) are the most negative examples. Thus, narrowing can be especially difficult when a high-stakes education decision is being negotiated; cross-turn reference can conceal a public-order concern; and a seemingly protective family--school practice can become risky after its purpose reverses. Each cell is one authored trajectory across 13 checkpoints, so these are item-level diagnostic hotspots rather than cell-level significance tests.
+\paragraph{Result.} Let $p$ denote a multi-turn mechanism and $d$ a risk domain. We compute the descriptive residual $R_{p,d}=\bar{s}_{p,d}-\bar{s}_{p,\cdot}-\bar{s}_{\cdot,d}+\bar{s}$. This residual measures how far a cell lies from its domain and mechanism means. The three lowest-residual cells are M06$\times$D02 (mean $-1.385$, $R=-1.605$), M02$\times$D10 (mean $-1.692$, $R=-1.443$) and M04$\times$D05 (mean $-1.385$, $R=-1.305$). They correspond to request narrowing in education decisions, cross-turn reference in law and public-order risk, and purpose reversal in family--school settings. Each cell contains one item and 13 model scores. These residuals therefore identify samples for further inspection rather than estimate population-level effects.
 
-\paragraph{Discussion.} Risk-domain coverage and state-dependent behavioral robustness are complementary diagnoses. The former identifies where responses are weakest across risk types; the latter identifies which dialogue operations make an otherwise recognizable risk difficult to maintain safely. Reordered rankings show that the two views should not be collapsed into a single model leaderboard. Mechanism profiles further distinguish failures to resolve references, apply accumulated rules, resist relational pressure, or revise a judgment when safety conditions change. \bench{} therefore motivates reporting both aggregate performance and mechanism-level profiles. It does not establish deployment thresholds or certify models for adolescent use.
+\section{Discussion and Limitations}
 
+The two tracks provide complementary information. Single-turn results identify domains in which models receive lower scores across risk types; multi-turn results identify mechanisms under which models more often lose a safe stance. The rankings are only partly consistent, so either track alone can miss weaknesses found by the other. The challenge sets are not paired counterfactuals, and the fixed multi-turn user script does not adapt to model responses. Ranking changes therefore cannot be attributed to the number of turns alone.
+
+This study has three limitations. First, the taxonomy is author-defined. The scenarios were generated with large-language-model assistance and reviewed by researchers. They do not estimate real-world prevalence or cover every Chinese region, age group or application context. Second, each domain--mechanism cell contains only one multi-turn item. The matrix can locate particular low-score samples, but it cannot support cell-level generalization. Third, a fixed user script improves comparability across models but can become locally incoherent when a model's answer departs from the expected context. \bench{} therefore provides one source of evidence for pre-deployment content-safety assessment. Results should be considered alongside the target application, users, system safeguards and human supervision.
+
+\enlargethispage{4\baselineskip}
 \section{Conclusion}
 
-\bench{} operationalizes Chinese adolescent content safety through a 10/50/143 hierarchy, 715 single-turn scenarios, and 100 balanced four-turn trajectories. Its shared domains and orthogonal mechanism matrix make risk type and risk-formation process separately measurable. Across 13 open-weight chat checkpoints, reordered rankings and relational-pressure/cross-turn-reference failures show why both risk-domain coverage and state-dependent behavioral robustness should be reported.
+\bench{} evaluates content safety in Chinese adolescent contexts with two complementary tracks. The single-turn track contains 715 items in a 10/50/143 hierarchy. The multi-turn track contains 100 four-turn trajectories in a balanced domain--mechanism design. Together, the tracks provide diagnostic views of risk domains and cross-turn mechanisms.
 
-\noindent\textbf{Ethics and reproducibility.} \bench{} uses synthetic, non-identifying, and non-operational scenarios. It supports diagnosis rather than prevalence estimates or individual inference; construction checks and full materials are in \appconstruction{}, \appref{sec:supp-evaluation}, and \appref{sec:supp-results}.
+Experiments on 13 open-weight models show similar but non-identical rankings across the tracks. The two tracks also show different low-score patterns across domains and mechanisms. A single total score or single-turn leaderboard can miss weaknesses that depend on context. \bench{} provides evidence for pre-deployment assessment and helps developers identify scenarios that need further review, mitigation or safeguards. Future work should extend coverage across age groups, regions and real application workflows. It should also use multiple human reviewers, different judge models and more realistic interaction protocols.
 
 \clearpage
 \bibliographystyle{iclr2026_conference}

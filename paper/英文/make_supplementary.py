@@ -58,6 +58,20 @@ MAIN_TOP_LEVEL_EN = [
 ]
 
 
+MAIN_DOMAIN_NAMES = [
+    "Social values",
+    "Education decisions",
+    "Mental health and AI reliance",
+    "Physical health and boundaries",
+    "Family, school and campus",
+    "Digital platforms",
+    "Privacy and synthetic media",
+    "Property and commercial exploitation",
+    "Offline personal safety",
+    "Law and public order",
+]
+
+
 SUBDOMAIN_EN = [
     "National identity, historical culture, and shared-community misconceptions",
     "Growth values, life outlook, labor values, and success narratives",
@@ -511,7 +525,7 @@ MULTI_EXAMPLES = {
         ],
         "isolated": "The final request is risky, but the pressure to comply derives from the companion role built across earlier turns.",
         "full": "Accumulated companionship is converted into a loyalty test intended to suppress safety advice about solo travel and overnight queuing.",
-        "counterfactual": "Removing Turns 1 and 3 leaves a direct travel-risk statement rather than a relationship-driven stance shift.",
+        "counterfactual": "Removing Turns 1 and 3 leaves a direct travel-risk statement rather than relationship-driven pressure to change stance.",
     },
     "MT-M10-005": {
         "mechanism": "M10 · Information-boundary shift",
@@ -1216,7 +1230,7 @@ def make_results(
     domain_rows_tex = [
         distribution_row(
             row["domain"],
-            assets.SINGLE_DOMAIN_NAMES[int(row["domain"][1:]) - 1],
+            MAIN_DOMAIN_NAMES[int(row["domain"][1:]) - 1],
             row["sample_count"],
             row["mean"],
             row["ci"],
@@ -1323,8 +1337,9 @@ Family & Model / Hugging Face identifier & Params. &
 \subsection{{Complete Track-Level Distributions}}
 
 \begin{{table}}[t]
-\caption{{Single-turn top-level domains. Score columns report percentages
-pooled over all 13 models; CIs resample item IDs.}}
+\caption{{Single-turn top-level domains. Domain names are shortened display labels
+for the full taxonomy. Score columns report percentages pooled over all 13
+models; CIs resample item IDs.}}
 \label{{tab:supp-domains}}
 \centering
 \scriptsize
@@ -1346,8 +1361,10 @@ ID & Domain & N & Mean & 95\% CI & Neg. & $-2$ & $-1$ & $0$ & $+1$ & $+2$\\
 \end{{table}}
 
 \begin{{table}}[t]
-\caption{{Multi-turn mechanisms. Each row pools 13 models over ten
-domain-matched trajectories; CIs resample model--domain blocks.}}
+\caption{{Multi-turn mechanisms. Each row reports 130 scores from 13 models over
+ten domain-matched trajectories. For the confidence interval, scores are first
+averaged across domains within each model and then resampled over the 13 model
+means.}}
 \label{{tab:supp-mechanisms}}
 \centering
 \scriptsize
@@ -1375,8 +1392,9 @@ ID & Mechanism & N & Mean & 95\% CI & Neg. & $-2$ & $-1$ & $0$ & $+1$ & $+2$\\
 \subsection{{Statistical Tests}}
 
 \begin{{table}}[htbp]
-\caption{{Complete inferential tests. Correlations use 13 model means; the
-Friedman and Wilcoxon tests use 130 model--domain blocks.}}
+\caption{{Complete inferential tests. Correlations use 13 model means. The
+Friedman and Wilcoxon tests use 13 model-level blocks, with each mechanism
+represented by a mean over ten domains.}}
 \label{{tab:supp-tests}}
 \centering
 \small
