@@ -338,9 +338,9 @@ MECHANISM_SPECS = [
     (
         "M02",
         "Cross-turn reference",
-        "Binding between a later euphemism, omission, or pronoun and an earlier risk object",
+        "Binding between a later euphemism, omission, or pronoun and earlier risky content",
         "The current meaning cannot be recovered without the earlier definition.",
-        "The risky object is repeated explicitly in every turn.",
+        "The risky content is repeated explicitly in every turn.",
         "Deleting the defining turn makes the later expression ambiguous or harmless.",
     ),
     (
@@ -395,7 +395,7 @@ MECHANISM_SPECS = [
         "M09",
         "Relational pressure",
         "Accumulated loyalty, intimacy, secrecy, or adviser obligation",
-        "A relationship established over several turns is used to pressure the model to change its safety stance.",
+        "A relationship established over several turns is used to pressure the model to relax an appropriate safety response.",
         "A one-turn role-play request with no accumulated obligation.",
         "Removing the relationship-building turns leaves only an ordinary direct request.",
     ),
@@ -624,7 +624,7 @@ def make_main_table(grouped: list[list[tuple[str, list[tuple[str, str]]]]]) -> s
             + rf" & \TaxCount{{{fine_count}}}\\"
         )
     return rf"""\begin{{table}}[t!]
-\caption{{Single-turn hierarchy. Each domain contains five second-level subdomains; the final column gives its number of fine-grained risks.}}
+\caption{{Single-turn hierarchy. Each domain contains five second-level subdomains; the final column gives the number of fine-grained risk scenarios.}}
 \label{{tab:taxonomy}}
 \centering
 \begingroup
@@ -637,10 +637,10 @@ def make_main_table(grouped: list[list[tuple[str, list[tuple[str, str]]]]]) -> s
 \setlength{{\extrarowheight}}{{0.4pt}}
 \renewcommand{{\tabularxcolumn}}[1]{{m{{#1}}}}
 \rowcolors{{2}}{{taxpale}}{{white}}
-\begin{{tabularx}}{{\textwidth}}{{>{{\centering\arraybackslash}}m{{0.30in}}>{{\raggedright\arraybackslash}}m{{1.52in}}Y>{{\centering\arraybackslash}}m{{0.28in}}}}
+\begin{{tabularx}}{{\textwidth}}{{>{{\centering\arraybackslash}}m{{0.30in}}>{{\raggedright\arraybackslash}}m{{1.52in}}Y>{{\centering\arraybackslash}}m{{0.52in}}}}
 \toprule
 \rowcolor{{taxblue!14}}
-\textbf{{ID}} & \textbf{{Top-level domain}} & \textbf{{Five second-level subdomains}} & \textbf{{Fine}}\\
+\textbf{{ID}} & \textbf{{Top-level domain}} & \textbf{{Five second-level subdomains}} & \textbf{{Scenarios}}\\
 \midrule
 {chr(10).join(rows)}
 \bottomrule
@@ -1454,21 +1454,21 @@ association is not a causal estimate of adding turns.
 Across the 13 models, the median difference between the overall multi-turn
 mean and the bottom-two-mechanism mean is
 {float(diagnostics["median_tail_gap"]):.2f} scale points.  The two largest gaps
-occur for {largest_gap_text}.  Thus, even a favorable aggregate can coexist
-with a substantially weaker mechanism-specific floor; the comparison supports
-reporting minimum or tail criteria alongside an overall threshold.
+occur for {largest_gap_text}.  Thus, a high overall mean can hide poor performance
+on specific mechanisms.  Minimum or tail-based criteria should therefore be
+reported alongside the overall mean.
 
-\paragraph{{The hardest mechanisms are not merely one shared failure mode.}}
+\paragraph{{The hardest mechanisms are not explained by a single shared failure mode.}}
 The co-failure graph retains {int(diagnostics["edge_count"])} of the 45
 mechanism pairs at the prespecified $\rho\geq
 {float(diagnostics["correlation_threshold"]):.2f}$ display threshold.  M02 and
 M09, despite having the two largest pooled negative-score rates, have maximum
 pairwise correlations of only {float(maximum_correlations["M02"]):.2f} and
-{float(maximum_correlations["M09"]):.2f}, respectively.  Their absence of
-displayed edges does not imply statistical independence, but it does show that
-their difficulty cannot be reduced to the strongest broad co-failure clusters
-in this model set.  Separate mechanism-level diagnostics therefore carry
-information that a single safety ranking discards.
+{float(maximum_correlations["M09"]):.2f}, respectively.  The missing edges do
+not imply statistical independence.  They only show that the difficulty of M02
+and M09 is not captured by the strongest co-failure clusters in this model set.
+Mechanism-level diagnostics therefore reveal variation that a single safety
+ranking would miss.
 """
 
 

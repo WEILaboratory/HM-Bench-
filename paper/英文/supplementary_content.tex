@@ -44,7 +44,7 @@
 
 \section{Released Fields and Execution Inputs}\hypertarget{supp-construction}{}
 
-Released records store the labels used for analysis and the text sent to the models. Table~\ref{tab:supp-schema} lists these fields and their use during inference. Appendix~\ref{sec:supp-evaluation} describes the judge inputs.
+Released records contain the labels used for analysis and the text sent to the models. Table~\ref{tab:supp-schema} shows how these fields are used during inference. Appendix~\ref{sec:supp-evaluation} describes the judge inputs.
 
 \begin{table}[t]
 \caption{Stored benchmark fields and their use during execution.}
@@ -60,7 +60,7 @@ Released records store the labels used for analysis and the text sent to the mod
 \textbf{Record} & \textbf{Stored fields} & \textbf{Model-visible material} \\
 \midrule
 Single-turn & Stable item ID; three taxonomy labels; background; user message & Background and user message combined into a single user message \\
-Multi-turn & Stable item ID; mechanism ID and name; scenario; background; four ordered user messages & Background together with turn 1; turns 2--4 contain earlier user messages, the model's preceding responses, and the current pre-specified message \\
+Multi-turn & Stable item ID; mechanism ID and name; scenario; background; four ordered user messages & The background and turn 1 form the initial input; turns 2--4 contain earlier user messages, the model's preceding responses, and the current pre-specified message \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -74,7 +74,7 @@ Multi-turn & Stable item ID; mechanism ID and name; scenario; background; four o
 
 \subsection{Models, Hardware and Generation Settings}
 
-We ran inference on NVIDIA A100 80GB PCIe GPUs, using one or two GPUs per model. vLLM provided the OpenAI-compatible chat interface. Table~\ref{tab:supp-config} lists the shared settings. Appendix~\ref{sec:supp-results} gives the complete model list and results.
+Inference ran on NVIDIA A100 80GB PCIe GPUs, with one or two GPUs assigned to each model. vLLM provided the OpenAI-compatible chat interface. Table~\ref{tab:supp-config} lists the shared settings. Appendix~\ref{sec:supp-results} gives the complete model list and results.
 \begin{table}[t]
 \caption{Generation and scoring configuration.}
 \label{tab:supp-config}
@@ -90,7 +90,7 @@ We ran inference on NVIDIA A100 80GB PCIe GPUs, using one or two GPUs per model.
 Inference backend & OpenAI-compatible chat interface provided by vLLM \\
 Generation & Temperature 0; top-$p$ 0.9; repetition penalty 1.05; maximum 512 new tokens \\
 Single-turn input & Background and user message combined into a single user message \\
-Multi-turn input & Fixed user messages; turns 2--4 include earlier user messages, the model's preceding responses, and the current pre-specified message; conversation history reset between items \\
+Multi-turn input & Fixed user messages; turns 2--4 include earlier user messages, the model's preceding responses, and the current pre-specified message; conversation state reset between items \\
 Automatic judge & Model identifier \texttt{claude-opus-4-8}; third-party OpenAI-compatible endpoint; temperature 0; one score per single-turn response or complete multi-turn interaction \\
 Request and parsing & Extract the JSON returned by the judge and verify that the score is in $\{-2,-1,0,1,2\}$ \\
 Statistics & 20,000 bootstrap replicates; random seed 20,260,721; two-sided tests \\
@@ -100,7 +100,7 @@ Statistics & 20,000 bootstrap replicates; random seed 20,260,721; two-sided test
 
 \subsection{Judge Input and Output Structure}
 
-The evaluated dialogues are Chinese, so the executable judge prompts are also Chinese. The boxes below provide faithful English translations of the system prompts. At runtime, the phrase ``scoring criteria'' is replaced by the complete five-level rubric in the dataset JSON. The user message contains the material to evaluate and instructs the judge to return only the score JSON. The exact strings are in \texttt{scripts/score\_single\_turn.py} and \texttt{scripts/score\_multi\_turn.py}.
+The evaluated dialogues are in Chinese, and the executable judge prompts are therefore also in Chinese. The boxes below translate the system prompts into English. At runtime, the phrase ``scoring criteria'' is replaced by the complete five-level rubric in the dataset JSON. The user message supplies the material to evaluate and asks the judge to return only the score JSON. The exact strings are in \texttt{scripts/score\_single\_turn.py} and \texttt{scripts/score\_multi\_turn.py}.
 
 \begingroup\setlength{\fboxsep}{7pt}
 \noindent\colorbox{supphead}{%
@@ -139,12 +139,12 @@ Multi-turn & \texttt{dialogue: [user1, assistant1, \ldots, user4, assistant4]}. 
 
 \subsection{Scoring Boundary Cases}
 
-Both tracks use the same five levels but apply task-specific criteria. Single-turn scoring combines the background with the current user message. Multi-turn scoring evaluates the complete interaction and follows changes in risk information across turns. Warnings or disclaimers do not cancel unsafe help already supplied. Empathy is not endorsement. An answer becomes risk-enabling when it endorses a party, adopts the risky premise, promises secrecy, or provides practical support for that premise. A later correction affects the multi-turn score, but continued risk enablement can still make the complete interaction negative.
+Both tracks use the same five levels but apply task-specific criteria. Single-turn scoring combines the background with the current user message. Multi-turn scoring evaluates the complete interaction and follows changes in risk information across turns. Warnings or disclaimers do not cancel unsafe help already supplied. Empathy is not endorsement. An answer becomes risk-enabling when it endorses the risky position, adopts the risky premise, promises secrecy, or provides practical support for that premise. A later correction affects the multi-turn score, but continued risk enablement can still make the complete interaction negative.
 
 \subsection{Human-Scoring Audit}
 \label{sec:supp-human-audit}
 
-One annotator scored 100 single-turn responses and 50 complete multi-turn interactions. We sampled items at fixed intervals across nine non-GLM models from the DeepSeek, InternLM, and Qwen families. This audit compares one annotator with the automatic judge; it is not an inter-annotator study. We do not treat the human scores as error-free truth. Figure~\ref{fig:supp-human-agreement} shows the aggregate confusion matrix and paired score differences.
+One annotator scored 100 single-turn responses and 50 complete multi-turn interactions. We sampled items at fixed intervals across nine non-GLM models from the DeepSeek, InternLM, and Qwen families. Because only one annotator was used, this is not an inter-annotator study. The human scores are treated as a reference rather than as error-free ground truth. Figure~\ref{fig:supp-human-agreement} shows the aggregate confusion matrix and paired score differences.
 
 \begin{figure}[t]
 \centering
@@ -170,7 +170,7 @@ Model-level confidence intervals resample test items. Track-level intervals resa
 
 \subsection{Release and Reproducibility}
 
-To reproduce a run, record the benchmark version, model repository identifiers, model outputs, generation settings, judge model identifier, API endpoint, and score files together. The automatic judge uses a third-party OpenAI-compatible endpoint, so the model identifier alone may not uniquely identify the server-side model used for a future request. Released materials contain no real personal identifiers.
+To reproduce a run, record the benchmark version, model repository identifiers, model outputs, generation settings, judge model identifier, API endpoint, and score files. The automatic judge uses a third-party OpenAI-compatible endpoint, so the model identifier alone may not uniquely identify the server-side model used for a future request. Released materials contain no real personal identifiers.
 
 \subsection{Large-Language-Model Use}
 

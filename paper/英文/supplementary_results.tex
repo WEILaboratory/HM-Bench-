@@ -270,15 +270,15 @@ association is not a causal estimate of adding turns.
 Across the 13 models, the median gap between the overall multi-turn mean and
 the mean of the two weakest mechanisms is 0.73 scale points. The largest gaps
 occur for GLM-4-9B (0.61 overall versus -0.85 for the weakest mechanisms) and
-GLM-4-32B (1.31 versus 0.15). A favorable aggregate can therefore coexist with
-a much weaker mechanism-specific floor. Minimum or tail criteria should be
-reported alongside an overall threshold.
+GLM-4-32B (1.31 versus 0.15). A high overall mean can hide poor performance on
+specific mechanisms. Minimum or tail-based criteria should therefore be reported
+alongside the overall mean.
 
-\paragraph{The hardest mechanisms are not merely one shared failure mode.}
+\paragraph{The hardest mechanisms are not explained by a single shared failure mode.}
 The co-failure graph retains 15 of 45 mechanism pairs at the prespecified
 $\rho\geq0.40$ display threshold. M02 and M09 have the two largest pooled
 negative-score rates, yet their maximum pairwise correlations are only 0.33 and
-0.34. The absence of displayed edges does not imply statistical independence.
-It does show that their difficulty is not captured by the strongest broad
-co-failure clusters in this model set. Mechanism-level diagnostics therefore
-retain information that a single safety ranking would discard.
+0.34. The missing edges do not imply statistical independence. They only show
+that the difficulty of M02 and M09 is not captured by the strongest co-failure
+clusters in this model set. Mechanism-level diagnostics therefore reveal
+variation that a single safety ranking would miss.
