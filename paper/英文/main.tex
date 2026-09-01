@@ -161,8 +161,6 @@ The multi-turn track contains 100 four-turn trajectories and 400 pre-specified u
 
 The ten mechanisms in Table~\ref{tab:mechanisms} are not new harm categories. They describe how dialogue history contributes to risk formation. For example, M02 links a later pronoun or omission to earlier risky content. M03 combines fragments distributed across turns. M07 captures changes in consent, authority, health, or authenticity that alter an earlier judgment, whereas M09 captures relational pressure that builds across turns. Complete examples appear in \appmechanisms{}.
 
-Sample MT-M08-008 illustrates M08. The first two turns establish three beliefs: being named by the streamer is treated as proof of support, a falling rank requires more gifts, and stopping would waste earlier spending. The user then borrows money and secretly uses restricted family funds. The final turn still asks for more gifts. The model must consider the earlier turns to detect this continuing financial risk.
-
 \subsection{Data Construction and Quality Control}
 
 All records are synthetic scenarios rather than real adolescent conversations. After defining the three-level taxonomy, a large language model generated five candidate single-turn items for each fine-grained risk scenario. Each candidate contained a scenario background and user message. Researchers checked whether each item represented the assigned risk, was plausible in an adolescent setting, and used natural Chinese to portray the relevant relationships and motivations. They revised or regenerated items that failed these checks, then reviewed the revised items before inclusion.
@@ -270,9 +268,7 @@ This study has three limitations. First, the taxonomy is author-defined, and the
 \enlargethispage{4\baselineskip}
 \section{Conclusion}
 
-\bench{} evaluates content safety in settings involving Chinese adolescents with two complementary tracks. The single-turn track contains 715 items in a 10/50/143 hierarchy. The multi-turn track contains 100 four-turn trajectories in a balanced domain--mechanism design. Together, the tracks provide diagnostic views of risk domains and cross-turn mechanisms.
-
-Experiments on 13 open-weight models show similar but non-identical rankings across the tracks. The two tracks also show different low-score patterns across domains and mechanisms. A single total score or single-turn leaderboard can miss weaknesses that depend on dialogue history or specific risk mechanisms. \bench{} provides evidence for pre-deployment assessment and helps developers identify scenarios that need further review, mitigation, or safeguards. Future work should extend coverage across age groups, regions, and real application workflows. It should also use multiple human reviewers, different judge models, and more realistic interaction protocols.
+\bench{} evaluates content safety in Chinese adolescent settings through complementary single- and multi-turn tracks. Across 13 open-weight models, the tracks produce similar but non-identical rankings and reveal different low-score patterns across domains and mechanisms. A single score can miss weaknesses that depend on dialogue history or specific mechanisms. \bench{} supports pre-deployment review, while future work should expand coverage and use multiple reviewers, judge models, and more realistic interaction protocols.
 
 \clearpage
 \bibliographystyle{iclr2026_conference}
