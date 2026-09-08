@@ -257,28 +257,28 @@ correlation of at least 0.40 across 130 model--domain blocks.}
 \label{fig:supp-diagnostics}
 \end{figure}
 
-\paragraph{Partial transfer, not interchangeability.}
-At the matched domain level, the two tracks have a descriptive Spearman
-correlation of $\rho=0.584$ over 130 model--domain pairs. This association is
-more informative about shared competence than two pooled means. However, the
-spread of points and shifted domain centroids show that a model's single-turn domain
-score does not fully predict its performance when risk is distributed across the
-conversation. The paired observations are different test items, so this
-association is not a causal estimate of adding turns.
+\paragraph{Cross-track transfer is partial.}
+At the matched-domain level, the two tracks have a descriptive Spearman
+correlation of $\rho=0.584$ over 130 model--domain pairs. This association shows
+that the tracks share some model-level variation. The spread of points and shifted
+domain centroids also show that a model's single-turn domain score incompletely
+predicts its performance when risk is distributed across the conversation. Because
+the paired observations are different test items, the correlation describes an
+association across tracks rather than the effect of adding turns.
 
-\paragraph{Average scores conceal weak mechanisms.}
+\paragraph{Aggregate means conceal weak mechanisms.}
 Across the 13 models, the median gap between the overall multi-turn mean and
 the mean of the two weakest mechanisms is 0.73 scale points. The largest gaps
 occur for GLM-4-9B (0.61 overall versus -0.85 for the weakest mechanisms) and
 GLM-4-32B (1.31 versus 0.15). A high overall mean can hide poor performance on
-specific mechanisms. Minimum or tail-based criteria should therefore be reported
-alongside the overall mean.
+specific mechanisms. Mechanism-level summaries should therefore accompany the
+overall mean.
 
 \paragraph{The hardest mechanisms are not explained by a single shared failure mode.}
 The co-failure graph retains 15 of 45 mechanism pairs at the prespecified
 $\rho\geq0.40$ display threshold. M02 and M09 have the two largest pooled
 negative-score rates, yet their maximum pairwise correlations are only 0.33 and
-0.34. The missing edges do not imply statistical independence. They only show
-that the difficulty of M02 and M09 is not captured by the strongest co-failure
-clusters in this model set. Mechanism-level diagnostics therefore reveal
+0.34. Their difficulty is therefore not captured by the strongest co-failure
+clusters in this model set. The graph is descriptive, and missing edges are not
+evidence of statistical independence. Mechanism-level diagnostics reveal
 variation that a single safety ranking would miss.

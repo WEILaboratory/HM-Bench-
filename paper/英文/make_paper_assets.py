@@ -848,7 +848,7 @@ def plot_benchmark_overview() -> None:
     main_subtitle = ax.text(
         0.025,
         0.947,
-        "Risk-type coverage and multi-turn mechanism robustness are evaluated separately",
+        "Single-turn risk scenarios and multi-turn risk mechanisms are evaluated separately",
         fontsize=7.25,
         color=MID,
         va="top",
@@ -1753,8 +1753,8 @@ def plot_dual_track_capability_map(rows: list[dict[str, Any]]) -> None:
     ax.tick_params(axis="x", labelsize=7.0)
     ax.set_xlabel("Mean joint safety--helpfulness score ($-2$ to $+2$)", fontsize=7.9, labelpad=4)
     ax.spines[["top", "right", "left"]].set_visible(False)
-    ax.scatter([], [], s=34, color=BLUE, label="Single-turn risk coverage")
-    ax.scatter([], [], s=34, color=PURPLE, label="Multi-turn mechanism robustness")
+    ax.scatter([], [], s=34, color=BLUE, label="Single-turn track")
+    ax.scatter([], [], s=34, color=PURPLE, label="Multi-turn track")
     ax.legend(
         loc="lower left",
         bbox_to_anchor=(0.0, 1.01),

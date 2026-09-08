@@ -144,7 +144,7 @@ Both tracks use the same five levels but apply task-specific criteria. Single-tu
 \subsection{Human-Scoring Audit}
 \label{sec:supp-human-audit}
 
-One annotator scored 100 single-turn responses and 50 complete multi-turn interactions. We sampled items at fixed intervals across nine non-GLM models from the DeepSeek, InternLM, and Qwen families. Because only one annotator was used, this is not an inter-annotator study. The human scores are treated as a reference rather than as error-free ground truth. Figure~\ref{fig:supp-human-agreement} shows the aggregate confusion matrix and paired score differences.
+One annotator scored 100 single-turn responses and 50 complete multi-turn interactions. Items were sampled at fixed intervals across nine non-GLM models from the DeepSeek, InternLM, and Qwen families. Because only one annotator was used, this is not an inter-annotator study. The human scores serve as a reference rather than error-free ground truth. Figure~\ref{fig:supp-human-agreement} shows the aggregate confusion matrix and paired score differences.
 
 \begin{figure}[t]
 \centering
@@ -155,7 +155,7 @@ One annotator scored 100 single-turn responses and 50 complete multi-turn intera
 
 \subsection{Confidence Intervals and Statistical Tests}
 
-Model-level confidence intervals resample test items. Track-level intervals resample item IDs and retain all 13 model scores for each sampled item. For mechanism intervals, we first average scores over the ten domains within each model and then resample the 13 models. Pearson correlation measures the association between model means across tracks. Spearman correlation compares model rankings. For the Friedman test, each model is a block and its domain-averaged mechanism scores are paired observations. Two-sided paired Wilcoxon signed-rank tests compare M09 with the other nine mechanisms, with Holm correction. Bootstrap uses 20,000 replicates with seed 20,260,721.
+Model-level confidence intervals resample test items. Track-level intervals resample item IDs and retain all 13 model scores for each sampled item. Mechanism intervals first average scores over the ten domains within each model and then resample the 13 models. Pearson correlation measures the association between model means across tracks. Spearman correlation compares model rankings. For the Friedman test, each model is a block and its domain-averaged mechanism scores are paired observations. Two-sided paired Wilcoxon signed-rank tests compare M09 with the other nine mechanisms, with Holm correction. Bootstrap uses 20,000 replicates with seed 20,260,721.
 
 \clearpage
 \section{Complete Results}
