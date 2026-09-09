@@ -213,7 +213,7 @@ One human annotator scored 100 single-turn responses and 50 complete multi-turn 
 \FloatBarrier
 \section{Results}
 
-The evaluation first summarizes overall benchmark performance and then addresses four diagnostic questions: whether the two tracks rank models similarly, which single-turn risk domains receive lower scores, which multi-turn risk mechanisms receive lower scores, and which domain--mechanism combinations score below the level implied by their marginal means.
+After summarizing overall benchmark performance, the analysis addresses four questions. First, does multi-turn evaluation provide information beyond single-turn evaluation? Second, where are models weakest across the single-turn risk domains? Third, which cross-turn mechanisms are most challenging for models? Finally, which domain--mechanism combinations reveal weaknesses beyond either factor alone?
 
 \subsection{Overall Benchmark Performance}
 
@@ -229,11 +229,11 @@ The evaluation first summarizes overall benchmark performance and then addresses
 
 Aggregate performance can also mask mechanism-specific weaknesses. Across the 13 models, the median gap between a model's overall multi-turn mean and the mean of its two weakest mechanisms is 0.73 points. The following analyses locate these weaknesses by evaluation track, risk domain, cross-turn mechanism, and domain--mechanism combination. Complete model-level results are reported in \appref{sec:supp-results}.
 
-\subsection{RQ1: Are Model Rankings Consistent Across Tracks?}
+\subsection{RQ1: Does Multi-Turn Evaluation Provide Information Beyond Single-Turn Evaluation?}
 
-\paragraph{Main finding.} The two tracks measure related but distinct aspects of safety. Their mean scores are positively correlated (Spearman $\rho=0.732$, $p=0.0045$), but several models change position across tracks. InternLM2.5-20B ranks first on the single-turn track and third on the multi-turn track. GLM-4-32B ranks sixth and first, respectively, while DeepSeek-V2-Lite ranks third and eighth (Figure~\ref{fig:capability-map}). Both tracks are needed to characterize model performance.
+\paragraph{Main finding.} Multi-turn evaluation provides information that is not captured by single-turn evaluation alone. The two tracks measure related but distinct aspects of safety. Their mean scores are positively correlated (Spearman $\rho=0.732$, $p=0.0045$), but several models change position across tracks. InternLM2.5-20B ranks first on the single-turn track and third on the multi-turn track. GLM-4-32B ranks sixth and first, respectively, while DeepSeek-V2-Lite ranks third and eighth (Figure~\ref{fig:capability-map}). Both tracks are needed to characterize model performance.
 
-\subsection{RQ2: Which Single-Turn Risk Domains Have Lower Scores?}
+\subsection{RQ2: Where Are Models Weakest Across the Single-Turn Risk Domains?}
 
 \begin{figure}[!htb]
     \centering
@@ -243,15 +243,15 @@ Aggregate performance can also mask mechanism-specific weaknesses. Across the 13
 \end{figure}
 \FloatBarrier
 
-\paragraph{Main finding.} Low single-turn scores concentrate in scenarios that require situation-specific safety judgment. Offline personal safety (D09) has the lowest mean score among the ten domains ($-0.168$, $\risk=51.18\%$), while law, regulation, and public order (D10) has the highest ($1.015$, $\risk=18.93\%$; Figure~\ref{fig:failure-profiles}, left). Other low-scoring subdomains include cognitive outsourcing, commercialization of minors, sensitive-information exposure, and fandom and livestream risks. These areas require models to connect the immediate request to age, trust, authorization, financial stakes, or possible offline consequences.
+\paragraph{Main finding.} Models are weakest in single-turn scenarios that require situation-specific safety judgment. Offline personal safety (D09) has the lowest mean score among the ten domains ($-0.168$, $\risk=51.18\%$), while law, regulation, and public order (D10) has the highest ($1.015$, $\risk=18.93\%$; Figure~\ref{fig:failure-profiles}, left). Other low-scoring subdomains include cognitive outsourcing, commercialization of minors, sensitive-information exposure, and fandom and livestream risks. These areas require models to connect the immediate request to age, trust, authorization, financial stakes, or possible offline consequences.
 
-\subsection{RQ3: Which Multi-Turn Risk Mechanisms Have Lower Scores?}
+\subsection{RQ3: Which Cross-Turn Mechanisms Are Most Challenging for Models?}
 
-\paragraph{Main finding.} Models score lowest on mechanisms that require them to connect the current request to risk information established in earlier turns. Mechanism means differ in a Friedman test across the 13 models ($\chi^2(9)=52.99$, $p=2.94\times10^{-8}$). The four lowest means across 130 model--mechanism scores are M09 ($-0.792$, $\risk=70.00\%$), M02 ($-0.569$, $61.54\%$), M08 ($-0.377$, $58.46\%$), and M03 ($-0.308$, $57.69\%$; Figure~\ref{fig:failure-profiles}, right). Their observed means identify the lowest-scoring mechanisms, while the corrected pairwise tests do not resolve their exact order. M02 and M09 have the two highest negative-score rates, yet their maximum pairwise correlations with other mechanisms are only 0.33 and 0.34. Their difficulty is therefore not captured by one shared co-failure pattern in this model set (\appref{sec:supp-results}).
+\paragraph{Main finding.} The most challenging mechanisms require models to connect the current request to risk information established in earlier turns. Mechanism means differ in a Friedman test across the 13 models ($\chi^2(9)=52.99$, $p=2.94\times10^{-8}$). The four lowest means across 130 model--mechanism scores are M09 ($-0.792$, $\risk=70.00\%$), M02 ($-0.569$, $61.54\%$), M08 ($-0.377$, $58.46\%$), and M03 ($-0.308$, $57.69\%$; Figure~\ref{fig:failure-profiles}, right). Their observed means identify the lowest-scoring mechanisms, while the corrected pairwise tests do not resolve their exact order. M02 and M09 have the two highest negative-score rates, yet their maximum pairwise correlations with other mechanisms are only 0.33 and 0.34. Their difficulty is therefore not captured by one shared co-failure pattern in this model set (\appref{sec:supp-results}).
 
-\subsection{RQ4: Which Domain--Mechanism Combinations Score Lower Than Expected?}
+\subsection{RQ4: Which Domain--Mechanism Combinations Reveal Weaknesses Beyond Either Factor Alone?}
 
-\paragraph{Main finding.} Some domain--mechanism combinations fall below the level implied by their separate domain and mechanism means. Let $p$ denote a multi-turn mechanism and $d$ a risk domain. The descriptive residual $R_{p,d}=\bar{s}_{p,d}-\bar{s}_{p,\cdot}-\bar{s}_{\cdot,d}+\bar{s}$ measures this difference. The three most negative residuals are M06$\times$D02 (mean $-1.385$, $R=-1.605$), M02$\times$D10 (mean $-1.692$, $R=-1.443$), and M04$\times$D05 (mean $-1.385$, $R=-1.305$). They correspond to request narrowing in education decisions, cross-turn reference in law and public-order risk, and purpose reversal in family--school settings. The matrix flags these cases for targeted error analysis. Larger cell samples are needed to determine whether the patterns generalize.
+\paragraph{Main finding.} Some domain--mechanism combinations reveal weaknesses that are not apparent from the domain or mechanism averages alone. Let $p$ denote a multi-turn mechanism and $d$ a risk domain. The descriptive residual $R_{p,d}=\bar{s}_{p,d}-\bar{s}_{p,\cdot}-\bar{s}_{\cdot,d}+\bar{s}$ measures this difference. The three most negative residuals are M06$\times$D02 (mean $-1.385$, $R=-1.605$), M02$\times$D10 (mean $-1.692$, $R=-1.443$), and M04$\times$D05 (mean $-1.385$, $R=-1.305$). They correspond to request narrowing in education decisions, cross-turn reference in law and public-order risk, and purpose reversal in family--school settings. The matrix flags these cases for targeted error analysis. Larger cell samples are needed to determine whether the patterns generalize.
 
 \begin{figure}[!htb]
     \centering
